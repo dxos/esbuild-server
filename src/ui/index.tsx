@@ -1,22 +1,37 @@
 import React, { FC } from 'react'
 import { render } from 'react-dom'
+import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 
 interface StorybookProps {
   stories: Stories
 }
 
 const Storybook = ({ stories }: StorybookProps) => (
+  <BrowserRouter>
+    <Sidebar stories={stories}/>
+    <Switch>
+      {Object.entries(stories).map(([file, mod]) => 
+        Object.entries(mod).map(([name, Story]) => (
+          <Route exact path={`/${file}/${name}`}>
+            <Story/>
+          </Route>
+        )
+      ))}
+    </Switch>
+  </BrowserRouter>
+)
+
+export interface SidebarProps {
+  stories: Stories
+}
+
+export const Sidebar = ({stories}: SidebarProps) => (
   <div>
     {Object.entries(stories).map(([file, mod]) => (
       <div>
         <div>{file}</div>
-        {Object.entries(mod).map(([name, Story]) => (
-          <div>
-          <h1>{name}</h1>
-          <div style={{ border: '1px solid black', padding: '20px' }}> 
-            <Story/>
-          </div>
-        </div>
+        {Object.keys(mod).map((name) => (
+          <Link to={`/${file}/${name}`}>{name}</Link>
         ))}
       </div>
     ))}
@@ -25,24 +40,41 @@ const Storybook = ({ stories }: StorybookProps) => (
 
 type Stories = Record<string, Record<string, FC>>
 
-function extractStories(modules: Record<string, any>): Stories {
+function extractStories(modules: Record<string, any>, basePath: string): Stories {
   const res: Stories = {}
 
   for(const file of Object.keys(modules)) {
-    res[file] = {}
+    const key = convertFileNameToPathSegment(file, basePath)
+    res[key] = {}
     const mod = modules[file]
 
-    for(const key of Object.keys(mod)) {
-      if(typeof mod[key] === 'function') {
-        res[file][key] = mod[key]
+    for(const comp of Object.keys(mod)) {
+      if(typeof mod[comp] === 'function') {
+        res[key][comp] = mod[comp]
       }
     }
   }
-  
 
   return res
 }
 
-export function uiMain(modules: Record<string, any>) {
-  render(<Storybook stories={extractStories(modules)} />, document.getElementById('root'))
+function convertFileNameToPathSegment(filename: string, basePath: string) {
+  if(filename.startsWith(basePath)) {
+    filename = filename.slice(basePath.length)
+  }
+
+  if(filename.startsWith('/')) {
+    filename = filename.slice(1)
+  }
+
+  return filename.trim().replace(/[-\.\/]/g, '-');
+}
+
+export interface Spec {
+  storyModules: Record<string, any>
+  basePath: string
+}
+
+export function uiMain(spec: Spec) {
+  render(<Storybook stories={extractStories(spec.storyModules, spec.basePath)} />, document.getElementById('root'))
 }

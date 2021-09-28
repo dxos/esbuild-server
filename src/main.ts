@@ -50,11 +50,14 @@ yargs(hideBin(process.argv))
               contents: `
                 import { uiMain } from '${join(__dirname, 'ui/index.tsx')}';
 
-                const stories = {
+                const storyModules = {
                   ${files.map(file => `"${file}": require("${file}")`).join(',')}
                 };
     
-                uiMain(stories)
+                uiMain({
+                  storyModules,
+                  basePath: "${process.cwd()}",
+                });
               `
             }))
           }
