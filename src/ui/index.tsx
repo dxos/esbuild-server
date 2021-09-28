@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route, Redirect } from 'react-router-dom'
+import styled from 'styled-components'
 
 interface StorybookProps {
   stories: Stories
@@ -8,20 +9,37 @@ interface StorybookProps {
 
 const Storybook = ({ stories }: StorybookProps) => (
   <BrowserRouter>
-    <Sidebar stories={stories}/>
-    <Switch>
-      {Object.entries(stories).map(([file, mod]) => 
-        Object.entries(mod).map(([name, Story]) => (
-          <Route exact path={`/${file}/${name}`}>
-            <Story/>
-          </Route>
-        )
-      ))}
+    <Main>
+      <Sidebar stories={stories}/>
+      <Switch>
+        {Object.entries(stories).map(([file, mod]) => 
+          Object.entries(mod).map(([name, Story]) => (
+            <Route exact path={`/${file}/${name}`}>
+              <StoryContainer>
+                <Story/>
+              </StoryContainer>
+            </Route>
+          )
+        ))}
 
-      <Redirect to="/" />
-    </Switch>
+        <Redirect to="/" />
+      </Switch>
+    </Main>
   </BrowserRouter>
 )
+
+const Main = styled.div`
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  width: 100vw;
+  height: 100vh;
+`
+
+const StoryContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+`
 
 export interface SidebarProps {
   stories: Stories
@@ -33,7 +51,9 @@ export const Sidebar = ({stories}: SidebarProps) => (
       <div>
         <div>{file}</div>
         {Object.keys(mod).map((name) => (
-          <Link to={`/${file}/${name}`}>{name}</Link>
+          <div>
+            <Link to={`/${file}/${name}`}>{name}</Link>
+          </div>
         ))}
       </div>
     ))}
