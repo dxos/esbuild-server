@@ -1,8 +1,6 @@
 import React, { FC } from 'react'
 import { render } from 'react-dom'
 
-console.log()
-
 interface StorybookProps {
   stories: Record<string, FC>
 }
@@ -32,7 +30,6 @@ function extractStories(mod: any): Record<string, FC> {
   return res
 }
 
-render(<Storybook stories={extractStories(require('../test/story.tsx'))} />, document.getElementById('root'))
-
-
-
+export function uiMain(mod: any) {
+  render(<Storybook stories={extractStories(mod)} />, document.getElementById('root'))
+}
