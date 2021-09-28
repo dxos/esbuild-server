@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { render } from 'react-dom'
-import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Link, Switch, Route, Redirect } from 'react-router-dom'
 
 interface StorybookProps {
   stories: Stories
@@ -17,6 +17,8 @@ const Storybook = ({ stories }: StorybookProps) => (
           </Route>
         )
       ))}
+
+      <Redirect to="/" />
     </Switch>
   </BrowserRouter>
 )

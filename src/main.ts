@@ -4,6 +4,8 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import glob from 'glob'
 import { promisify } from 'util'
+import http, { IncomingMessage, ServerResponse } from 'http'
+import { RequestOptions } from 'https'
 
 interface DevCommandArgv {
   stories: string[]
@@ -31,9 +33,8 @@ yargs(hideBin(process.argv))
       console.log(`🔎 Found ${files.length} files with stories`)
 
 
-      await serve({
+      const serveResult = await serve({
         servedir: join(__dirname, 'ui/public'),
-        port: 8080,
       }, {
         entryPoints: {
           'index': 'entrypoint'
@@ -64,7 +65,40 @@ yargs(hideBin(process.argv))
         }],
         metafile: true,
       })
-    
+
+      http.createServer((req, res) => {
+        const options: RequestOptions = {
+          hostname: serveResult.host,
+          port: serveResult.port,
+          path: req.url,
+          method: req.method,
+          headers: req.headers,
+        }
+
+        const proxyReq = http.request(options, proxyRes => {
+          if (proxyRes.statusCode === 404) {
+            const options: RequestOptions = {
+              hostname: serveResult.host,
+              port: serveResult.port,
+              path: '/',
+              method: 'GET',
+            }
+            const proxyReq = http.request(options, proxyRes => {
+              res.writeHead(proxyRes.statusCode!, proxyRes.headers);
+              proxyRes.pipe(res, { end: true });
+            })
+            proxyReq.end()
+          } else {
+            // Otherwise, forward the response from esbuild to the client
+            res.writeHead(proxyRes.statusCode!, proxyRes.headers);
+            proxyRes.pipe(res, { end: true });
+          }
+        });
+
+        // Forward the body of the request to esbuild
+        req.pipe(proxyReq, { end: true });
+      }).listen(argv.port);
+      
       console.log('🚀 Listening on http://localhost:8080')
     }
   )
