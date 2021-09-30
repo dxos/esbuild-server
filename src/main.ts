@@ -69,6 +69,7 @@ yargs(hideBin(process.argv))
         bundle: true,
         platform: 'browser',
         format: 'iife',
+        incremental: true,
         plugins: [
           createPlugin(files, packageRoot, process.cwd()),
           ...(config?.plugins ?? [])
@@ -128,7 +129,7 @@ function getPackageRoot() {
 function createPlugin(files: string[], packageRoot: string, projectRoot: string): Plugin {
   return {
     name: 'esbuild-book',
-    setup: ({ onResolve, onLoad }) => {
+    setup: ({ onResolve, onLoad, onStart, onEnd }) => {
       onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }))
       onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => ({
         resolveDir: __dirname,
@@ -146,7 +147,17 @@ function createPlugin(files: string[], packageRoot: string, projectRoot: string)
               `
       })),
 
-      onResolve({ filter: /^react$/ }, () => ({ path: require.resolve('react', { paths: [projectRoot] }) }))
+      onResolve({ filter: /^react$/ }, () => ({ path: require.resolve('react', { paths: [projectRoot] }) }));
+
+      let startTime: number = 0;
+      onStart(() => {
+        console.log(`Build started`)
+        startTime = Date.now()
+      })
+
+      onEnd(() => {
+        console.log(`Build ended in ${((Date.now() - startTime) / 1000).toFixed(2)} seconds`)
+      })
     }
   }
 }
