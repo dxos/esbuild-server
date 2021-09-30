@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "bin": "./bin/main.js",
   "scripts": {
-    "start": "ts-node src/main.ts"
+    "start": "ts-node src/main.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "@types/glob": "^7.1.4",
