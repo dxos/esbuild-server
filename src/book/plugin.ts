@@ -5,8 +5,8 @@ export function createBookPlugin(files: string[], packageRoot: string, projectRo
   return {
     name: 'esapp-book',
     setup: ({ onResolve, onLoad, onStart }) => {
-      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }))
-      onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => ({
+      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esapp-book', path: 'entrypoint' }))
+      onLoad({ namespace: 'esapp-book', filter: /^entrypoint$/ }, () => ({
         resolveDir: __dirname,
         contents: `
                 import { uiMain } from '${join(packageRoot, 'src/book/ui/index.tsx')}';
