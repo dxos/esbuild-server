@@ -1,4 +1,5 @@
 import assert from 'assert'
+import chalk from 'chalk'
 import { build } from 'esbuild'
 import { dirname, join, resolve } from 'path'
 import { sync as findPackageJson } from 'pkg-up'
@@ -44,12 +45,12 @@ yargs(hideBin(process.argv))
       const config = loadConfig(argv.config);
 
       if(config) {
-        console.log(`🔧 Loaded config from ${argv.config}`);
+        console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
       }
 
       const files = (await resolveFiles(argv.stories)).map(file => resolve(file))
 
-      console.log(`🔎 Found ${files.length} files with stories`)
+      console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`)
 
       if(argv.verbose) {
         for(const file of files) {
@@ -86,7 +87,7 @@ yargs(hideBin(process.argv))
 
       devServer.listen();
 
-      console.log(`🚀 Listening on http://localhost:${argv.port}`)
+      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
     }
   )
   .demandCommand()

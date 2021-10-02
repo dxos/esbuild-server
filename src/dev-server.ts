@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import { join } from "path/posix";
 import { Trigger } from "./trigger";
 import http from 'http'
+import chalk from "chalk";
 
 export interface ResolvedFile {
   path: string
@@ -28,14 +29,18 @@ export class DevServer {
       setup: ({ onStart, onEnd }) => {
         let startTime: number = 0;
         onStart(() => {
-          console.log(`Build started`)
+          console.log(chalk`🏎️  {dim Build started}`)
           startTime = Date.now()
 
           this.buildTrigger.reset();
         })
   
         onEnd((result) => {
-          console.log(`Build ended in ${((Date.now() - startTime) / 1000).toFixed(2)} seconds`)
+          if(result.errors.length > 0) {
+            console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+            return
+          }
+          console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
   
           this.buildTrigger.wake(result);
         })
