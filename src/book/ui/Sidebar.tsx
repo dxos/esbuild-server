@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 import { Stories } from "./stories";
 
 export interface SidebarProps {
@@ -7,16 +8,25 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ stories }: SidebarProps) => (
-  <div>
+  <Container>
     {Object.entries(stories).map(([file, mod]) => (
       <div>
         <div>{mod.title}</div>
         {Object.keys(mod.stories).map((name) => (
-          <div>
-            <Link to={`/${file}/${name}`}>{name}</Link>
-          </div>
+          <StoryItem>
+            <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+          </StoryItem>
         ))}
       </div>
     ))}
-  </div>
+  </Container>
 )
+
+const Container = styled.div`
+  overflow-x: auto;
+  border-right: 1px solid black;
+`
+
+const StoryItem = styled.div`
+  margin-left: 10px;
+`

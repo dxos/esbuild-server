@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Stories } from "./stories";
 import React from 'react'
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { Sidebar } from "./Sidebar";
 
 export interface StorybookProps {
@@ -10,6 +10,7 @@ export interface StorybookProps {
 
 export const Storybook = ({ stories }: StorybookProps) => (
   <BrowserRouter>
+    <GlobalStyle />
     <Switch>
       <Route path="/__story">
         {Object.entries(stories).map(([file, mod]) =>
@@ -42,7 +43,7 @@ export const Storybook = ({ stories }: StorybookProps) => (
 
 const Main = styled.div`
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 200px 1fr;
   width: 100vw;
   height: 100vh;
 `
@@ -51,4 +52,10 @@ const StoryContainer = styled.iframe`
   width: 100%;
   height: 100%;
   border: none;
+`
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0px;
+  }
 `
