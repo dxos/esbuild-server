@@ -1,13 +1,13 @@
 import assert from 'assert'
 import chalk from 'chalk'
-import { build } from 'esbuild'
+import { build, Plugin } from 'esbuild'
 import { dirname, join, resolve } from 'path'
 import { sync as findPackageJson } from 'pkg-up'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { createBookPlugin } from './book/plugin'
 import { resolveFiles } from './book/resolver'
-import { DevServer } from './dev-server'
+import { DevServer, DevServerConfig } from './dev-server'
 import { loadConfig } from './load-config'
 
 interface DevCommandArgv {
@@ -45,35 +45,19 @@ yargs(hideBin(process.argv))
         throw new Error('Config not found')
       }
 
-      if(!config.entrypoints) {
+      if(!config.entryPoints) {
         throw new Error('At least one entrypoint must be specified')
       }
 
-      const packageRoot = getPackageRoot();
-
-      const devServer = new DevServer({
-        port: argv.port,
-        staticDir: config?.staticDir,
-        logRequests: argv.verbose
-      });
-      
-      build({
-        entryPoints: config?.entrypoints,
-        outdir: '/',
-        bundle: true,
-        watch: true,
-        write: false,
-        platform: 'browser',
-        format: 'iife',
-        incremental: true,
-        plugins: [
-          devServer.createPlugin(),
-          ...(config?.plugins ?? [])
-        ],
-        metafile: true,
+      startDevBundler({
+        entryPoints: config?.entryPoints,
+        plugins: config?.plugins ?? [],
+        devServer: {
+          port: argv.port,
+          staticDir: config?.staticDir,
+          logRequests: argv.verbose
+        }
       })
-
-      devServer.listen();
 
       console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
     }
@@ -119,34 +103,21 @@ yargs(hideBin(process.argv))
       }
 
       const packageRoot = getPackageRoot();
-
-      const devServer = new DevServer({
-        port: argv.port,
-        staticDir: join(packageRoot, 'src/book/ui/public'),
-        logRequests: argv.verbose
-      });
-      
-      build({
+      startDevBundler({
         entryPoints: {
           'index': 'entrypoint'
         },
-        outdir: '/',
-        bundle: true,
-        watch: true,
-        write: false,
-        platform: 'browser',
-        format: 'iife',
-        incremental: true,
         plugins: [
           createBookPlugin(files, packageRoot, process.cwd()),
-          devServer.createPlugin(),
           ...(config?.plugins ?? [])
         ],
-        metafile: true,
+        devServer: {
+          port: argv.port,
+          staticDir: join(packageRoot, 'src/book/ui/public'),
+          logRequests: argv.verbose
+        }
       })
-
-      devServer.listen();
-
+      
       console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
     }
   )
@@ -159,3 +130,30 @@ function getPackageRoot() {
   return dirname(pkg);
 }
 
+interface DevBundlerConfig {
+  entryPoints: string[] | Record<string, string>
+  plugins: Plugin[]
+  devServer: DevServerConfig
+}
+
+function startDevBundler(config: DevBundlerConfig) {
+  const devServer = new DevServer(config.devServer);
+  
+  build({
+    entryPoints: config.entryPoints,
+    outdir: '/',
+    bundle: true,
+    watch: true,
+    write: false,
+    platform: 'browser',
+    format: 'iife',
+    incremental: true,
+    plugins: [
+      ...config.plugins,
+      devServer.createPlugin(),
+    ],
+    metafile: true,
+  })
+
+  devServer.listen();
+}
