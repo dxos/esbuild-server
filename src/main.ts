@@ -19,8 +19,68 @@ interface DevCommandArgv {
 
 yargs(hideBin(process.argv))
   .command<DevCommandArgv>(
-    'dev <stories...>',
+    'dev',
     'start the dev server',
+    yargs => yargs
+      .option('port', { 
+        alias: 'p',
+        type: 'number',
+        default: 8080,
+      })
+      .option('config', { 
+        type: 'string',
+        default: './esapp.config.js',
+      })
+      .option('verbose', { 
+        alias: 'v',
+        type: 'boolean',
+        default: false,
+      }),
+    async argv => {
+      const config = loadConfig(argv.config);
+
+      if(config) {
+        console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
+      } else {
+        throw new Error('Config not found')
+      }
+
+      if(!config.entrypoints) {
+        throw new Error('At least one entrypoint must be specified')
+      }
+
+      const packageRoot = getPackageRoot();
+
+      const devServer = new DevServer({
+        port: argv.port,
+        staticDir: config?.staticDir,
+        logRequests: argv.verbose
+      });
+      
+      build({
+        entryPoints: config?.entrypoints,
+        outdir: '/',
+        bundle: true,
+        watch: true,
+        write: false,
+        platform: 'browser',
+        format: 'iife',
+        incremental: true,
+        plugins: [
+          devServer.createPlugin(),
+          ...(config?.plugins ?? [])
+        ],
+        metafile: true,
+      })
+
+      devServer.listen();
+
+      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
+    }
+  )
+  .command<DevCommandArgv>(
+    'book <stories...>',
+    'start the dev server with a book of components',
     yargs => yargs
       .positional('stories', {
         describe: 'glob to find story files',
