@@ -5,6 +5,10 @@
   "types": "./dist/src/index.d.ts",
   "license": "./LICENSE",
   "bin": "./bin/main.js",
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "start": "ts-node src/main.ts",
     "build": "tsc"
