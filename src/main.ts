@@ -153,6 +153,11 @@ function startDevBundler(config: DevBundlerConfig) {
       devServer.createPlugin(),
     ],
     metafile: true,
+    loader: {
+      '.jpg': 'file',
+      '.png': 'file',
+      '.svg': 'file',
+    }
   })
 
   devServer.listen();
