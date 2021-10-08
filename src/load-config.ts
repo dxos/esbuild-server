@@ -5,6 +5,8 @@ import { resolve } from "path";
 export function loadConfig(path: string): Config | undefined {
   const resolved = resolve(path);
 
+  console.log({ resolved })
+
   if(!existsSync(resolved)) {
     return undefined;
   }
