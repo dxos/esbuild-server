@@ -1,6 +1,6 @@
 {
   "name": "esapp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "license": "./LICENSE",
@@ -26,14 +26,14 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
-    "ts-node": "^10.1.0",
-    "typescript": "^4.3.5",
     "@types/glob": "^7.1.4",
     "@types/node": "^16.3.2",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.3.0",
     "@types/styled-components": "^5.1.14",
-    "@types/yargs": "^17.0.3"
+    "@types/yargs": "^17.0.3",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
   }
 }
