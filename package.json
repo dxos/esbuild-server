@@ -1,9 +1,9 @@
 {
   "name": "esapp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "license": "MIT",
+  "license": "./LICENSE",
   "bin": "./bin/main.js",
   "scripts": {
     "start": "ts-node src/main.ts",
