@@ -7,7 +7,8 @@
   "bin": "./bin/main.js",
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "src"
   ],
   "scripts": {
     "start": "ts-node src/main.ts",
