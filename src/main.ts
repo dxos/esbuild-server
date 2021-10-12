@@ -1,6 +1,7 @@
 import assert from 'assert'
 import chalk from 'chalk'
 import { build, Plugin } from 'esbuild'
+import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path'
 import { sync as findPackageJson } from 'pkg-up'
 import yargs from 'yargs'
@@ -10,6 +11,10 @@ import { resolveFiles } from './book/resolver'
 import { DevServer, DevServerConfig } from './dev-server'
 import { loadConfig } from './load-config'
 
+interface BuildCommandArgv {
+  config: string
+}
+
 interface DevCommandArgv {
   stories: string[]
   port: number
@@ -18,6 +23,54 @@ interface DevCommandArgv {
 }
 
 yargs(hideBin(process.argv))
+  .command<BuildCommandArgv>(
+    'build',
+    'build the app for production',
+    yargs => yargs
+      .option('config', {
+        type: 'string',
+        default: './esapp.config.js'
+      }),
+    async argv => {
+      const config = loadConfig(argv.config);
+
+      if (config) {
+        console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
+      } else {
+        throw new Error('Config not found');
+      }
+
+      if (!config.entryPoints) {
+        throw new Error('At least one entrypoint must be specified');
+      }
+
+      const outdir = config.outdir || './dist';
+
+      if (config.staticDir) {
+        ncp(config.staticDir, outdir, function (err) {
+          if (err) {
+            return console.error(err);
+          }
+        });
+      }
+
+      build({
+        entryPoints: config.entryPoints,
+        outdir,
+        bundle: true,
+        write: true,
+        platform: 'browser',
+        format: 'iife',
+        plugins: config.plugins,
+        metafile: true,
+        loader: {
+          '.jpg': 'file',
+          '.png': 'file',
+          '.svg': 'file',
+        }
+      });
+    }
+  )
   .command<DevCommandArgv>(
     'dev',
     'start the dev server',

@@ -11,6 +11,11 @@ export interface Config {
   entryPoints?: string[] | Record<string, string>
 
   /**
+   * Directory to output production build to.
+   */
+  outdir?: string
+
+  /**
    * Directory with static files to be served by the dev server.
    */
   staticDir?: string
