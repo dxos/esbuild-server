@@ -4,6 +4,7 @@ import { build, Plugin } from 'esbuild'
 import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path'
 import { sync as findPackageJson } from 'pkg-up'
+import { promisify } from 'util';
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { createBookPlugin } from './book/plugin'
@@ -46,29 +47,41 @@ yargs(hideBin(process.argv))
 
       const outdir = config.outdir || './dist';
 
-      if (config.staticDir) {
-        ncp(config.staticDir, outdir, function (err) {
-          if (err) {
-            return console.error(err);
+      console.log(chalk`📦 {dim Building to} ${outdir}`)
+
+
+      console.log(chalk`🏎️  {dim Build started}`)
+      const startTime = Date.now()
+
+      try {
+        if (config.staticDir) {
+          try {
+            await promisify(ncp)(config.staticDir, outdir);
+          } catch(err) {
+            console.error(err)
+            throw err
+          }
+        }
+
+        await build({
+          entryPoints: config.entryPoints,
+          outdir,
+          bundle: true,
+          write: true,
+          platform: 'browser',
+          format: 'iife',
+          plugins: config.plugins,
+          metafile: true,
+          loader: {
+            '.jpg': 'file',
+            '.png': 'file',
+            '.svg': 'file',
           }
         });
+        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+      } catch(err) {
+        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
       }
-
-      build({
-        entryPoints: config.entryPoints,
-        outdir,
-        bundle: true,
-        write: true,
-        platform: 'browser',
-        format: 'iife',
-        plugins: config.plugins,
-        metafile: true,
-        loader: {
-          '.jpg': 'file',
-          '.png': 'file',
-          '.svg': 'file',
-        }
-      });
     }
   )
   .command<DevCommandArgv>(
