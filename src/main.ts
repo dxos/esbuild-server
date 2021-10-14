@@ -81,6 +81,7 @@ yargs(hideBin(process.argv))
         console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
       } catch(err) {
         console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+        process.exit(1);
       }
     }
   )
