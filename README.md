@@ -51,9 +51,17 @@ export interface Config {
 
 ESApp's stories are compatible with storybook format, although only the very minimal features are supported.
 
-To render a storybook run `esapp book 'stories/**/*.stories.tsx'` (replacing with your glob for stories).
+To render a storybook run the following command (replacing with your glob for stories).
+
+```
+esapp book 'stories/**/*.stories.tsx'
+```
 
 Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
+
+## Development
+
+Use `yarn link` and `yarn build --watch` to use the development build of this project from another package.
 
 ## Polyfills
 
