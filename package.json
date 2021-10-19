@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "license": "./LICENSE",
+  "license": "MIT",
   "bin": "./bin/main.js",
   "files": [
     "dist",
