@@ -8,7 +8,7 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ stories }: SidebarProps) => {
-  const sorted = Object.entries(stories).sort(([,a], [,b]) => {
+  const sorted = Object.entries(stories).sort(([, { title: a }], [,{ title: b }]) => {
     return a < b ? -1 : a > b ? 1 : 0;
   });
 
@@ -35,7 +35,7 @@ const Container = styled.div`
   width: 300px;
   overflow-x: auto;
   border-right: 1px solid #999;
-  background-color: #FAFAFA;
+  background-color: gainsboro;
 `
 
 const StoryTitle = styled.div`
