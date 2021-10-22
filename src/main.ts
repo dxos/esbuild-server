@@ -1,6 +1,6 @@
 import assert from 'assert'
 import chalk from 'chalk'
-import { build, Plugin } from 'esbuild'
+import { build, BuildOptions, Plugin } from 'esbuild'
 import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path'
 import { sync as findPackageJson } from 'pkg-up'
@@ -34,6 +34,7 @@ yargs(hideBin(process.argv))
       }),
     async argv => {
       const config = loadConfig(argv.config);
+      const overrides = config?.overrides || {};
 
       if (config) {
         console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
@@ -76,7 +77,8 @@ yargs(hideBin(process.argv))
             '.jpg': 'file',
             '.png': 'file',
             '.svg': 'file',
-          }
+          },
+          ...overrides
         });
         console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
       } catch(err) {
@@ -182,7 +184,8 @@ yargs(hideBin(process.argv))
           port: argv.port,
           staticDir: join(packageRoot, 'src/book/ui/public'),
           logRequests: argv.verbose
-        }
+        },
+        overrides: config?.overrides
       })
       
       console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
@@ -201,10 +204,12 @@ interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
   plugins: Plugin[]
   devServer: DevServerConfig
+  overrides?: BuildOptions
 }
 
 function startDevBundler(config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
+  const overrides = config.overrides || {};
   
   build({
     entryPoints: config.entryPoints,
@@ -224,7 +229,8 @@ function startDevBundler(config: DevBundlerConfig) {
       '.jpg': 'file',
       '.png': 'file',
       '.svg': 'file',
-    }
+    },
+    ...overrides
   })
 
   devServer.listen();
