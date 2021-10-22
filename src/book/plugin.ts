@@ -3,26 +3,26 @@ import { join } from "path/posix";
 
 export function createBookPlugin(files: string[], packageRoot: string, projectRoot: string): Plugin {
   return {
-    name: 'esapp-book',
+    name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
-      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esapp-book', path: 'entrypoint' }))
-      onLoad({ namespace: 'esapp-book', filter: /^entrypoint$/ }, () => ({
+      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }))
+      onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => ({
         resolveDir: __dirname,
         contents: `
-                import { uiMain } from '${join(packageRoot, 'src/book/ui/index.tsx')}';
+          import { uiMain } from '${join(packageRoot, 'src/book/ui/index.tsx')}';
 
-                const storyModules = {
-                  ${files.map(file => `"${file}": require("${file}")`).join(',')}
-                };
-    
-                uiMain({
-                  storyModules,
-                  basePath: "${process.cwd()}",
-                });
-              `
+          const storyModules = {
+            ${files.map(file => `"${file}": require("${file}")`).join(',')}
+          };
+
+          uiMain({
+            storyModules,
+            basePath: "${process.cwd()}",
+          });
+        `
       }))
 
-      // Map our own react to the client one      
+      // Map our own react to the client one
       let reactResolved: string;
       onStart(() => {
         reactResolved = require.resolve('react', { paths: [projectRoot] })
