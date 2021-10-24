@@ -7,12 +7,16 @@ import { sync as findPackageJson } from 'pkg-up'
 import assert from "assert";
 import { startDevBundler } from "../dev-bundler";
 import { createBookPlugin } from "../book/plugin";
+import { promisify } from "util";
+import { ncp } from "ncp";
+import { build } from "esbuild";
 
 interface BookCommandArgv {
   stories: string[]
   port: number
   config: string
   verbose: boolean
+  build: boolean
 }
 
 export const bookCommand: CommandModule<{}, BookCommandArgv> = {
@@ -38,6 +42,11 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       alias: 'v',
       type: 'boolean',
       default: false,
+    })
+    .option('build', {
+      type: 'boolean',
+      default: false,
+      describe: 'build a static stories site instead of starting a dev-server',
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
@@ -61,23 +70,65 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       }
     }
 
+    const outdir = config?.outdir || './dist';
     const packageRoot = getPackageRoot();
-    startDevBundler({
-      entryPoints: {
-        'index': 'entrypoint'
-      },
-      plugins: [
-        createBookPlugin(files, packageRoot, process.cwd()),
-        ...(config?.plugins ?? [])
-      ],
-      devServer: {
-        port: argv.port,
-        staticDir: join(packageRoot, 'src/book/ui/public'),
-        logRequests: argv.verbose
+    const staticDir = join(packageRoot, 'src/book/ui/public');
+
+    if(argv.build) {
+      console.log(chalk`🏎️  {dim Build started}`)
+      const startTime = Date.now()
+  
+      try {
+        try {
+          await promisify(ncp)(staticDir, outdir);
+        } catch(err) {
+          console.error(err)
+          throw err
+        }
+  
+        await build({
+          entryPoints: {
+            'index': 'entrypoint'
+          },
+          outdir,
+          bundle: true,
+          write: true,
+          platform: 'browser',
+          format: 'iife',
+          plugins: [
+            createBookPlugin(files, packageRoot, process.cwd()),
+            ...(config?.plugins ?? [])
+          ],
+          metafile: true,
+          loader: {
+            '.jpg': 'file',
+            '.png': 'file',
+            '.svg': 'file',
+          }
+        });
+        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+      } catch(err) {
+        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+        process.exit(1);
       }
-    })
-    
-    console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
+    } else {
+      startDevBundler({
+        entryPoints: {
+          'index': 'entrypoint'
+        },
+        plugins: [
+          createBookPlugin(files, packageRoot, process.cwd()),
+          ...(config?.plugins ?? [])
+        ],
+        devServer: {
+          port: argv.port,
+          staticDir,
+          logRequests: argv.verbose
+        }
+      })
+      
+      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
+    }
   }
 }
 

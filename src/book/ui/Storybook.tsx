@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
 import { Stories } from "./stories";
 import React from 'react'
 import styled, { createGlobalStyle } from "styled-components";
@@ -10,7 +10,7 @@ export interface StorybookProps {
 
 export const Storybook = ({ stories }: StorybookProps) => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <GlobalStyle />
       <Switch>
         <Route path="/__story">
@@ -30,7 +30,7 @@ export const Storybook = ({ stories }: StorybookProps) => {
                 Object.keys(mod.stories).map((name) => (
                   <Route exact path={`/${file}/${name}`}>
                     <StoryContainer>
-                      <StoryFrame src={`/__story/${file}/${name}`}/>
+                      <StoryFrame src={`#/__story/${file}/${name}`}/>
                     </StoryContainer>
                   </Route>
                 ))
@@ -40,7 +40,7 @@ export const Storybook = ({ stories }: StorybookProps) => {
           </Main>
         </Route>
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
