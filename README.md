@@ -66,3 +66,15 @@ Use `yarn link` and `yarn build --watch` to use the development build of this pr
 ## Polyfills
 
 Currently ESApp does not polyfill any of the node.js modules or globals. If your code is using them you'd need to manually include a plugin to add them.
+
+## Running the examples
+
+```
+# build the code
+yarn build
+
+cd example
+
+# start the server
+../bin/main.js dev 
+```
