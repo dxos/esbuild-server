@@ -1,17 +1,16 @@
-import { Config } from "./config";
-import { existsSync } from "fs";
-import { resolve } from "path";
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
+import { Config } from './config';
 
 export function loadConfig(path: string): Config | undefined {
   const resolved = resolve(path);
 
-  if(!existsSync(resolved)) {
+  if (!existsSync(resolved)) {
     return undefined;
   }
 
-  const config: Config = require(resolved);
-
   // TODO: Config validation.
-
+  const config: Config = require(resolved);
   return config;
 }

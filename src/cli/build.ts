@@ -1,9 +1,11 @@
-import chalk from "chalk";
-import { build } from "esbuild";
-import { ncp } from "ncp";
-import { promisify } from "util";
-import { CommandModule } from "yargs";
-import { loadConfig } from "../load-config";
+import chalk from 'chalk';
+import { build } from 'esbuild';
+import { ncp } from 'ncp';
+import { promisify } from 'util';
+import { CommandModule } from 'yargs';
+
+import { loadConfig } from '../load-config';
+import { DEFAFULT_CONFIG_FILE } from '../config';
 
 interface BuildCommandArgv {
   config: string
@@ -15,7 +17,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
   builder: yargs => yargs
     .option('config', {
       type: 'string',
-      default: './esapp.config.js'
+      default: DEFAFULT_CONFIG_FILE,
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
@@ -34,8 +36,6 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
     const outdir = config.outdir || './dist';
 
     console.log(chalk`📦 {dim Building to} ${outdir}`)
-
-
     console.log(chalk`🏎️  {dim Build started}`)
     const startTime = Date.now()
 

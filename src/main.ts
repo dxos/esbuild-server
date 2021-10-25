@@ -1,8 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { bookCommand } from './cli/book';
-import { buildCommand } from './cli/build';
-import { devCommand } from './cli/dev';
+
+import { bookCommand, buildCommand, devCommand } from './cli';
 
 yargs(hideBin(process.argv))
   .command(buildCommand)

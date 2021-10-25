@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC } from 'react'
 
 export type Stories = Record<string, {
   title: string
@@ -10,7 +10,7 @@ export function extractStories(modules: Record<string, any>, basePath: string): 
 
   for (const file of Object.keys(modules)) {
     const key = convertFileNameToPathSegment(file, basePath)
-    
+
     const mod = modules[file]
     res[key] = {
       title: mod.default?.title ?? key,

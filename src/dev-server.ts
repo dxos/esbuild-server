@@ -1,9 +1,10 @@
-import { BuildResult, Plugin } from "esbuild";
-import { readFile } from "fs/promises";
-import { join } from "path/posix";
-import { Trigger } from "./trigger";
+import chalk from 'chalk';
+import { BuildResult, Plugin } from 'esbuild';
+import { readFile } from 'fs/promises';
 import http from 'http'
-import chalk from "chalk";
+import { join } from 'path/posix';
+
+import { Trigger } from './trigger';
 
 export interface ResolvedFile {
   path: string
@@ -25,7 +26,7 @@ export class DevServer {
 
   createPlugin(): Plugin {
     return {
-      name: 'esapp-serve',
+      name: 'esbuild-server',
       setup: ({ onStart, onEnd }) => {
         let startTime: number = 0;
         onStart(() => {
@@ -34,14 +35,14 @@ export class DevServer {
 
           this.buildTrigger.reset();
         })
-  
+
         onEnd((result) => {
-          if(result.errors.length > 0) {
+          if (result.errors.length > 0) {
             console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
             return
           }
           console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-  
+
           this.buildTrigger.wake(result);
         })
       }
@@ -50,16 +51,16 @@ export class DevServer {
 
   private async resolveFile(url: string): Promise<ResolvedFile | undefined> {
     const buildResult = await this.buildTrigger.wait()
-    
+
     const output = buildResult.outputFiles?.find(file => file.path === url)
-    if(output) {
+    if (output) {
       return {
         path: output.path,
         contents: output.contents,
       }
     }
 
-    if(this.config.staticDir) {
+    if (this.config.staticDir) {
       try {
         const path = join(this.config.staticDir, url)
         const contents = await readFile(path)
@@ -71,7 +72,7 @@ export class DevServer {
       } catch {}
     }
 
-    if(url === '/') {
+    if (url === '/') {
       return this.resolveFile('index.html')
     }
 
@@ -93,13 +94,13 @@ export class DevServer {
       }
 
       const file = await this.resolveFile(req.url!)
-      if(file) {
+      if (file) {
         respondWithFile(file)
         return
       }
 
       const indexFile = await this.resolveFile('/')
-      if(indexFile) {
+      if (indexFile) {
         respondWithFile(indexFile)
         return
       }

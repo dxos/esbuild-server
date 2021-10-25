@@ -1,15 +1,16 @@
-import chalk from "chalk";
-import { dirname, join, resolve } from "path";
-import { CommandModule } from "yargs";
-import { resolveFiles } from "../book/resolver";
-import { loadConfig } from "../load-config";
+import chalk from 'chalk';
+import { dirname, join, resolve } from 'path';
+import { CommandModule } from 'yargs';
 import { sync as findPackageJson } from 'pkg-up'
-import assert from "assert";
-import { startDevBundler } from "../dev-bundler";
-import { createBookPlugin } from "../book/plugin";
-import { promisify } from "util";
-import { ncp } from "ncp";
-import { build } from "esbuild";
+import assert from 'assert';
+import { promisify } from 'util';
+import { ncp } from 'ncp';
+import { build } from 'esbuild';
+
+import { startDevBundler } from '../dev-bundler';
+import { loadConfig } from '../load-config';
+import { createBookPlugin, resolveFiles } from '../book';
+import { DEFAFULT_CONFIG_FILE } from '../config';
 
 interface BookCommandArgv {
   stories: string[]
@@ -20,25 +21,25 @@ interface BookCommandArgv {
 }
 
 export const bookCommand: CommandModule<{}, BookCommandArgv> = {
-  command: 'book <stories...>',
+  command: 'book [stories...]',
   describe: 'start the dev server with a book of components',
   builder: yargs => yargs
     .positional('stories', {
       describe: 'glob to find story files',
       type: 'string',
       array: true,
-      default: [],
+      default: ['./stories/**/*.stories.[jt]sx'],
     })
-    .option('port', { 
+    .option('port', {
       alias: 'p',
       type: 'number',
       default: 8080,
     })
-    .option('config', { 
+    .option('config', {
       type: 'string',
-      default: './esapp.config.js',
+      default: DEFAFULT_CONFIG_FILE,
     })
-    .option('verbose', { 
+    .option('verbose', {
       alias: 'v',
       type: 'boolean',
       default: false,
@@ -52,20 +53,19 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     const config = loadConfig(argv.config);
     const overrides = config?.overrides || {};
 
-    if(config) {
+    if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
 
     const files = (await resolveFiles(argv.stories)).map(file => resolve(file))
-
-    if(files.length === 0) {
+    if (files.length === 0) {
       console.log(chalk`{red error}: No stories found.`)
       process.exit(1)
     }
 
     console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`)
 
-    if(argv.verbose) {
+    if (argv.verbose) {
       for(const file of files) {
         console.log(`    ${file}`)
       }
@@ -75,10 +75,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     const packageRoot = getPackageRoot();
     const staticDir = join(packageRoot, 'src/book/ui/public');
 
-    if(argv.build) {
+    if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`)
       const startTime = Date.now()
-  
+
       try {
         try {
           await promisify(ncp)(staticDir, outdir);
@@ -86,7 +86,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           console.error(err)
           throw err
         }
-  
+
         await build({
           entryPoints: {
             'index': 'entrypoint'
@@ -129,7 +129,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         },
         overrides
       })
-      
+
       console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
     }
   }

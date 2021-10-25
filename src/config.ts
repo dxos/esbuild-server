@@ -1,11 +1,13 @@
-import { BuildOptions, Plugin } from "esbuild";
+import { BuildOptions, Plugin } from 'esbuild';
+
+export const DEFAFULT_CONFIG_FILE = './esbuild-server.config.js';
 
 export interface Config {
   /**
    * List of entry points to bundle.
-   * 
+   *
    * Those are then can be requested from the dev server.
-   * 
+   *
    * Read more: https://esbuild.github.io/api/#entry-points
    */
   entryPoints?: string[] | Record<string, string>

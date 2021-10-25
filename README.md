@@ -1,39 +1,65 @@
-# ESApp - amazingly fast dev-server built with esbuild
+# ESBuild Server
 
-<img src="https://img.shields.io/npm/v/esapp"/>
+A fast dev-server and storybook built with esbuild.
+
+<img src="https://img.shields.io/npm/v/@dxos/esbuild-server"/>
 
 ## Getting started
 
-Look in the `src/example` directory.
+To run the dev server with the examples:
+
+```bash
+yarn build
+
+cd examples
+../bin/main.js dev 
+```
+
+To run the storybook within the examples:
+
+```bash
+cd examples
+../bin/main.js book stories/*.stories.tsx
+```
 
 ## CLI reference
 
 ```
-esapp <command>
+esbuild-server <command>
 
 Commands:
-  esapp dev                start the dev server
-  esapp book <stories...>  start the dev server with a book of components
+  esbuild-server dev                Start the dev server.
+  esbuild-server book <stories...>  Start the dev server with a book of components.
 
 Options:
-  --help     Show help                                                 [boolean]
+  --help     Show help              [boolean]
   --version  Show version number  
 ```
 
 ## Config file
 
-Config is automatically loaded from `./esapp.config.js`.
+Config is automatically loaded from `./esbuild-server.config.js`.
 
 ```typescript
 export interface Config {
   /**
    * List of entry points to bundle.
-   * 
+   *
    * Those are then can be requested from the dev server.
-   * 
+   *
    * Read more: https://esbuild.github.io/api/#entry-points
    */
   entryPoints?: string[] | Record<string, string>
+
+  /**
+   * Directory to output production build to.
+   */
+  outdir?: string
+
+  /**
+   * Override esapp default settings for esbuild
+   */
+  overrides?: BuildOptions
 
   /**
    * Directory with static files to be served by the dev server.
@@ -49,12 +75,12 @@ export interface Config {
 
 ## Storybook
 
-ESApp's stories are compatible with storybook format, although only the very minimal features are supported.
+esbuild-server stories are compatible with storybook format, although only the very minimal features are supported.
 
 To render a storybook run the following command (replacing with your glob for stories).
 
 ```
-esapp book 'stories/**/*.stories.tsx'
+esbuild-server book 'stories/**/*.stories.tsx'
 ```
 
 Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
@@ -65,16 +91,5 @@ Use `yarn link` and `yarn build --watch` to use the development build of this pr
 
 ## Polyfills
 
-Currently ESApp does not polyfill any of the node.js modules or globals. If your code is using them you'd need to manually include a plugin to add them.
-
-## Running the examples
-
-```
-# build the code
-yarn build
-
-cd example
-
-# start the server
-../bin/main.js dev 
-```
+Currently esbuild-server does not polyfill any of the node.js modules or globals. 
+If your code is using them you'd need to manually include a plugin to add them.
