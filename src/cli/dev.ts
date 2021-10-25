@@ -49,7 +49,7 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
         staticDir: config?.staticDir,
         logRequests: argv.verbose
       },
-    overrides: config?.overrides
+      overrides: config?.overrides
       })
 
     console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)

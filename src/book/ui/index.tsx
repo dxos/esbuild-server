@@ -11,5 +11,5 @@ export interface Spec {
 
 export function uiMain(spec: Spec) {
   render(<Storybook stories={extractStories(spec.storyModules, spec.basePath)} />,
-    document.getElementById('root'));
+  document.getElementById('root'));
 }
