@@ -12,6 +12,5 @@ export function loadConfig(path: string): Config | undefined {
 
   // TODO: Config validation.
   const config: Config = require(resolved);
-  console.log(config);
   return config;
 }
