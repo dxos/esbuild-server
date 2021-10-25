@@ -10,4 +10,3 @@ yargs(hideBin(process.argv))
   .command(bookCommand)
   .demandCommand()
   .argv
-

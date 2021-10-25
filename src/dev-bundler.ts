@@ -1,14 +1,16 @@
-import { build, Plugin } from "esbuild";
+import { build, BuildOptions, Plugin } from "esbuild";
 import { DevServer, DevServerConfig } from ".";
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
   plugins: Plugin[]
-  devServer: DevServerConfig
+  devServer: DevServerConfig,
+  overrides?: BuildOptions
 }
 
 export function startDevBundler(config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
+  const overrides = config?.overrides || {};
   
   build({
     entryPoints: config.entryPoints,
@@ -28,7 +30,8 @@ export function startDevBundler(config: DevBundlerConfig) {
       '.jpg': 'file',
       '.png': 'file',
       '.svg': 'file',
-    }
+    },
+    ...overrides
   })
 
   devServer.listen();

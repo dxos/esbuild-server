@@ -1,4 +1,4 @@
-import { Plugin } from "esbuild";
+import { BuildOptions, Plugin } from "esbuild";
 
 export interface Config {
   /**
@@ -14,6 +14,11 @@ export interface Config {
    * Directory to output production build to.
    */
   outdir?: string
+
+  /**
+   * Override esapp default settings for esbuild
+   */
+  overrides?: BuildOptions
 
   /**
    * Directory with static files to be served by the dev server.
