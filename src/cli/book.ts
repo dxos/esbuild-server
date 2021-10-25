@@ -51,6 +51,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
+    const overrides = config?.overrides || {};
+
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
@@ -103,7 +105,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
             '.jpg': 'file',
             '.png': 'file',
             '.svg': 'file',
-          }
+          },
+          ...overrides
         });
         console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
       } catch(err) {
@@ -123,7 +126,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           port: argv.port,
           staticDir,
           logRequests: argv.verbose
-        }
+        },
+        overrides
       })
 
       console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)

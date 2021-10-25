@@ -21,6 +21,8 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
+    const overrides = config?.overrides || {};
+
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     } else {
@@ -60,7 +62,8 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
           '.jpg': 'file',
           '.png': 'file',
           '.svg': 'file',
-        }
+        },
+        ...overrides
       });
       console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
     } catch(err) {

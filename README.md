@@ -6,10 +6,19 @@ A fast dev-server and storybook built with esbuild.
 
 ## Getting started
 
-To run the storybook within the examples directory:
+To run the dev server with the examples:
 
 ```bash
-cd examples/
+yarn build
+
+cd examples
+../bin/main.js dev 
+```
+
+To run the storybook within the examples:
+
+```bash
+cd examples
 ../bin/main.js book stories/*.stories.tsx
 ```
 
@@ -35,12 +44,22 @@ Config is automatically loaded from `./esbuild-server.config.js`.
 export interface Config {
   /**
    * List of entry points to bundle.
-   * 
+   *
    * Those are then can be requested from the dev server.
-   * 
+   *
    * Read more: https://esbuild.github.io/api/#entry-points
    */
   entryPoints?: string[] | Record<string, string>
+
+  /**
+   * Directory to output production build to.
+   */
+  outdir?: string
+
+  /**
+   * Override esapp default settings for esbuild
+   */
+  overrides?: BuildOptions
 
   /**
    * Directory with static files to be served by the dev server.
