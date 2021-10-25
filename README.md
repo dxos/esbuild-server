@@ -1,28 +1,32 @@
-# ESApp - amazingly fast dev-server built with esbuild
+# ESBuild Server
 
-<img src="https://img.shields.io/npm/v/esapp"/>
+A fast dev-server and storybook built with esbuild.
+
+<img src="https://img.shields.io/npm/v/@dxos/esbuild-server"/>
 
 ## Getting started
 
 Look in the `src/example` directory.
 
+TODO(burdon): Update docs to describe how to use exapmles.
+
 ## CLI reference
 
 ```
-esapp <command>
+esbuild-server <command>
 
 Commands:
-  esapp dev                start the dev server
-  esapp book <stories...>  start the dev server with a book of components
+  esbuild-server dev                Start the dev server.
+  esbuild-server book <stories...>  Start the dev server with a book of components.
 
 Options:
-  --help     Show help                                                 [boolean]
+  --help     Show help              [boolean]
   --version  Show version number  
 ```
 
 ## Config file
 
-Config is automatically loaded from `./esapp.config.js`.
+Config is automatically loaded from `./esbuild-server.config.js`.
 
 ```typescript
 export interface Config {
@@ -49,12 +53,12 @@ export interface Config {
 
 ## Storybook
 
-ESApp's stories are compatible with storybook format, although only the very minimal features are supported.
+esbuild-server stories are compatible with storybook format, although only the very minimal features are supported.
 
 To render a storybook run the following command (replacing with your glob for stories).
 
 ```
-esapp book 'stories/**/*.stories.tsx'
+esbuild-server book 'stories/**/*.stories.tsx'
 ```
 
 Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
@@ -65,4 +69,5 @@ Use `yarn link` and `yarn build --watch` to use the development build of this pr
 
 ## Polyfills
 
-Currently ESApp does not polyfill any of the node.js modules or globals. If your code is using them you'd need to manually include a plugin to add them.
+Currently esbuild-server does not polyfill any of the node.js modules or globals. 
+If your code is using them you'd need to manually include a plugin to add them.

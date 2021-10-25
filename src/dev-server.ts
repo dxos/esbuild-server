@@ -1,9 +1,10 @@
-import { BuildResult, Plugin } from "esbuild";
-import { readFile } from "fs/promises";
-import { join } from "path/posix";
-import { Trigger } from "./trigger";
+import chalk from 'chalk';
+import { BuildResult, Plugin } from 'esbuild';
+import { readFile } from 'fs/promises';
 import http from 'http'
-import chalk from "chalk";
+import { join } from 'path/posix';
+
+import { Trigger } from './trigger';
 
 export interface ResolvedFile {
   path: string
@@ -25,7 +26,7 @@ export class DevServer {
 
   createPlugin(): Plugin {
     return {
-      name: 'esapp-serve',
+      name: 'esbuild-server',
       setup: ({ onStart, onEnd }) => {
         let startTime: number = 0;
         onStart(() => {
@@ -34,14 +35,14 @@ export class DevServer {
 
           this.buildTrigger.reset();
         })
-  
+
         onEnd((result) => {
           if(result.errors.length > 0) {
             console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
             return
           }
           console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-  
+
           this.buildTrigger.wake(result);
         })
       }
@@ -50,7 +51,7 @@ export class DevServer {
 
   private async resolveFile(url: string): Promise<ResolvedFile | undefined> {
     const buildResult = await this.buildTrigger.wait()
-    
+
     const output = buildResult.outputFiles?.find(file => file.path === url)
     if(output) {
       return {

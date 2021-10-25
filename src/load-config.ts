@@ -1,6 +1,7 @@
-import { Config } from "./config";
-import { existsSync } from "fs";
-import { resolve } from "path";
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
+import { Config } from './config';
 
 export function loadConfig(path: string): Config | undefined {
   const resolved = resolve(path);
@@ -9,9 +10,8 @@ export function loadConfig(path: string): Config | undefined {
     return undefined;
   }
 
-  const config: Config = require(resolved);
-
   // TODO: Config validation.
-
+  const config: Config = require(resolved);
+  console.log(config);
   return config;
 }
