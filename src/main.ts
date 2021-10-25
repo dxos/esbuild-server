@@ -105,13 +105,13 @@ yargs(hideBin(process.argv))
     async argv => {
       const config = loadConfig(argv.config);
 
-      if(config) {
+      if (config) {
         console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
       } else {
         throw new Error('Config not found')
       }
 
-      if(!config.entryPoints) {
+      if (!config.entryPoints) {
         throw new Error('At least one entrypoint must be specified')
       }
 
@@ -153,18 +153,16 @@ yargs(hideBin(process.argv))
       }),
     async argv => {
       const config = loadConfig(argv.config);
-
-      if(config) {
+      if (config) {
         console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
       }
 
       const files = (await resolveFiles(argv.stories)).map(file => resolve(file))
-
       console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`)
 
-      if(argv.verbose) {
-        for(const file of files) {
-          console.log(`    ${file}`)
+      if (argv.verbose) {
+        for (const file of files) {
+          console.log(`  ${file}`)
         }
       }
 

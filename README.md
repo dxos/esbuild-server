@@ -8,8 +8,13 @@ A fast dev-server and storybook built with esbuild.
 
 Look in the `src/example` directory.
 
-TODO(burdon): Update docs to describe how to use exapmles.
+TODO(burdon): Update docs to describe how to use exapmles (dev and book).
 
+```bash
+yarn start dev --config ./src/example/esbuild-server.config.js
+yarn start book **/*.stories.tsx
+```
+`
 ## CLI reference
 
 ```
