@@ -1,5 +1,7 @@
 import { Plugin } from 'esbuild';
 
+export const DEFAFULT_CONFIG_FILE = './esbuild-server.config.js';
+
 export interface Config {
   /**
    * List of entry points to bundle.

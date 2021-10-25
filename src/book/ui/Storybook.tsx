@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Switch, Route, Redirect, useParams } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect, useParams } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { Stories } from './stories';
@@ -21,13 +21,11 @@ const Main = ({ stories }: StorybookProps) => {
           Object.keys(mod.stories).map((name) => (
             <Route exact path={`/${file}/${name}`}>
               <StoryContainer>
-                <StoryFrame src={`/__story/${file}/${name}`}/>
+                <StoryFrame src={`#/__story/${file}/${name}`}/>
               </StoryContainer>
             </Route>
           ))
         )}
-
-        <Redirect to='/' />
       </Switch>
     </Container>
   );
@@ -35,7 +33,7 @@ const Main = ({ stories }: StorybookProps) => {
 
 export const Storybook = ({ stories }: StorybookProps) => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <GlobalStyle />
 
       <Switch>
@@ -52,8 +50,13 @@ export const Storybook = ({ stories }: StorybookProps) => {
         <Route path='/:file/:story'>
           <Main stories={stories} />
         </Route>
+
+        <Route exact path='/'>
+          <Main stories={stories} />
+        </Route>
+        <Redirect to='/' />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 

@@ -37,7 +37,7 @@ export class DevServer {
         })
 
         onEnd((result) => {
-          if(result.errors.length > 0) {
+          if (result.errors.length > 0) {
             console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
             return
           }
@@ -53,14 +53,14 @@ export class DevServer {
     const buildResult = await this.buildTrigger.wait()
 
     const output = buildResult.outputFiles?.find(file => file.path === url)
-    if(output) {
+    if (output) {
       return {
         path: output.path,
         contents: output.contents,
       }
     }
 
-    if(this.config.staticDir) {
+    if (this.config.staticDir) {
       try {
         const path = join(this.config.staticDir, url)
         const contents = await readFile(path)
@@ -72,7 +72,7 @@ export class DevServer {
       } catch {}
     }
 
-    if(url === '/') {
+    if (url === '/') {
       return this.resolveFile('index.html')
     }
 
@@ -94,13 +94,13 @@ export class DevServer {
       }
 
       const file = await this.resolveFile(req.url!)
-      if(file) {
+      if (file) {
         respondWithFile(file)
         return
       }
 
       const indexFile = await this.resolveFile('/')
-      if(indexFile) {
+      if (indexFile) {
         respondWithFile(indexFile)
         return
       }

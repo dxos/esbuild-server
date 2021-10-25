@@ -6,7 +6,7 @@ import { Config } from './config';
 export function loadConfig(path: string): Config | undefined {
   const resolved = resolve(path);
 
-  if(!existsSync(resolved)) {
+  if (!existsSync(resolved)) {
     return undefined;
   }
 

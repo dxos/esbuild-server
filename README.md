@@ -6,15 +6,13 @@ A fast dev-server and storybook built with esbuild.
 
 ## Getting started
 
-Look in the `src/example` directory.
-
-TODO(burdon): Update docs to describe how to use exapmles (dev and book).
+To run the storybook within the examples directory:
 
 ```bash
-yarn start dev --config ./src/example/esbuild-server.config.js
-yarn start book **/*.stories.tsx
+cd examples/
+../bin/main.js book stories/*.stories.tsx
 ```
-`
+
 ## CLI reference
 
 ```
