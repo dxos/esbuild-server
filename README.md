@@ -24,16 +24,27 @@ cd examples
 
 ## CLI reference
 
+Run `esbuild-server --help` or `esbuild-server <command> --help` for an always up-to-date CLI reference.
+
+### Running apps and storybooks
+
 ```
 esbuild-server <command>
 
 Commands:
+  esbuild-server build              Build the app for production.
   esbuild-server dev                Start the dev server.
-  esbuild-server book <stories...>  Start the dev server with a book of components.
+  esbuild-server book [stories...]  Start the dev server with a book of components.
 
 Options:
-  --help     Show help              [boolean]
-  --version  Show version number  
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
+```
+
+### Building storybooks
+
+```
+esbuild-server book --build [stories...]
 ```
 
 ## Config file
