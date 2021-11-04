@@ -27,7 +27,7 @@ export const Sidebar = ({ stories, selected }: SidebarProps) => {
               {Object.keys(mod.stories).map((name) => {
                 return (
                   <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-                    > <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+                    &gt; <NavLink to={`/${file}/${name}`}>{name}</NavLink>
                   </StoryItem>
                 )
               })}
