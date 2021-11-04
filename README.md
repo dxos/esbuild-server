@@ -79,6 +79,10 @@ To build storybooks:
 esbuild-server book --build 'stories/**/*.stories.tsx'
 ```
 
+## Publishing
+
+```yarn publish```
+
 
 ## Polyfills
 
