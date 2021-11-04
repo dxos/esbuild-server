@@ -1,7 +1,11 @@
 import React from 'react';
 
-export const SecondFileStory = () => (
-  <div>
-    <p>This is a story from the second file.</p>
+export default {
+  title: 'examples/story-2'
+};
+
+export const Primary = () => (
+  <div style={{ padding: 16 }}>
+    <h1>Primary component for story 2</h1>
   </div>
 );

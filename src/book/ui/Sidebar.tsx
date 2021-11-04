@@ -16,20 +16,25 @@ export const Sidebar = ({ stories, selected }: SidebarProps) => {
 
   return (
     <Container>
-      {sorted.map(([file, mod]) => {
-        return (
-          <Story key={`${file}-${name}`} style={{ backgroundColor: file === selected.file ? 'lightsteelblue' : '' }}>
-            <StoryTitle title={mod.title}>{mod.title}</StoryTitle>
-            {Object.keys(mod.stories).map((name) => {
-              return (
-                <StoryItem key={name} style={{ backgroundColor: file === selected.file && name === selected.story ? 'darkseagreen' : ''  }}>
-                  <NavLink to={`/${file}/${name}`}>{name}</NavLink>
-                </StoryItem>
-              )
-            })}
-          </Story>
-        )
-      })}
+      <Header>esbuild-server book</Header>
+      <List>
+        {sorted.map(([file, mod]) => {
+          return (
+            <Story key={`${file}-${name}`} selected={file === selected.file}>
+              <StoryTitle title={mod.title}>
+                {mod.title}
+              </StoryTitle>
+              {Object.keys(mod.stories).map((name) => {
+                return (
+                  <StoryItem key={name} selected={file === selected.file && name === selected.story}>
+                    > <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+                  </StoryItem>
+                )
+              })}
+            </Story>
+          )
+        })}
+      </List>
     </Container>
   );
 }
@@ -38,16 +43,32 @@ const Container = styled.div`
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
-  width: 300px;
-  overflow-x: auto;
-  border-right: 1px solid #999;
-  background-color: gainsboro;
+  width: 300;
+  border-right: 1 solid #999;
 `;
 
-const Story = styled.div`
-  margin-bottom: 12px;
+const Header = styled.div`
+  display: flex;
+  padding: 8 16;
+  align-items: center;
+  background-color: #DDD;
+  font-family: sans-serif;
+  font-size: 20;
+  border-bottom: 1 solid #999;
+`;
+
+const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-x: auto;
+  background-color: #FAFAFA;
+`;
+
+const Story = styled.div<{ selected: boolean }>`
+  margin-bottom: 16;
   font-family: monospace;
-  font-size: 15px;
+  font-size: 16;
   a {
     text-decoration: none;
     color: #555 !important;
@@ -61,15 +82,15 @@ const Story = styled.div`
 `;
 
 const StoryTitle = styled.div`
-  padding: 8px 0;
-  padding-left: 8px;
-  color: #111;
+  padding: 16;
+  color: darkblue;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-bottom: 1 solid #999;
 `;
 
-const StoryItem = styled.div`
-  padding: 8px 0;
-  padding-left: 16px;
+const StoryItem = styled.div<{ selected: boolean }>`
+  background-color: ${props => props.selected && '#EEE'};
+  padding: 8 16;
 `;
