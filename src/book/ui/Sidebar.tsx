@@ -10,30 +10,62 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ stories, selected }: SidebarProps) => {
+  // TODO(burdon): Memoize.
+
+  // Sort stories.
   const sorted = Object.entries(stories).sort(([, { title: a }], [,{ title: b }]) => {
     return a < b ? -1 : a > b ? 1 : 0;
   });
+
+  // Group stories.
+  const grouped = sorted.reduce((result: any, story) => {
+    const [file, { title, stories }] = story;
+    const [module] = title.split('/');
+    let value = result[module];
+    if (!value) {
+      value = [];
+      result[module] = value;
+    }
+
+    const name = title.substring(title.indexOf('/') + 1);
+    value.push({ file, name, stories: Object.entries(stories).map(([name, f]) => ({ name, f })) });
+    return result;
+  }, {});
+
+  // Convert to array.
+  const flat = Object.keys(grouped).map(key => ({ module: key, stories: grouped[key] })).sort();
+
+  console.log(JSON.stringify(flat, undefined, 2));
+  // <StoryTitle title={mod.title}>
+  //   {mod.title}
+  // </StoryTitle>
+  // {Object.keys(mod.stories).map((name) => (
+  //   <StoryItem key={name} selected={file === selected.file && name === selected.story}>
+  //     &gt; <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+  //   </StoryItem>
+  // ))}
 
   return (
     <Container>
       <Header>esbuild-server book</Header>
       <List>
-        {sorted.map(([file, mod]) => {
-          return (
-            <Story key={`${file}-${name}`} selected={file === selected.file}>
-              <StoryTitle title={mod.title}>
-                {mod.title}
-              </StoryTitle>
-              {Object.keys(mod.stories).map((name) => {
-                return (
+        {flat.map(({ module, stories }) => (
+          <Module key={module}>
+            <ModuleTitle>
+              {module}
+            </ModuleTitle>
+            {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
+              <Story key={name}>
+                <StoryTitle>{name}</StoryTitle>
+                {stories.map(({ name }) => (
                   <StoryItem key={name} selected={file === selected.file && name === selected.story}>
                     &gt; <NavLink to={`/${file}/${name}`}>{name}</NavLink>
                   </StoryItem>
-                )
-              })}
-            </Story>
-          )
-        })}
+                ))}
+              </Story>
+            ))}
+          </Module>
+        ))}
       </List>
     </Container>
   );
@@ -65,10 +97,36 @@ const List = styled.div`
   background-color: #FAFAFA;
 `;
 
-const Story = styled.div<{ selected: boolean }>`
-  margin-bottom: 16;
+const Module = styled.div`
+  border-bottom: 1px solid #DDD;
   font-family: monospace;
   font-size: 16;
+`;
+
+const ModuleTitle = styled.div`
+  padding: 6 16;
+  color: darkblue;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1 solid #999;
+`;
+
+const Story = styled.div`
+`;
+
+const StoryTitle = styled.div`
+  padding: 6 24;
+  color: darkblue;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1 solid #999;
+`;
+
+const StoryItem = styled.div<{ selected?: boolean }>`
+  padding: 6 32;
+  background-color: ${props => props.selected && '#EEE'};
   a {
     text-decoration: none;
     color: #555 !important;
@@ -79,18 +137,4 @@ const Story = styled.div<{ selected: boolean }>`
   a:visited {
     color: #555 !important;
   }
-`;
-
-const StoryTitle = styled.div`
-  padding: 16;
-  color: darkblue;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-bottom: 1 solid #999;
-`;
-
-const StoryItem = styled.div<{ selected: boolean }>`
-  background-color: ${props => props.selected && '#EEE'};
-  padding: 8 16;
 `;
