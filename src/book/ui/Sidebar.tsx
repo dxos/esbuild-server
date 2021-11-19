@@ -1,17 +1,13 @@
-import React from 'react'
+import React, { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Stories } from './stories';
 
-export interface SidebarProps {
-  stories: Stories
-  selected: { file: string, story: string }
-}
-
-export const Sidebar = ({ stories, selected }: SidebarProps) => {
-  // TODO(burdon): Memoize.
-
+/**
+ * Sort and groups stories into hierarchy.
+ */
+const createHierarchy = (stories: Stories) => {
   // Sort stories.
   const sorted = Object.entries(stories).sort(([, { title: a }], [,{ title: b }]) => {
     return a < b ? -1 : a > b ? 1 : 0;
@@ -33,23 +29,24 @@ export const Sidebar = ({ stories, selected }: SidebarProps) => {
   }, {});
 
   // Convert to array.
-  const flat = Object.keys(grouped).map(key => ({ module: key, stories: grouped[key] })).sort();
+  const flatten = Object.keys(grouped).map(key => ({ module: key, stories: grouped[key] })).sort();
+  // console.log(JSON.stringify(flat, undefined, 2));
+  return flatten;
+};
 
-  console.log(JSON.stringify(flat, undefined, 2));
-  // <StoryTitle title={mod.title}>
-  //   {mod.title}
-  // </StoryTitle>
-  // {Object.keys(mod.stories).map((name) => (
-  //   <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-  //     &gt; <NavLink to={`/${file}/${name}`}>{name}</NavLink>
-  //   </StoryItem>
-  // ))}
+export interface SidebarProps {
+  stories: Stories
+  selected: { file: string, story: string }
+}
+
+export const Sidebar = ({ stories, selected }: SidebarProps) => {
+  const hierarchy = useMemo(() => createHierarchy(stories), [stories]);
 
   return (
     <Container>
       <Header>esbuild-server book</Header>
       <List>
-        {flat.map(({ module, stories }) => (
+        {hierarchy.map(({ module, stories }) => (
           <Module key={module}>
             <ModuleTitle>
               {module}
@@ -76,7 +73,6 @@ const Container = styled.div`
   flex-shrink: 0;
   flex-direction: column;
   width: 300;
-  border-right: 1 solid #999;
 `;
 
 const Header = styled.div`
@@ -86,7 +82,6 @@ const Header = styled.div`
   background-color: #DDD;
   font-family: sans-serif;
   font-size: 20;
-  border-bottom: 1 solid #999;
 `;
 
 const List = styled.div`
@@ -105,23 +100,20 @@ const Module = styled.div`
 
 const ModuleTitle = styled.div`
   padding: 6 16;
-  color: darkblue;
+  color: cornflowerblue;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-bottom: 1 solid #999;
 `;
 
-const Story = styled.div`
-`;
+const Story = styled.div``;
 
 const StoryTitle = styled.div`
   padding: 6 24;
-  color: darkblue;
+  color: darkmagenta;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-bottom: 1 solid #999;
 `;
 
 const StoryItem = styled.div<{ selected?: boolean }>`
