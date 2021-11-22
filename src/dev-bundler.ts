@@ -1,5 +1,5 @@
-import { build, BuildOptions, Plugin } from "esbuild";
-import { DevServer, DevServerConfig } from ".";
+import { build, BuildOptions, Plugin } from 'esbuild';
+import { DevServer, DevServerConfig } from '.';
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
@@ -11,7 +11,7 @@ export interface DevBundlerConfig {
 export function startDevBundler(config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
   const overrides = config?.overrides || {};
-  
+
   build({
     entryPoints: config.entryPoints,
     outdir: '/',
@@ -34,6 +34,16 @@ export function startDevBundler(config: DevBundlerConfig) {
     ...overrides
   })
 
-  devServer.listen();
-}
+  // Increment port of in use.
+  let port = config.devServer.port;
+  let callback = (code: string) => {
+    if (code === 'EADDRINUSE') {
+      port++
+      devServer.listen(port, callback)
+    } else {
+      throw Error(code)
+    }
+  }
 
+  devServer.listen(port, callback)
+}

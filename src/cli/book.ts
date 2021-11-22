@@ -129,8 +129,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         },
         overrides
       })
-
-      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${argv.port}}`)
     }
   }
 }

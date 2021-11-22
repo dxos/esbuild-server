@@ -66,8 +66,8 @@ export class DevServer {
         const contents = await readFile(path)
 
         return {
-            path,
-            contents,
+          path,
+          contents,
         }
       } catch {}
     }
@@ -79,8 +79,8 @@ export class DevServer {
     return undefined
   }
 
-  listen() {
-    http.createServer(async (req, res) => {
+  listen(port: number = this.config.port, callback = undefined) {
+    const server = http.createServer(async (req, res) => {
       const start = Date.now()
 
       this.config.logRequests && console.log(`=> ${req.method} ${req.url} ${req.headers['accept']}`)
@@ -109,6 +109,17 @@ export class DevServer {
 
       res.writeHead(404, 'Not found')
       res.end()
-    }).listen(this.config.port)
+    })
+
+    server.on('error', (err: any) => {
+      callback?.(err.code)
+      server.close()
+    });
+
+    server.listen(port, () => {
+      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${port}}`)
+    })
+
+    return server
   }
 }
