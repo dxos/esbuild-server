@@ -79,7 +79,7 @@ export class DevServer {
     return undefined
   }
 
-  listen(port: number = this.config.port, callback = undefined) {
+  listen(port: number = this.config.port, callback?: (code: string) => void) {
     const server = http.createServer(async (req, res) => {
       const start = Date.now()
 
