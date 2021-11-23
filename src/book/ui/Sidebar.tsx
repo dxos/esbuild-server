@@ -75,7 +75,8 @@ const palette = {
   dark: {
     fg: {
       main: '#AAA',
-      story: '#CCC',
+      header: '#57ACDB',
+      story: '#BBB',
       selected: '#DDD',
       bullet: 'orange',
       border: '#555'
@@ -91,6 +92,7 @@ const palette = {
   light: {
     fg: {
       main: '#666',
+      header: '#57ACDB',
       story: '#333',
       selected: '#EEE',
       bullet: '#377BB8',
@@ -111,7 +113,7 @@ const Container = styled.div`
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
-  width: 250px;
+  width: 300px;
   background-color: ${color.bg.main};
   color: ${color.fg.main};
   font-family: Arial;
@@ -151,16 +153,13 @@ const StoryList = styled.ul`
   padding: 0;
 `;
 
-const Story = styled.li`
-`;
+const Story = styled.li``;
 
 const StoryTitle = styled.div`
   padding: 10px 24px;
-  color: ${color.fg.main};
-  font-variant: all-petite-caps;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: ${color.fg.header};
+  font-size: 14px;
+  font-family: monospace;
 `;
 
 const StoryItemList = styled.ul`
