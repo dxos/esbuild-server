@@ -44,89 +44,144 @@ export const Sidebar = ({ stories, selected }: SidebarProps) => {
 
   return (
     <Container>
-      <Header>esbuild-server book</Header>
-      <List>
+      <ModuleList>
         {hierarchy.map(({ module, stories }) => (
           <Module key={module}>
             <ModuleTitle>
               {module}
             </ModuleTitle>
-            {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
-              <Story key={name}>
-                <StoryTitle>{name}</StoryTitle>
-                {stories.map(({ name }) => (
-                  <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-                    &gt; <NavLink to={`/${file}/${name}`}>{name}</NavLink>
-                  </StoryItem>
-                ))}
-              </Story>
-            ))}
+            <StoryList>
+              {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
+                <Story key={name}>
+                  <StoryTitle>{name}</StoryTitle>
+                  <StoryItemList>
+                    {stories.map(({ name }) => (
+                      <StoryItem key={name} selected={file === selected.file && name === selected.story}>
+                        <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+                      </StoryItem>
+                    ))}
+                  </StoryItemList>
+                </Story>
+              ))}
+            </StoryList>
           </Module>
         ))}
-      </List>
+      </ModuleList>
     </Container>
   );
 }
+
+const palette = {
+  dark: {
+    fg: {
+      main: '#AAA',
+      story: '#CCC',
+      selected: '#DDD',
+      bullet: 'orange',
+      border: '#555'
+    },
+    bg: {
+      main: '#31313D',
+      panel: '#31313D',
+      module: '#31313D',
+      selected: '#2C2B38'
+    }
+  },
+
+  light: {
+    fg: {
+      main: '#666',
+      story: '#333',
+      selected: '#EEE',
+      bullet: '#377BB8',
+      border: '#AAA'
+    },
+    bg: {
+      main: '#FAFAFA',
+      panel: '#FAFAFA',
+      module: '#FAFAFA',
+      selected: '#377BB8'
+    }
+  }
+};
+
+const color = palette.dark;
 
 const Container = styled.div`
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
-  width: 300;
+  width: 250px;
+  background-color: ${color.bg.main};
+  color: ${color.fg.main};
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 100;
+  
+  li, a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
-const Header = styled.div`
-  display: flex;
-  padding: 8 16;
-  align-items: center;
-  background-color: #DDD;
-  font-family: sans-serif;
-  font-size: 20;
-`;
-
-const List = styled.div`
+const ModuleList = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow-x: auto;
-  background-color: #FAFAFA;
+  overflow-y: auto;
 `;
 
 const Module = styled.div`
-  border-bottom: 1px solid #DDD;
-  font-family: monospace;
-  font-size: 16;
+  background-color: ${color.bg.panel};
+  padding-bottom: 8px;
+  border-bottom: 1px solid ${color.fg.border};
 `;
 
 const ModuleTitle = styled.div`
-  padding: 6 16;
-  color: cornflowerblue;
+  padding: 8px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  background-color: ${color.bg.module};
+  font-variant: small-caps;
 `;
 
-const Story = styled.div``;
+const StoryList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const Story = styled.li`
+`;
 
 const StoryTitle = styled.div`
-  padding: 6 24;
-  color: darkmagenta;
+  padding: 10px 24px;
+  color: ${color.fg.main};
+  font-variant: all-petite-caps;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-const StoryItem = styled.div<{ selected?: boolean }>`
-  padding: 6 32;
-  background-color: ${props => props.selected && '#EEE'};
+const StoryItemList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  li::before {
+    content: "\\25AA"; 
+    color: ${color.fg.story};
+    margin-right: 8px;
+  }
+`;
+
+const StoryItem = styled.li<{ selected?: boolean }>`
+  margin: 2px 0;
+  padding: 8px 21px;
+  background-color: ${props => props.selected && color.bg.selected};
+  border-left: 3px solid ${props => props.selected ? color.fg.bullet : color.bg.module};
   a {
     text-decoration: none;
-    color: #555 !important;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  a:visited {
-    color: #555 !important;
+    color: ${props => props.selected ? color.fg.selected : color.fg.story};
   }
 `;

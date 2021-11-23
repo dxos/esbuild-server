@@ -62,7 +62,8 @@ export const Storybook = ({ stories }: StorybookProps) => {
 
 const GlobalStyle = createGlobalStyle`
   body {
-    margin: 0px;
+    margin: 0;
+    overflow: hidden;
   }
 `;
 

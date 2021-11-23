@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { dirname, join, resolve } from 'path';
 import { CommandModule } from 'yargs';
-import { sync as findPackageJson } from 'pkg-up'
+import { sync as findPackageJson } from 'pkg-up';
 import assert from 'assert';
 import { promisify } from 'util';
 import { ncp } from 'ncp';
