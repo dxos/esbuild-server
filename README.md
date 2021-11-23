@@ -81,7 +81,9 @@ esbuild-server book --build 'stories/**/*.stories.tsx'
 
 ## Publishing
 
-```yarn publish```
+```
+yarn publish
+```
 
 
 ## Polyfills
