@@ -100,6 +100,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
             createBookPlugin(files, packageRoot, process.cwd()),
             ...(config?.plugins ?? [])
           ],
+          sourcemap: true,
           metafile: true,
           loader: {
             '.jpg': 'file',
