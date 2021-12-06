@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { BuildResult, Plugin } from 'esbuild';
 import { readFile } from 'fs/promises';
 import http from 'http'
+import { isAbsolute } from 'path';
 import { join } from 'path/posix';
 
 import { Trigger } from './trigger';
@@ -58,6 +59,17 @@ export class DevServer {
         path: output.path,
         contents: output.contents,
       }
+    }
+
+    if(isAbsolute(url)) {
+      try {
+        const contents = await readFile(url)
+
+        return {
+          path: url,
+          contents,
+        }
+      } catch {}
     }
 
     if (this.config.staticDir) {
