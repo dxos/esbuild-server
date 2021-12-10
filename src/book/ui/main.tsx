@@ -2,9 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { extractStories } from './stories'
-import { Storybook } from './Storybook'
-
-// TODO(burdon): Move code out of index!
+import { Storybook } from './components'
 
 export interface Story {
   module: any // Contains exports of module.

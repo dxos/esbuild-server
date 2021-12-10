@@ -1,9 +1,12 @@
 import React from 'react'
-import { HashRouter, Switch, Route, Redirect, useParams } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect, useParams, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { Stories } from './stories';
+import { Stories } from '../stories';
 import { Sidebar } from './Sidebar';
+import { Source } from './Source';
+
+const mode = 'dark';
 
 export interface StorybookProps {
   stories: Stories
@@ -11,17 +14,26 @@ export interface StorybookProps {
 
 const Main = ({ stories }: StorybookProps) => {
   const { file, story }: { file: string, story: string } = useParams();
+  const { search } = useLocation();
 
   return (
     <Container>
-      <Sidebar stories={stories} selected={{ file, story }} />
+      <Sidebar
+        stories={stories}
+        selected={{ file, story }}
+        mode='dark'
+      />
 
       <Switch>
-        {Object.entries(stories).map(([file, mod]) =>
-          Object.keys(mod.stories).map((name) => (
+        {Object.entries(stories).map(([file, { stories, source }]) =>
+          Object.keys(stories).map((name) => (
             <Route exact path={`/${file}/${name}`}>
               <StoryContainer>
-                <StoryFrame src={`#/__story/${file}/${name}`}/>
+                {search ? (
+                  <Source code={source} mode={mode} />
+                ) : (
+                  <StoryFrame src={`#/__story/${file}/${name}`}/>
+                )}
               </StoryContainer>
             </Route>
           ))
@@ -60,12 +72,6 @@ export const Storybook = ({ stories }: StorybookProps) => {
         <Route path={['/:file/:story', '/']}>
           <Main stories={stories} />
         </Route>
-
-        {/*
-        <Route exact path='/'>
-          <Main stories={stories} />
-        </Route>
-        */}
 
         <Redirect to='/' />
       </Switch>

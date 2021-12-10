@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { Story } from './index';
+import { Story } from './main';
 
 export type Stories = Record<string, {
   title: string
