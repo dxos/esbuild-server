@@ -21,6 +21,7 @@ export function startDevBundler(config: DevBundlerConfig) {
     platform: 'browser',
     format: 'iife',
     incremental: true,
+    sourcemap: true,
     plugins: [
       ...config.plugins,
       devServer.createPlugin(),

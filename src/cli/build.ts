@@ -58,6 +58,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
         format: 'iife',
         plugins: config.plugins,
         metafile: true,
+        sourcemap: true,
         loader: {
           '.jpg': 'file',
           '.png': 'file',
