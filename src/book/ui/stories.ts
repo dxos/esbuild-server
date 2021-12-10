@@ -1,25 +1,29 @@
 import { FC } from 'react'
 
+import { Story } from './index';
+
 export type Stories = Record<string, {
   title: string
   stories: Record<string, FC>
+  source: string
 }>
 
-export function extractStories(modules: Record<string, any>, basePath: string): Stories {
+export function extractStories(modules: Record<string, Story>, basePath: string): Stories {
   const res: Stories = {}
 
   for (const file of Object.keys(modules)) {
     const key = convertFileNameToPathSegment(file, basePath);
 
-    const mod = modules[file];
+    const { module, source } = modules[file];
     res[key] = {
-      title: mod.default?.title ?? key,
-      stories: {}
+      title: module.default?.title ?? key,
+      stories: {},
+      source
     };
 
-    for (const comp of Object.keys(mod)) {
-      if (typeof mod[comp] === 'function') {
-        res[key].stories[comp] = mod[comp];
+    for (const comp of Object.keys(module)) {
+      if (typeof module[comp] === 'function') {
+        res[key].stories[comp] = module[comp];
       }
     }
   }

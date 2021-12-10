@@ -1,9 +1,9 @@
 import chalk from 'chalk';
 import { CommandModule } from 'yargs';
 
+import { DEFAFULT_CONFIG_FILE } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
-import { DEFAFULT_CONFIG_FILE } from '../config';
 
 interface DevCommandArgv {
   port: number
@@ -34,11 +34,11 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     } else {
-      throw new Error('Config not found')
+      throw new Error('Config not found.');
     }
 
     if (!config.entryPoints) {
-      throw new Error('At least one entrypoint must be specified')
+      throw new Error('At least one entrypoint must be specified.');
     }
 
     startDevBundler({
@@ -50,6 +50,6 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
         logRequests: argv.verbose
       },
       overrides: config?.overrides
-    })
+    });
   }
 }

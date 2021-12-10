@@ -32,6 +32,8 @@ const Main = ({ stories }: StorybookProps) => {
 };
 
 export const Storybook = ({ stories }: StorybookProps) => {
+  console.log(stories);
+
   return (
     <HashRouter>
       <GlobalStyle />
@@ -47,13 +49,24 @@ export const Storybook = ({ stories }: StorybookProps) => {
           )}
         </Route>
 
-        <Route path='/:file/:story'>
+        <Route path='/__source'>
+          {Object.entries(stories).map(([file, { source }]) => (
+            <Route key={`${file}`} exact path={`/__source/${file}`}>
+              <pre>{source}</pre>
+            </Route>
+          ))}
+        </Route>
+
+        <Route path={['/:file/:story', '/']}>
           <Main stories={stories} />
         </Route>
 
+        {/*
         <Route exact path='/'>
           <Main stories={stories} />
         </Route>
+        */}
+
         <Redirect to='/' />
       </Switch>
     </HashRouter>

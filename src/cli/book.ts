@@ -1,16 +1,16 @@
-import chalk from 'chalk';
-import { dirname, join, resolve } from 'path';
-import { CommandModule } from 'yargs';
-import { sync as findPackageJson } from 'pkg-up';
 import assert from 'assert';
-import { promisify } from 'util';
-import { ncp } from 'ncp';
+import chalk from 'chalk';
 import { build } from 'esbuild';
+import { ncp } from 'ncp';
+import { dirname, join, resolve } from 'path';
+import { sync as findPackageJson } from 'pkg-up';
+import { promisify } from 'util';
+import { CommandModule } from 'yargs';
 
-import { startDevBundler } from '../dev-bundler';
-import { loadConfig } from '../load-config';
 import { createBookPlugin, resolveFiles } from '../book';
 import { DEFAFULT_CONFIG_FILE } from '../config';
+import { startDevBundler } from '../dev-bundler';
+import { loadConfig } from '../load-config';
 
 interface BookCommandArgv {
   stories: string[]
@@ -57,17 +57,17 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
 
-    const files = (await resolveFiles(argv.stories)).map(file => resolve(file))
+    const files = (await resolveFiles(argv.stories)).map(file => resolve(file));
     if (files.length === 0) {
-      console.log(chalk`{red error}: No stories found.`)
-      process.exit(1)
+      console.log(chalk`{red error}: No stories found.`);
+      process.exit(1);
     }
 
-    console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`)
+    console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`);
 
     if (argv.verbose) {
-      for(const file of files) {
-        console.log(`    ${file}`)
+      for (const file of files) {
+        console.log(`    ${file}`);
       }
     }
 
@@ -76,15 +76,15 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     const staticDir = join(packageRoot, 'src/book/ui/public');
 
     if (argv.build) {
-      console.log(chalk`🏎️  {dim Build started}`)
-      const startTime = Date.now()
+      console.log(chalk`🏎️  {dim Build started}`);
+      const startTime = Date.now();
 
       try {
         try {
           await promisify(ncp)(staticDir, outdir);
-        } catch(err) {
-          console.error(err)
-          throw err
+        } catch (err) {
+          console.error(err);
+          throw err;
         }
 
         await build({
@@ -104,13 +104,13 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           loader: {
             '.jpg': 'file',
             '.png': 'file',
-            '.svg': 'file',
+            '.svg': 'file'
           },
           ...overrides
         });
-        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-      } catch(err) {
-        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
+      } catch (err) {
+        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
         process.exit(1);
       }
     } else {
@@ -128,10 +128,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           logRequests: argv.verbose
         },
         overrides
-      })
+      });
     }
   }
-}
+};
 
 function getPackageRoot() {
   const pkg = findPackageJson({ cwd: __dirname });

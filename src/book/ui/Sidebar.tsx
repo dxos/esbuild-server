@@ -69,7 +69,7 @@ export const Sidebar = ({ stories, selected }: SidebarProps) => {
       </ModuleList>
     </Container>
   );
-}
+};
 
 const palette = {
   dark: {

@@ -12,17 +12,17 @@ export function createBookPlugin(files: string[], packageRoot: string, projectRo
           import { uiMain } from '${join(packageRoot, 'src/book/ui/index.tsx')}';
 
           const storyModules = {
-            ${files.map(file => `'${file}': require('${file}')`).join(',')}
+            ${files.map(file => `'${file}': { module: require('${file}'), source: 'xxx' }`).join(',')}
           };
 
           uiMain({
             storyModules,
-            basePath: '${process.cwd()}',
+            basePath: '${process.cwd()}'
           });
         `
       }))
 
-      // Map our own react to the client one
+      // Map our own react to the client one.
       let reactResolved: string;
       onStart(() => {
         reactResolved = require.resolve('react', { paths: [projectRoot] })
