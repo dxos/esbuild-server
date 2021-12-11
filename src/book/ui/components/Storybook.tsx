@@ -3,16 +3,18 @@ import { HashRouter, Switch, Route, Redirect, useParams, useLocation } from 'rea
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { Stories } from '../stories';
+import { Mode } from '../theme';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
-const mode = 'dark';
-
 export interface StorybookProps {
   stories: Stories
+  options?: {
+    mode?: Mode
+  }
 }
 
-const Main = ({ stories }: StorybookProps) => {
+const Main = ({ stories, options = {} }: StorybookProps) => {
   const { file, story }: { file: string, story: string } = useParams();
   const { search } = useLocation();
 
@@ -21,7 +23,7 @@ const Main = ({ stories }: StorybookProps) => {
       <Sidebar
         stories={stories}
         selected={{ file, story }}
-        mode='dark'
+        mode={options.mode}
       />
 
       <Switch>
@@ -30,7 +32,7 @@ const Main = ({ stories }: StorybookProps) => {
             <Route exact path={`/${file}/${name}`}>
               <StoryContainer>
                 {search ? (
-                  <Source code={source} mode={mode} />
+                  <Source code={source} mode={options.mode} />
                 ) : (
                   <StoryFrame src={`#/__story/${file}/${name}`}/>
                 )}
@@ -43,9 +45,7 @@ const Main = ({ stories }: StorybookProps) => {
   );
 };
 
-export const Storybook = ({ stories }: StorybookProps) => {
-  console.log(stories);
-
+export const Storybook = ({ stories, options = {} }: StorybookProps) => {
   return (
     <HashRouter>
       <GlobalStyle />
@@ -61,16 +61,8 @@ export const Storybook = ({ stories }: StorybookProps) => {
           )}
         </Route>
 
-        <Route path='/__source'>
-          {Object.entries(stories).map(([file, { source }]) => (
-            <Route key={`${file}`} exact path={`/__source/${file}`}>
-              <pre>{source}</pre>
-            </Route>
-          ))}
-        </Route>
-
         <Route path={['/:file/:story', '/']}>
-          <Main stories={stories} />
+          <Main stories={stories} options={options} />
         </Route>
 
         <Redirect to='/' />

@@ -1,24 +1,31 @@
 export type Mode = 'light' | 'dark' | undefined;
 
+// https://mui.com/customization/color
 export const theme = {
   dark: {
+    bg: {
+      main: '#263238',
+      panel: '#263238',
+      module: '#263238',
+      selected: '#546e7a'
+    },
     fg: {
       main: '#AAA',
       header: '#57ACDB',
       story: '#BBB',
       selected: '#DDD',
-      bullet: 'orange',
-      border: '#555'
-    },
-    bg: {
-      main: '#31313D',
-      panel: '#31313D',
-      module: '#31313D',
-      selected: '#2C2B38'
+      bullet: '#d32f2f',
+      border: '#263238'
     }
   },
 
   light: {
+    bg: {
+      main: '#FAFAFA',
+      panel: '#FAFAFA',
+      module: '#FAFAFA',
+      selected: '#377BB8'
+    },
     fg: {
       main: '#666',
       header: '#57ACDB',
@@ -26,12 +33,6 @@ export const theme = {
       selected: '#EEE',
       bullet: '#377BB8',
       border: '#AAA'
-    },
-    bg: {
-      main: '#FAFAFA',
-      panel: '#FAFAFA',
-      module: '#FAFAFA',
-      selected: '#377BB8'
     }
   }
 };

@@ -44,6 +44,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       type: 'boolean',
       default: false,
     })
+    .option('mode', {
+      type: 'string',
+      default: 'dark'
+    })
     .option('build', {
       type: 'boolean',
       default: false,
@@ -97,7 +101,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(files, packageRoot, process.cwd()),
+            createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -120,7 +124,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(files, packageRoot, process.cwd()),
+          createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
           ...(config?.plugins ?? [])
         ],
         devServer: {

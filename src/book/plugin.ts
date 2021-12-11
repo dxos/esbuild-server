@@ -2,7 +2,9 @@ import { Plugin } from 'esbuild';
 import fs from 'fs';
 import { join } from 'path/posix';
 
-export function createBookPlugin(files: string[], packageRoot: string, projectRoot: string): Plugin {
+export function createBookPlugin(
+  files: string[], packageRoot: string, projectRoot: string, options: any  = {}
+): Plugin {
   return {
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
@@ -21,8 +23,8 @@ export function createBookPlugin(files: string[], packageRoot: string, projectRo
   
             uiMain({
               storyModules,
-              basePath: '${process.cwd()}'
-            });
+              basePath: '${process.cwd()}', 
+            }, ${JSON.stringify(options)});
           `
         };
       });

@@ -117,6 +117,7 @@ const ModuleTitle = styled.div`
   overflow: hidden;
   background-color: ${({ theme }) => theme.bg.module};
   font-variant: small-caps;
+  font-size: 18px;
 `;
 
 const StoryList = styled.ul`
@@ -130,8 +131,7 @@ const Story = styled.li``;
 const StoryTitle = styled.div`
   padding: 10px 24px;
   color: ${({ theme }) => theme.fg.header};
-  font-size: 14px;
-  font-family: monospace;
+  font-size: 16px;
 `;
 
 const StoryItemList = styled.ul`
@@ -152,7 +152,7 @@ const StoryItem = styled.li<{ selected?: boolean }>`
   margin: 2px 0;
   padding: 6px 21px;
   background-color: ${({ theme, selected }) => selected && theme.bg.selected};
-  border-left: 3px solid ${({ theme, selected }) => selected ? theme.fg.bullet : theme.bg.module};
+  border-left: 4px solid ${({ theme, selected }) => selected ? theme.fg.bullet : 'transparent'};
   a {
     display: flex;
     text-decoration: none;
