@@ -56,7 +56,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
   handler: async argv => {
     const config = loadConfig(argv.config);
     const overrides = config?.overrides || {};
-
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
@@ -101,7 +100,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
+            createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -124,7 +123,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
+          createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
           ...(config?.plugins ?? [])
         ],
         devServer: {
