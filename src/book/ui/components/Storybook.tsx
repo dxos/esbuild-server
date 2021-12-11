@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { HashRouter, Switch, Route, Redirect, useParams, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -9,7 +9,7 @@ import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
 export interface StorybookProps {
-  readme?: string
+  readme?: FunctionComponent
   stories: Stories
   options?: {
     mode?: Mode
@@ -17,7 +17,7 @@ export interface StorybookProps {
 }
 
 const Main = ({
-  readme,
+  readme: Component,
   stories,
   options = {}
 }: StorybookProps) => {
@@ -34,7 +34,13 @@ const Main = ({
 
       <Switch>
         <Route exact path='/'>
-          <Page>{readme}</Page>
+          {Component && (
+            <StoryContainer>
+              <Page>
+                <Component />
+              </Page>
+            </StoryContainer>
+          )}
         </Route>
 
         {Object.entries(stories).map(([file, { stories, source }]) =>

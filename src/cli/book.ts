@@ -100,7 +100,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
+            createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -123,7 +123,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(files, packageRoot, process.cwd(), { mode: argv.mode }),
+          createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
           ...(config?.plugins ?? [])
         ],
         devServer: {

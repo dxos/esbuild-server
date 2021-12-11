@@ -50,6 +50,9 @@ export const Sidebar = ({ stories, selected, mode }: SidebarProps) => {
   return (
     <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
       <Container>
+        <Header>
+          <NavLink to='/'>Home</NavLink>
+        </Header>
         <ModuleList>
           {hierarchy.map(({ module, stories }) => (
             <Module key={module}>
@@ -92,10 +95,22 @@ const Container = styled.div`
   font-size: 16px;
   font-weight: 100;
   
-  li, a {
+  a {
     overflow: hidden;
     text-overflow: ellipsis;
+    text-decoration: none;
     white-space: nowrap;
+  }
+`;
+
+const Header = styled.div`
+  padding: 8px;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.bg.module};
+  font-size: 18px;
+  a {
+    font-size: 16px;
+    color: ${({ theme }) => theme.fg.story};
   }
 `;
 
@@ -155,7 +170,6 @@ const StoryItem = styled.li<{ selected?: boolean }>`
   border-left: 4px solid ${({ theme, selected }) => selected ? theme.fg.bullet : 'transparent'};
   a {
     display: flex;
-    text-decoration: none;
     font-size: 16px;
     color: ${({ theme, selected }) => selected ? theme.fg.selected : theme.fg.story};
   }

@@ -11,7 +11,7 @@ export interface Story {
 
 export interface Spec {
   basePath: string
-  readme: string
+  readme: React.FunctionComponent
   modules: Record<string, Story>
 }
 
