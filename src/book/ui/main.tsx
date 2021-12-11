@@ -10,11 +10,18 @@ export interface Story {
 }
 
 export interface Spec {
-  storyModules: Record<string, Story>
   basePath: string
+  readme: string
+  modules: Record<string, Story>
 }
 
 export function uiMain(spec: Spec, options: any) {
-  render(<Storybook stories={extractStories(spec.storyModules, spec.basePath)} options={options} />,
+  render((
+    <Storybook
+      readme={spec.readme}
+      stories={extractStories(spec.modules, spec.basePath)}
+      options={options}
+    />
+  ),
   document.getElementById('root'));
 }

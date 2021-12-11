@@ -56,7 +56,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
   handler: async argv => {
     const config = loadConfig(argv.config);
     const overrides = config?.overrides || {};
-
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }

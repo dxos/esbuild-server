@@ -4,17 +4,23 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import { Stories } from '../stories';
 import { Mode } from '../theme';
+import { Page } from './Page';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
 export interface StorybookProps {
+  readme?: string
   stories: Stories
   options?: {
     mode?: Mode
   }
 }
 
-const Main = ({ stories, options = {} }: StorybookProps) => {
+const Main = ({
+  readme,
+  stories,
+  options = {}
+}: StorybookProps) => {
   const { file, story }: { file: string, story: string } = useParams();
   const { search } = useLocation();
 
@@ -27,6 +33,10 @@ const Main = ({ stories, options = {} }: StorybookProps) => {
       />
 
       <Switch>
+        <Route exact path='/'>
+          <Page>{readme}</Page>
+        </Route>
+
         {Object.entries(stories).map(([file, { stories, source }]) =>
           Object.keys(stories).map((name) => (
             <Route exact path={`/${file}/${name}`}>
@@ -45,12 +55,17 @@ const Main = ({ stories, options = {} }: StorybookProps) => {
   );
 };
 
-export const Storybook = ({ stories, options = {} }: StorybookProps) => {
+export const Storybook = ({
+  readme,
+  stories,
+  options = {}
+}: StorybookProps) => {
   return (
     <HashRouter>
       <GlobalStyle />
 
       <Switch>
+        {/* Stories to be loaded into the iframe. */}
         <Route path='/__story'>
           {Object.entries(stories).map(([file, mod]) =>
             Object.entries(mod.stories).map(([name, Story]) => (
@@ -61,8 +76,13 @@ export const Storybook = ({ stories, options = {} }: StorybookProps) => {
           )}
         </Route>
 
+        {/* Main layout. */}
         <Route path={['/:file/:story', '/']}>
-          <Main stories={stories} options={options} />
+          <Main
+            readme={readme}
+            stories={stories}
+            options={options}
+          />
         </Route>
 
         <Redirect to='/' />
