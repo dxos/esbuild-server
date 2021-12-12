@@ -23,13 +23,15 @@ const components: MDXComponents = {
 // https://theme-ui.com/guides/how-it-works
 const theme = {
   fonts: {
-    heading: 'cursive'
+    body: 'system-ui, sans-serif'
   },
   styles: {
+    root: {
+      fontFamily: 'body'
+    },
     h1: { // TODO(burdon): Not working.
       color: 'red',
-      fontSize: 32,
-      fontFamily: 'heading'
+      fontSize: 24
     },
   },
   colors: {
