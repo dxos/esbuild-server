@@ -8,6 +8,9 @@ import { Page } from './Page';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
+// TODO(burdon): Add pages from stories.
+// import Readme from '../../../../examples/stories/README.mdx';
+
 export interface StorybookProps {
   readme?: FunctionComponent
   stories: Stories
@@ -17,7 +20,7 @@ export interface StorybookProps {
 }
 
 const Main = ({
-  readme: Component,
+  readme: Readme,
   stories,
   options = {}
 }: StorybookProps) => {
@@ -34,10 +37,10 @@ const Main = ({
 
       <Switch>
         <Route exact path='/'>
-          {Component && (
+          {Readme && (
             <StoryContainer>
               <Page>
-                <Component />
+                <Readme />
               </Page>
             </StoryContainer>
           )}

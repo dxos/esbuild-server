@@ -16,6 +16,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@mdx-js/esbuild": "^2.0.0-rc.1",
     "@mdx-js/mdx": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
     "@styled-icons/material-outlined": "^10.34.0",

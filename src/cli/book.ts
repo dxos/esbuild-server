@@ -7,7 +7,7 @@ import { sync as findPackageJson } from 'pkg-up';
 import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
-import { createBookPlugin, resolveFiles } from '../book';
+import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
 import { DEFAFULT_CONFIG_FILE } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
@@ -101,6 +101,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           format: 'iife',
           plugins: [
             createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
+            await createMdxPlugin(),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -124,6 +125,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         },
         plugins: [
           createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
+          await createMdxPlugin(),
           ...(config?.plugins ?? [])
         ],
         devServer: {
