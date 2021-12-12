@@ -13,6 +13,7 @@ import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
 
 interface BookCommandArgv {
+  pages: string[]
   stories: string[]
   port: number
   config: string
@@ -28,21 +29,27 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       describe: 'glob to find story files',
       type: 'string',
       array: true,
-      default: ['./stories/**/*.stories.[jt]sx'],
+      default: ['./stories/**/*.stories.[jt]sx']
+    })
+    .positional('pages', {
+      describe: 'glob to find story pages',
+      type: 'string',
+      array: true,
+      default: ['./stories/**/*.mdx']
     })
     .option('port', {
       alias: 'p',
       type: 'number',
-      default: 8080,
+      default: 8080
     })
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE,
+      default: DEFAFULT_CONFIG_FILE
     })
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
-      default: false,
+      default: false
     })
     .option('mode', {
       type: 'string',
@@ -51,7 +58,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     .option('build', {
       type: 'boolean',
       default: false,
-      describe: 'build a static stories site instead of starting a dev-server',
+      describe: 'build a static stories site instead of starting a dev-server'
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
@@ -60,17 +67,29 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
 
+    const pages = (await resolveFiles(argv.pages)).map(file => resolve(file));
     const files = (await resolveFiles(argv.stories)).map(file => resolve(file));
-    if (files.length === 0) {
-      console.log(chalk`{red error}: No stories found.`);
+
+    if (pages.length === 0 && files.length === 0) {
+      console.log(chalk`{red error}: No pages or stories found.`);
       process.exit(1);
     }
 
     console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`);
 
     if (argv.verbose) {
-      for (const file of files) {
-        console.log(`    ${file}`);
+      if (pages.length) {
+        console.log('Pages:');
+        for (const page of pages) {
+          console.log(`- ${chalk.green(page)}`);
+        }
+      }
+
+      if (files.length) {
+        console.log('Stories:');
+        for (const file of files) {
+          console.log(`- ${chalk.green(file)}`);
+        }
       }
     }
 
@@ -100,7 +119,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
+            createBookPlugin(process.cwd(), packageRoot, pages, files, { mode: argv.mode }),
             await createMdxPlugin(),
             ...(config?.plugins ?? [])
           ],
@@ -124,7 +143,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(process.cwd(), packageRoot, files, { mode: argv.mode }),
+          createBookPlugin(process.cwd(), packageRoot, pages, files, { mode: argv.mode }),
           await createMdxPlugin(),
           ...(config?.plugins ?? [])
         ],

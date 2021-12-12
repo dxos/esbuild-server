@@ -5,6 +5,7 @@ import { join } from 'path/posix';
 export function createBookPlugin(
   projectRoot: string,
   packageRoot: string,
+  pages: string[],
   files: string[],
   options: any = {}
 ): Plugin {
@@ -24,6 +25,12 @@ export function createBookPlugin(
 
             // Compiled via mdx plugin.
             import Readme from '${join(projectRoot, 'README.md')}';
+            // const { default: Readme } = require('${join(projectRoot, 'README.md')}');
+            
+            // MDX Pages.
+            const pages = [
+              ${pages.map(page => `['${page}', require('${page}').default]`).join(',')}
+            ];
 
             // Dynamically import stories with sources.
             const modules = {
@@ -36,6 +43,7 @@ export function createBookPlugin(
             const spec = {
               basePath: '${process.cwd()}',
               readme: Readme,
+              pages,
               modules
             };
 

@@ -1,7 +1,9 @@
 import { MDXComponents } from 'mdx/types';
-import React, { ReactNode, Suspense, lazy } from 'react';
+import React, { FunctionComponent, ReactNode, Suspense, lazy } from 'react';
 import { ThemeProvider } from 'theme-ui';
 import { MDXProvider } from '@mdx-js/react';
+
+export type PageType = [page: string, component: FunctionComponent]
 
 // https://mdxjs.com/packages/react
 // https://mdxjs.com/table-of-components

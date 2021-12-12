@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
-import { HashRouter, Switch, Route, Redirect, useParams, useLocation } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { Stories } from '../stories';
 import { Mode } from '../theme';
-import { Page } from './Page';
+import { Page, PageType } from './Page';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
@@ -13,6 +13,7 @@ import { Source } from './Source';
 
 export interface StorybookProps {
   readme?: FunctionComponent
+  pages: PageType[]
   stories: Stories
   options?: {
     mode?: Mode
@@ -21,17 +22,17 @@ export interface StorybookProps {
 
 const Main = ({
   readme: Readme,
+  pages,
   stories,
   options = {}
 }: StorybookProps) => {
-  const { file, story }: { file: string, story: string } = useParams();
   const { search } = useLocation();
 
   return (
     <Container>
       <Sidebar
+        pages={pages}
         stories={stories}
-        selected={{ file, story }}
         mode={options.mode}
       />
 
@@ -45,6 +46,16 @@ const Main = ({
             </StoryContainer>
           )}
         </Route>
+
+        {pages.map(([page, Component]) => (
+          <Route key={page} exact path={`/page/${page}`}>
+            <StoryContainer>
+              <Page>
+                <Component />
+              </Page>
+            </StoryContainer>
+          </Route>
+        ))}
 
         {Object.entries(stories).map(([file, { stories, source }]) =>
           Object.keys(stories).map((name) => (
@@ -66,6 +77,7 @@ const Main = ({
 
 export const Storybook = ({
   readme,
+  pages,
   stories,
   options = {}
 }: StorybookProps) => {
@@ -86,9 +98,10 @@ export const Storybook = ({
         </Route>
 
         {/* Main layout. */}
-        <Route path={['/:file/:story', '/']}>
+        <Route path={['/page/:page', '/:file/:story', '/']}>
           <Main
             readme={readme}
+            pages={pages}
             stories={stories}
             options={options}
           />

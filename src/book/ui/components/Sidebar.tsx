@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 // Icons: https://styled-icons.dev
@@ -7,6 +7,7 @@ import { TextSnippet } from '@styled-icons/material-outlined'
 
 import { Stories } from '../stories';
 import { Mode, theme } from '../theme';
+import { PageType } from './Page';
 
 /**
  * Sort and groups stories into hierarchy.
@@ -39,46 +40,63 @@ const createHierarchy = (stories: Stories) => {
 };
 
 export interface SidebarProps {
+  pages: PageType[]
   stories: Stories
-  selected: { file: string, story: string }
   mode?: Mode
 }
 
-export const Sidebar = ({ stories, selected, mode }: SidebarProps) => {
-  const hierarchy = useMemo(() => createHierarchy(stories), [stories]);
+export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
+  const selected: { page: string, file: string, story: string } = useParams();
+  const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
 
+  // TODO(burdon): Selection for header and pages.
   return (
     <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
       <Container>
-        <Header>
+        <Header selected={!selected.page && !selected.file}>
           <NavLink to='/'>Home</NavLink>
         </Header>
-        <ModuleList>
-          {hierarchy.map(({ module, stories }) => (
-            <Module key={module}>
-              <ModuleTitle>
-                {module}
-              </ModuleTitle>
-              <StoryList>
-                {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
-                  <Story key={name}>
-                    <StoryTitle>{name}</StoryTitle>
-                    <StoryItemList>
-                      {stories.map(({ name }) => (
-                        <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-                          <NavLink to={`/${file}/${name}`}>{name}</NavLink>
-                          <NavLink to={`/${file}/${name}?source`}>
-                            <TextSnippet size={24} title='Source' />
-                          </NavLink>
-                        </StoryItem>
-                      ))}
-                    </StoryItemList>
-                  </Story>
-                ))}
-              </StoryList>
-            </Module>
-          ))}
-        </ModuleList>
+
+        {pages.length && (
+          <PageList>
+            {pages.map(([page]) => (
+              <PageTitle key={page} selected={page === selected.page}>
+                <NavLink to={`/page/${page}`}>
+                  {page}
+                </NavLink>
+              </PageTitle>
+            ))}
+          </PageList>
+        )}
+
+        {stories.length && (
+          <ModuleList>
+            {stories.map(({ module, stories }) => (
+              <Module key={module}>
+                <ModuleTitle>
+                  {module}
+                </ModuleTitle>
+                <StoryList>
+                  {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
+                    <Story key={name}>
+                      <StoryTitle>{name}</StoryTitle>
+                      <StoryItemList>
+                        {stories.map(({ name }) => (
+                          <StoryItem key={name} selected={file === selected.file && name === selected.story}>
+                            <NavLink to={`/${file}/${name}`}>{name}</NavLink>
+                            <NavLink to={`/${file}/${name}?source`}>
+                              <TextSnippet size={24} title='Source' />
+                            </NavLink>
+                          </StoryItem>
+                        ))}
+                      </StoryItemList>
+                    </Story>
+                  ))}
+                </StoryList>
+              </Module>
+            ))}
+          </ModuleList>
+        )}
       </Container>
     </ThemeProvider>
   );
@@ -100,24 +118,42 @@ const Container = styled.div`
     text-overflow: ellipsis;
     text-decoration: none;
     white-space: nowrap;
-  }
-`;
-
-const Header = styled.div`
-  padding: 8px;
-  overflow: hidden;
-  background-color: ${({ theme }) => theme.bg.module};
-  font-size: 18px;
-  a {
     font-size: 16px;
     color: ${({ theme }) => theme.fg.story};
   }
 `;
 
+const Header = styled.div<{ selected?: boolean }>`
+  padding: 8px;
+  overflow: hidden;
+  background-color: ${({ theme, selected }) => selected && theme.bg.selected};
+  font-size: 18px;
+`;
+
+//
+// Page
+//
+
+const PageList = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+`;
+
+const PageTitle = styled.div<{ selected?: boolean }>`
+  padding: 8px;
+  overflow: hidden;
+  background-color: ${({ theme, selected }) => selected && theme.bg.selected};
+  font-size: 18px;
+`;
+
+//
+// Module
+//
+
 const ModuleList = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
   overflow-y: auto;
 `;
 
@@ -134,6 +170,10 @@ const ModuleTitle = styled.div`
   font-variant: small-caps;
   font-size: 18px;
 `;
+
+//
+// Story
+//
 
 const StoryList = styled.ul`
   list-style: none;

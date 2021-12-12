@@ -6,7 +6,7 @@ To run the dev server with the examples build the package (optionally in watch m
 yarn build --watch
 ```
 
-## App server
+## App Server
 
 To run the app server.
 
