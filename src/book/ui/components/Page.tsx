@@ -8,7 +8,7 @@ export type PageType = [page: string, component: FunctionComponent]
 // https://mdxjs.com/packages/react
 // https://mdxjs.com/table-of-components
 const components: MDXComponents = {
-  pre: (props) => <pre {...props} style={{ padding: 10, backgroundColor: '#EEE' }} />,
+  pre: (props) => <pre {...props} style={{ fontSize: 16, padding: '12px 10px', backgroundColor: '#EEE' }} />,
 
   // TODO(burdon): Custom tags not working (unless imported).
   TestComponent: ({ label }: { label?: string }) => {
