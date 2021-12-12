@@ -48,7 +48,7 @@ const Main = ({
         </Route>
 
         {pages.map(([page, Component]) => (
-          <Route key={page} exact path={`/page/${page}`}>
+          <Route key={page} exact path={`/${page}`}>
             <StoryContainer>
               <Page>
                 <Component />
@@ -59,7 +59,7 @@ const Main = ({
 
         {Object.entries(stories).map(([file, { stories, source }]) =>
           Object.keys(stories).map((name) => (
-            <Route exact path={`/${file}/${name}`}>
+            <Route exact path={`/story/${file}/${name}`}>
               <StoryContainer>
                 {search ? (
                   <Source code={source} mode={options.mode} />
@@ -98,7 +98,7 @@ export const Storybook = ({
         </Route>
 
         {/* Main layout. */}
-        <Route path={['/page/:page', '/:file/:story', '/']}>
+        <Route path={['/story/:file/:story', '/:page', '/']}>
           <Main
             readme={readme}
             pages={pages}

@@ -49,7 +49,6 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
   const selected: { page: string, file: string, story: string } = useParams();
   const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
 
-  // TODO(burdon): Selection for header and pages.
   return (
     <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
       <Container>
@@ -61,7 +60,7 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
           <PageList>
             {pages.map(([page]) => (
               <PageTitle key={page} selected={page === selected.page}>
-                <NavLink to={`/page/${page}`}>
+                <NavLink to={`/${page}`}>
                   {page}
                 </NavLink>
               </PageTitle>
@@ -83,8 +82,8 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
                       <StoryItemList>
                         {stories.map(({ name }) => (
                           <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-                            <NavLink to={`/${file}/${name}`}>{name}</NavLink>
-                            <NavLink to={`/${file}/${name}?source`}>
+                            <NavLink to={`/story/${file}/${name}`}>{name}</NavLink>
+                            <NavLink to={`/story/${file}/${name}?source`}>
                               <TextSnippet size={24} title='Source' />
                             </NavLink>
                           </StoryItem>
@@ -127,6 +126,7 @@ const Header = styled.div<{ selected?: boolean }>`
   padding: 8px;
   overflow: hidden;
   background-color: ${({ theme, selected }) => selected && theme.bg.selected};
+  border-left: 4px solid ${({ theme, selected }) => selected ? theme.fg.bullet : 'transparent'};
   font-size: 18px;
 `;
 
@@ -144,6 +144,7 @@ const PageTitle = styled.div<{ selected?: boolean }>`
   padding: 8px;
   overflow: hidden;
   background-color: ${({ theme, selected }) => selected && theme.bg.selected};
+  border-left: 4px solid ${({ theme, selected }) => selected ? theme.fg.bullet : 'transparent'};
   font-size: 18px;
 `;
 
@@ -164,7 +165,7 @@ const Module = styled.div`
 `;
 
 const ModuleTitle = styled.div`
-  padding: 8px;
+  padding: 8px 12px;
   overflow: hidden;
   background-color: ${({ theme }) => theme.bg.module};
   font-variant: small-caps;
