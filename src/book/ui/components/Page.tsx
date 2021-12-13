@@ -64,7 +64,7 @@ const components: MDXComponents = {
     }, []);
 
     return (
-       <span style={{ opacity: on ? 1 : 0.5, ...props}}>
+      <span style={{ opacity: on ? 1 : 0.5, ...props}}>
         {children}
       </span>
     );
@@ -121,13 +121,14 @@ export const Page = ({ children }: PageProps) => {
  */
 // TODO(burdon): Experimental -- remove.
 export const Wrapper = ({ path }: { path: string }) => {
-  // Path must be static.
-  const OtherComponent = lazy(() => import('../../../../README.md'));
+  // Imported dynamically but path must be static.
+  // Compiled using mdx esbuild plugin.
+  const LazyComponent = lazy(() => import('../../../../README.md'));
 
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
-        <OtherComponent />
+        <LazyComponent />
       </Suspense>
     </div>
   );
