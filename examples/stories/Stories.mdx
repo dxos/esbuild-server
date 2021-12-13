@@ -1,7 +1,9 @@
+# Stories
+
 import { TestComponent } from './src';
 
 ```typescript
-// NOTE: Path relative to proejct root.
+// NOTE: The path must be relative to the project root.
 import { TestComponent } from './src';
 ```
 
@@ -20,3 +22,14 @@ And another:
 ```tsx
 <TestComponent label="GREEN" color='seagreen' size={100} />
 ```
+
+This is a custom <Blink color='seagreen'>shortcode</Blink> tag.
+
+<CodeBlock>
+```tsx
+const main = () => {
+  const x = 100;
+  console.log(x);
+};
+```
+</CodeBlock>
