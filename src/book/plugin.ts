@@ -25,7 +25,6 @@ export function createBookPlugin(
 
             // Compiled via mdx plugin.
             import Readme from '${join(projectRoot, 'README.md')}';
-            // const { default: Readme } = require('${join(projectRoot, 'README.md')}');
             
             // MDX Pages.
             const pages = [

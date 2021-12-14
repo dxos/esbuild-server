@@ -14,7 +14,7 @@ export async function createMdxPlugin (): Promise<Plugin> {
     remarkPlugins: [
       // Support GFM features such as autolink literals, footnotes, strikethrough, tables, and task lists.
       // https://mdxjs.com/guides/gfm
-      // remarkGfm,
+      remarkGfm,
 
       // TODO(burdon): No effect. Configure for code blocks?
       // highlight
