@@ -2,11 +2,10 @@ import { Plugin } from 'esbuild';
 import fs from 'fs';
 import { join } from 'path/posix';
 
-import { compileMdx } from './mdx';
-
 export function createBookPlugin(
   projectRoot: string,
   packageRoot: string,
+  pages: string[],
   files: string[],
   options: any = {}
 ): Plugin {
@@ -14,15 +13,9 @@ export function createBookPlugin(
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
       onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }))
-      onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, async () => {
+      onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => {
         // Load source file.
-        const source = (file: string) => JSON.stringify(fs.readFileSync(file, 'utf-8'));
-
-        // Process README MDX file.
-        // TODO(burdon): Create MDX files for each story?
-        // TODO(burdon): Is this the right location (e.g., for static build?)
-        const output = join(__dirname, 'mdx');
-        const readme = await compileMdx(join(projectRoot, 'README.md'), output);
+        const readSource = (file: string) => JSON.stringify(fs.readFileSync(file, 'utf-8'));
 
         // Create contents for main function.
         return {
@@ -30,19 +23,29 @@ export function createBookPlugin(
           contents: `
             import { uiMain } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
 
-            // Import the compiled README file.
-            const Component = require('${readme}');
-             
+            // Compiled via mdx plugin.
+            import Readme from '${join(projectRoot, 'README.md')}';
+            
+            // MDX Pages.
+            const pages = [
+              ${pages.map(page => `['${page}', require('${page}').default]`).join(',')}
+            ];
+
+            // Dynamically import stories with sources.
             const modules = {
-              ${files.map(file => `'${file}': { module: require('${file}'), source: ${source(file)} }`).join(',')}
+              ${files.map(file => `'${file}': { 
+                module: require('${file}'), 
+                source: ${readSource(file)} 
+              }`).join(',')}
             };
 
             const spec = {
               basePath: '${process.cwd()}',
-              readme: Component.default,
+              readme: Readme,
+              pages,
               modules
             };
-  
+
             uiMain(spec, ${JSON.stringify(options)});
           `
         };

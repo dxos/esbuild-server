@@ -1,0 +1,35 @@
+# Stories
+
+import { TestComponent } from './src';
+
+```typescript
+// NOTE: The path must be relative to the project root.
+import { TestComponent } from './src';
+```
+
+This is a custom component:
+
+<TestComponent label="ORANGE" color='orange' />
+
+```tsx
+<TestComponent label="ORANGE" color='orange' />
+```
+
+And another:
+
+<TestComponent label="GREEN" color='seagreen' size={100} />
+
+```tsx
+<TestComponent label="GREEN" color='seagreen' size={100} />
+```
+
+This is a custom <Blink color='seagreen'>shortcode</Blink> tag.
+
+<CodeBlock>
+```tsx
+const main = () => {
+  const x = 100;
+  console.log(x);
+};
+```
+</CodeBlock>
