@@ -56,7 +56,7 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
           <NavLink to='/'>Home</NavLink>
         </Header>
 
-        {pages.length && (
+        {pages.length > 0 && (
           <PageList>
             {pages.map(([page]) => (
               <PageTitle key={page} selected={page === selected.page}>
@@ -68,7 +68,7 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
           </PageList>
         )}
 
-        {stories.length && (
+        {stories.length > 0 && (
           <ModuleList>
             {stories.map(({ module, stories }) => (
               <Module key={module}>

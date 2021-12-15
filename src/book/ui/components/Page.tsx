@@ -27,6 +27,7 @@ const CodeBlock = styled.div`
   }
 `
 
+// TODO(burdon): Not working externally.
 // TODO(burdon): Factor out.
 // https://mdxjs.com/packages/react
 // https://mdxjs.com/table-of-components
@@ -37,6 +38,7 @@ const components: MDXComponents = {
     <Pre>{children}</Pre>
   ),
 
+  // TODO(burdon): Remove (testing).
   CodeBlock: ({ children }: { children?: ReactChildren }) => {
     return (
       <CodeBlock>
@@ -45,6 +47,7 @@ const components: MDXComponents = {
     )
   },
 
+  // TODO(burdon): Remove (testing).
   Blink: ({ children, ...props }: { children?: ReactChildren }) => {
     const [_, setCount] = useState(10);
     const [on, setOn] = useState(true);
@@ -83,7 +86,7 @@ const theme = {
     root: {
       fontFamily: 'body'
     },
-    h2: { // TODO(burdon): Not working.
+    h2: { // TODO(burdon): Only shows up externally.
       color: 'red',
       fontSize: 24
     },
