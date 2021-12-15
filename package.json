@@ -1,6 +1,6 @@
 {
   "name": "@dxos/esbuild-server",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@babel/core": "^7.16.5",
     "@mdx-js/esbuild": "^2.0.0-rc.1",
     "@mdx-js/mdx": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
