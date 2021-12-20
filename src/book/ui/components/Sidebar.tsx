@@ -52,10 +52,6 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
   return (
     <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
       <Container>
-        <Header selected={!selected.page && !selected.file}>
-          <NavLink to='/'>Home</NavLink>
-        </Header>
-
         {pages.length > 0 && (
           <PageList>
             {pages.map(([page]) => (

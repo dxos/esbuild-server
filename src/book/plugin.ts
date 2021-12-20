@@ -9,6 +9,8 @@ export function createBookPlugin(
   files: string[],
   options: any = {}
 ): Plugin {
+  const { mdx } = options;
+
   return {
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
@@ -23,13 +25,11 @@ export function createBookPlugin(
           contents: `
             import { uiMain } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
 
-            // Compiled via mdx plugin.
-            import Readme from '${join(projectRoot, 'README.md')}';
-            
             // MDX Pages.
-            const pages = [
+            const pages = ${mdx} ? [
+              ['${join(projectRoot, 'README.md')}', require('${join(projectRoot, 'README.md')}').default],
               ${pages.map(page => `['${page}', require('${page}').default]`).join(',')}
-            ];
+            ]: [];
 
             // Dynamically import stories with sources.
             const modules = {
@@ -41,7 +41,6 @@ export function createBookPlugin(
 
             const spec = {
               basePath: '${process.cwd()}',
-              readme: Readme,
               pages,
               modules
             };

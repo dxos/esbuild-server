@@ -1,7 +1,7 @@
-import styled  from 'styled-components';
 import { MDXComponents } from 'mdx/types';
 import React, { FunctionComponent, ReactChildren, ReactNode, Suspense, lazy, useEffect, useState } from 'react';
-import { ThemeProvider } from 'theme-ui';
+import styled  from 'styled-components';
+import { ThemeProvider } from '@emotion/react';
 import { MDXProvider } from '@mdx-js/react';
 
 // TODO(burdon): Syntax highlighting.
@@ -9,7 +9,7 @@ import { MDXProvider } from '@mdx-js/react';
 // TODO(burdon): Apply theme-ui consistently across app (sidebar, code, pages, etc.)
 // TODO(burdon): Avoid material? Style components vs. emotion vs. @jsxImportSource theme-ui
 
-export type PageType = [page: string, component: FunctionComponent]
+export type PageType = [path: string, component: FunctionComponent]
 
 const Pre = styled.pre`
   width: 100%;
@@ -17,7 +17,7 @@ const Pre = styled.pre`
   padding: 12px 10px;
   font-size: 16px;
   background-color: #EEE;
-`
+`;
 
 const CodeBlock = styled.div`
   display: 'flex';
@@ -25,15 +25,13 @@ const CodeBlock = styled.div`
   pre { // NOTE: Cannot do nested rules as inline styles.
     margin: 0;
   }
-`
+`;
 
 // TODO(burdon): Not working externally.
 // TODO(burdon): Factor out.
 // https://mdxjs.com/packages/react
 // https://mdxjs.com/table-of-components
 const components: MDXComponents = {
-  h1: 'h2',
-
   pre: ({ children }: { children?: ReactNode }) => (
     <Pre>{children}</Pre>
   ),
@@ -59,7 +57,7 @@ const components: MDXComponents = {
             setOn(true);
             clearInterval(t);
           }
-          return count - 1
+          return count - 1;
         });
       }, 500);
 
@@ -76,23 +74,30 @@ const components: MDXComponents = {
 
 // TODO(burdon): Factor out.
 // https://github.com/system-ui/theme-ui
+// https://theme-ui.com/theme-spec
 // https://theme-ui.com/mdx-components
 // https://theme-ui.com/guides/how-it-works
 const theme = {
+  colors: {
+    background: '#fafafa',
+    heading: '#222',
+    body: '#333'
+  },
   fonts: {
-    body: 'system-ui, sans-serif'
+    body: 'system-ui, sans-serif',
+    monospace: 'Menlo, monospace'
   },
   styles: {
     root: {
-      fontFamily: 'body'
+      color: 'body',
+      fontFamily: 'body',
+      fontWeight: 100
     },
-    h2: { // TODO(burdon): Only shows up externally.
-      color: 'red',
-      fontSize: 24
-    },
-  },
-  colors: {
-    background: '#fafafa'
+    h1: { // TODO(burdon): Only shows up externally.
+      color: 'heading',
+      fontSize: 32,
+      fontWeight: 100
+    }
   }
 };
 
@@ -107,11 +112,11 @@ export const Page = ({ children }: PageProps) => {
       overflow: 'auto',
       padding: '0 32px'
     }}>
-      <MDXProvider components={components}>
-        <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <MDXProvider components={components}>
           {children}
-        </ThemeProvider>
-      </MDXProvider>
+        </MDXProvider>
+      </ThemeProvider>
     </div>
   );
 };
@@ -135,4 +140,4 @@ export const Wrapper = ({ path }: { path: string }) => {
       </Suspense>
     </div>
   );
-}
+};

@@ -51,6 +51,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       type: 'boolean',
       default: false
     })
+    .option('mdx', {
+      type: 'boolean',
+      default: false
+    })
     .option('mode', {
       type: 'string',
       default: 'dark'
@@ -119,7 +123,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(process.cwd(), packageRoot, pages, files, { mode: argv.mode }),
+            createBookPlugin(process.cwd(), packageRoot, pages, files, { mdx: argv.mdx, mode: argv.mode }),
             await createMdxPlugin(),
             ...(config?.plugins ?? [])
           ],
@@ -143,7 +147,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(process.cwd(), packageRoot, pages, files, { mode: argv.mode }),
+          createBookPlugin(process.cwd(), packageRoot, pages, files, { mdx: argv.mdx, mode: argv.mode }),
           await createMdxPlugin(),
           ...(config?.plugins ?? [])
         ],
