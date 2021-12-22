@@ -100,6 +100,10 @@ export class DevServer {
       const respondWithFile = (file: ResolvedFile) => {
         this.config.logRequests && console.log(`<= 200 ${file.path} (${file.contents.length} bytes) ${Date.now() - start}ms`)
 
+        if (req.url?.endsWith('.js')) {
+          res.setHeader('Content-Type', 'application/javascript');
+        }
+
         res.writeHead(200)
         res.write(file?.contents)
         res.end()
