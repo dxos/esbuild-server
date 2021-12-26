@@ -1,5 +1,5 @@
 import { MDXComponents } from 'mdx/types';
-import React, { FunctionComponent, ReactChildren, ReactNode, Suspense, lazy, useEffect, useState } from 'react';
+import React, { ReactChildren, ReactNode, Suspense, lazy, useEffect, useState } from 'react';
 import styled  from 'styled-components';
 import { ThemeProvider } from '@emotion/react';
 import { MDXProvider } from '@mdx-js/react';
@@ -8,8 +8,6 @@ import { MDXProvider } from '@mdx-js/react';
 // TODO(burdon): Custom collapsible code block (see Mui).
 // TODO(burdon): Apply theme-ui consistently across app (sidebar, code, pages, etc.)
 // TODO(burdon): Avoid material? Style components vs. emotion vs. @jsxImportSource theme-ui
-
-export type PageType = [path: string, component: FunctionComponent]
 
 const Pre = styled.pre`
   width: 100%;
@@ -105,7 +103,7 @@ export interface PageProps {
   children: ReactNode
 }
 
-export const Page = ({ children }: PageProps) => {
+export const PageContainer = ({ children }: PageProps) => {
   return (
     <div style={{
       width: '100%',

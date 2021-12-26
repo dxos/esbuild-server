@@ -6,11 +6,9 @@ export function createBookPlugin(
   projectRoot: string,
   packageRoot: string,
   pages: string[],
-  files: string[],
+  stories: string[],
   options: any = {}
 ): Plugin {
-  const { mdx } = options;
-
   return {
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
@@ -23,29 +21,32 @@ export function createBookPlugin(
         return {
           resolveDir: __dirname,
           contents: `
-            import { uiMain } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
+            import { main } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
 
             // MDX Pages.
-            const pages = ${mdx} ? [
-              ['${join(projectRoot, 'README.md')}', require('${join(projectRoot, 'README.md')}').default],
-              ${pages.map(page => `['${page}', require('${page}').default]`).join(',')}
-            ]: [];
+            const pages = [
+              ${pages.map(file => `{
+                path: '${file}', 
+                page: require('${file}').default // Uses MDX plugin if confiured.
+              }`).join(',')}
+            ];
 
             // Dynamically import stories with sources.
-            const modules = {
-              ${files.map(file => `'${file}': { 
+            const stories = [
+              ${stories.map(file => `{
+                path: '${file}',
                 module: require('${file}'), 
                 source: ${readSource(file)} 
               }`).join(',')}
-            };
+            ];
 
             const spec = {
               basePath: '${process.cwd()}',
               pages,
-              modules
+              stories
             };
 
-            uiMain(spec, ${JSON.stringify(options)});
+            main(spec, ${JSON.stringify(options)});
           `
         };
       });

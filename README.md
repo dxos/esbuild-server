@@ -68,7 +68,7 @@ although only the very minimal features are currently supported.
 To render a storybook run the following command (replacing with your glob for stories).
 
 ```
-esbuild-server book 'stories/**/*.stories.tsx'
+esbuild-server book
 ```
 
 Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
@@ -76,7 +76,7 @@ Each story file should export a set of components and optionally a default expor
 To build storybooks:
 
 ```
-esbuild-server book --build 'stories/**/*.stories.tsx'
+esbuild-server book --build
 ```
 
 ## Publishing
@@ -89,4 +89,4 @@ yarn publish
 ## Polyfills
 
 Currently `esbuild-server` does not polyfill any of the node.js modules or globals. 
-If your code is using them you'd need to manually include a plugin to add them.
+If your code is using them you need to manually include a plugin to add them.

@@ -1,25 +1,33 @@
 import { Plugin } from 'esbuild';
 
-export async function createMdxPlugin (): Promise<Plugin> {
+interface MDXOptions {
+  mdx?: boolean
+}
+
+export async function createMdxPlugin ({ mdx }: MDXOptions = {}): Promise<Plugin> {
   // TODO(burdon): Figure out how to use EMS with CJS.
-  const { default: mdx } = await eval('import("@mdx-js/esbuild")');
-  const remarkGfm = await eval('import("remark-gfm")');
+  const { default: plugin } = await eval('import("@mdx-js/esbuild")');
+
+  // const remarkGfm = await eval('import("remark-gfm")');
   // const highlight = await eval('import("rehype-highlight")');
 
-  // https://mdxjs.com/packages/esbuild/#mdxoptions
-  return mdx({
+  // https://mdxjs.com/packages/esbuild/#mdxoptions (same as compile).
+  return plugin({
     // allowDangerousRemoteMdx: true,
 
     // https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins
     remarkPlugins: [
-      // Support GFM features such as autolink literals, footnotes, strikethrough, tables, and task lists.
       // https://mdxjs.com/guides/gfm
-      remarkGfm,
+      // Support GFM features such as autolink literals, footnotes, strikethrough, tables, and task lists.
+      // remarkGfm,
 
       // TODO(burdon): No effect. Configure for code blocks?
       // highlight
     ],
 
-    providerImportSource: '@mdx-js/react' // Support MDXProvider.
+    // Required to support MDXProvider (i.e., custom components).
+    // TODO(burdon): Creates external dependency error:
+    //   Could not resolve "@mdx-js/react" (mark it as external to exclude it from the bundle)
+    providerImportSource: mdx ? '@mdx-js/react' : undefined
   });
 }

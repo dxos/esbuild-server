@@ -1,16 +1,17 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 import { HashRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { Stories } from '../stories';
+import { Page } from '../pages';
+import { StoryMap } from '../stories';
 import { Mode } from '../theme';
-import { Page, PageType } from './Page';
+import { PageContainer } from './PageContainer';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
 export interface StorybookProps {
-  pages: PageType[]
-  stories: Stories
+  pages: Page[]
+  stories: StoryMap
   options?: {
     mode?: Mode
   }
@@ -32,12 +33,12 @@ const Main = ({
       />
 
       <Switch>
-        {pages.map(([page, Component]) => (
-          <Route key={page} exact path={`/${page}`}>
+        {pages.map(({ title, page: Page }) => (
+          <Route key={title} exact path={`/${title}`}>
             <StoryContainer>
-              <Page>
-                <Component />
-              </Page>
+              <PageContainer>
+                <Page />
+              </PageContainer>
             </StoryContainer>
           </Route>
         ))}

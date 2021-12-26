@@ -1,5 +1,6 @@
 import assert from 'assert';
 import chalk from 'chalk';
+import fs from 'fs';
 import { build } from 'esbuild';
 import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path';
@@ -71,15 +72,25 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
 
-    const pages = (await resolveFiles(argv.pages)).map(file => resolve(file));
-    const files = (await resolveFiles(argv.stories)).map(file => resolve(file));
+    const projectRoot = process.cwd();
+    const packageRoot = getPackageRoot();
+    const staticDir = join(packageRoot, 'src/book/ui/public');
+    const outdir = config?.outdir || './dist';
 
-    if (pages.length === 0 && files.length === 0) {
+    const readme = join(projectRoot, 'README.md');
+    const pages = [
+      ...(fs.existsSync(readme) ? [readme] : []),
+      ...(argv.mdx ? (await resolveFiles(argv.pages)).map(file => resolve(file)) : [])
+    ];
+
+    const stories = (await resolveFiles(argv.stories)).map(file => resolve(file));
+
+    if (pages.length === 0 && stories.length === 0) {
       console.log(chalk`{red error}: No pages or stories found.`);
       process.exit(1);
     }
 
-    console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`);
+    console.log(chalk`🔎 {dim Found} {white ${stories.length}} {dim files with stories}`);
 
     if (argv.verbose) {
       if (pages.length) {
@@ -89,17 +100,13 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         }
       }
 
-      if (files.length) {
+      if (stories.length) {
         console.log('Stories:');
-        for (const file of files) {
+        for (const file of stories) {
           console.log(`- ${chalk.green(file)}`);
         }
       }
     }
-
-    const outdir = config?.outdir || './dist';
-    const packageRoot = getPackageRoot();
-    const staticDir = join(packageRoot, 'src/book/ui/public');
 
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
@@ -123,8 +130,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(process.cwd(), packageRoot, pages, files, { mdx: argv.mdx, mode: argv.mode }),
-            await createMdxPlugin(),
+            createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
+            await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -147,8 +154,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(process.cwd(), packageRoot, pages, files, { mdx: argv.mdx, mode: argv.mode }),
-          await createMdxPlugin(),
+          createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
+          await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
           ...(config?.plugins ?? [])
         ],
         devServer: {
