@@ -21,7 +21,7 @@ To run the storybook:
 
 ```bash
 cd examples
-../bin/main.js book
+../bin/main.js book --mdx
 ```
 
 To build the storybook:

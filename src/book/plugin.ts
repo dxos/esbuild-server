@@ -6,7 +6,7 @@ export function createBookPlugin(
   projectRoot: string,
   packageRoot: string,
   pages: string[],
-  files: string[],
+  stories: string[],
   options: any = {}
 ): Plugin {
   return {
@@ -21,32 +21,32 @@ export function createBookPlugin(
         return {
           resolveDir: __dirname,
           contents: `
-            import { uiMain } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
+            import { main } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
 
-            // Compiled via mdx plugin.
-            import Readme from '${join(projectRoot, 'README.md')}';
-            
             // MDX Pages.
             const pages = [
-              ${pages.map(page => `['${page}', require('${page}').default]`).join(',')}
+              ${pages.map(file => `{
+                path: '${file}', 
+                page: require('${file}').default // Uses MDX plugin if confiured.
+              }`).join(',')}
             ];
 
             // Dynamically import stories with sources.
-            const modules = {
-              ${files.map(file => `'${file}': { 
+            const stories = [
+              ${stories.map(file => `{
+                path: '${file}',
                 module: require('${file}'), 
                 source: ${readSource(file)} 
               }`).join(',')}
-            };
+            ];
 
             const spec = {
               basePath: '${process.cwd()}',
-              readme: Readme,
               pages,
-              modules
+              stories
             };
 
-            uiMain(spec, ${JSON.stringify(options)});
+            main(spec, ${JSON.stringify(options)});
           `
         };
       });

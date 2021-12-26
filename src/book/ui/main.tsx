@@ -1,32 +1,24 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 import { render } from 'react-dom'
 
-import { extractStories } from './stories'
-import { PageType, Storybook } from './components'
-
-export interface Story {
-  module: any // Contains exports of module.
-  source: string
-}
+import { Page, extractPages } from './pages'
+import { Story, extractStories } from './stories'
+import { Storybook } from './components'
 
 export interface Spec {
   basePath: string
-  readme: FunctionComponent
-  pages: PageType[]
-  modules: Record<string, Story>
+  pages: Page[]
+  stories: Story[]
 }
 
-export function uiMain(spec: Spec, options: any) {
-  const pages = spec.pages.map(([page, component]): PageType => {
-    const name = page.substring(page.lastIndexOf('/') + 1).split('.')[0];
-    return [name, component];
-  });
-
+/**
+ * Called by JS injected into page via the plugin.
+ */
+export function main(spec: Spec, options: any) {
   render((
     <Storybook
-      readme={spec.readme}
-      pages={pages}
-      stories={extractStories(spec.modules, spec.basePath)}
+      pages={extractPages(spec.pages)}
+      stories={extractStories(spec.stories, spec.basePath)}
       options={options}
     />
   ),

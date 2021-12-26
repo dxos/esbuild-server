@@ -1,27 +1,23 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 import { HashRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { Stories } from '../stories';
+import { Page } from '../pages';
+import { StoryMap } from '../stories';
 import { Mode } from '../theme';
-import { Page, PageType } from './Page';
+import { PageContainer } from './PageContainer';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
 
-// TODO(burdon): Add pages from stories.
-// import Readme from '../../../../examples/stories/README.mdx';
-
 export interface StorybookProps {
-  readme?: FunctionComponent
-  pages: PageType[]
-  stories: Stories
+  pages: Page[]
+  stories: StoryMap
   options?: {
     mode?: Mode
   }
 }
 
 const Main = ({
-  readme: Readme,
   pages,
   stories,
   options = {}
@@ -37,22 +33,12 @@ const Main = ({
       />
 
       <Switch>
-        <Route exact path='/'>
-          {Readme && (
+        {pages.map(({ title, page: Page }) => (
+          <Route key={title} exact path={`/${title}`}>
             <StoryContainer>
-              <Page>
-                <Readme />
-              </Page>
-            </StoryContainer>
-          )}
-        </Route>
-
-        {pages.map(([page, Component]) => (
-          <Route key={page} exact path={`/${page}`}>
-            <StoryContainer>
-              <Page>
-                <Component />
-              </Page>
+              <PageContainer>
+                <Page />
+              </PageContainer>
             </StoryContainer>
           </Route>
         ))}
@@ -76,7 +62,6 @@ const Main = ({
 };
 
 export const Storybook = ({
-  readme,
   pages,
   stories,
   options = {}
@@ -100,7 +85,6 @@ export const Storybook = ({
         {/* Main layout. */}
         <Route path={['/story/:file/:story', '/:page', '/']}>
           <Main
-            readme={readme}
             pages={pages}
             stories={stories}
             options={options}

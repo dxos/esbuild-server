@@ -5,14 +5,14 @@ import styled, { ThemeProvider } from 'styled-components';
 // Icons: https://styled-icons.dev
 import { TextSnippet } from '@styled-icons/material-outlined'
 
-import { Stories } from '../stories';
+import { Page } from '../pages';
+import { StoryMap } from '../stories';
 import { Mode, theme } from '../theme';
-import { PageType } from './Page';
 
 /**
  * Sort and groups stories into hierarchy.
  */
-const createHierarchy = (stories: Stories) => {
+const createHierarchy = (stories: StoryMap) => {
   // Sort stories.
   const sorted = Object.entries(stories).sort(([, { title: a }], [,{ title: b }]) => {
     return a < b ? -1 : a > b ? 1 : 0;
@@ -40,8 +40,8 @@ const createHierarchy = (stories: Stories) => {
 };
 
 export interface SidebarProps {
-  pages: PageType[]
-  stories: Stories
+  pages: Page[]
+  stories: StoryMap
   mode?: Mode
 }
 
@@ -52,22 +52,20 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
   return (
     <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
       <Container>
-        <Header selected={!selected.page && !selected.file}>
-          <NavLink to='/'>Home</NavLink>
-        </Header>
-
+        {/* Pages */}
         {pages.length > 0 && (
           <PageList>
-            {pages.map(([page]) => (
-              <PageTitle key={page} selected={page === selected.page}>
-                <NavLink to={`/${page}`}>
-                  {page}
+            {pages.map(({ title }) => (
+              <PageTitle key={title} selected={title === selected.page}>
+                <NavLink to={`/${title}`}>
+                  {title}
                 </NavLink>
               </PageTitle>
             ))}
           </PageList>
         )}
 
+        {/* Stories */}
         {stories.length > 0 && (
           <ModuleList>
             {stories.map(({ module, stories }) => (
