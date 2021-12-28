@@ -113,6 +113,7 @@ const Container = styled.div`
 const StoryContainer = styled.div`
   display: flex;
   flex: 1;
+  overflow: hidden;
 `;
 
 const StoryFrame = styled.iframe`

@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
-// Icons: https://styled-icons.dev
-import { TextSnippet } from '@styled-icons/material-outlined'
+// Icons: https://styled-icons.dev/?s=material-outlined
+import { Launch as LaunchIcon, TextSnippet as CodeIcon } from '@styled-icons/material-outlined'
 
 import { Page } from '../pages';
 import { StoryMap } from '../stories';
@@ -82,7 +82,10 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
                           <StoryItem key={name} selected={file === selected.file && name === selected.story}>
                             <NavLink to={`/story/${file}/${name}`}>{name}</NavLink>
                             <NavLink to={`/story/${file}/${name}?source`}>
-                              <TextSnippet size={24} title='Source' />
+                              <CodeIcon size={24} title='Source' />
+                            </NavLink>
+                            <NavLink to={`/__story/${file}/${name}?source`} style={{ marginLeft: 8 }}>
+                              <LaunchIcon size={24} title='Open' />
                             </NavLink>
                           </StoryItem>
                         ))}
