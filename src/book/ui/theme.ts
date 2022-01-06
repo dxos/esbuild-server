@@ -1,7 +1,7 @@
 export type Mode = 'light' | 'dark' | undefined;
 
 // https://mui.com/customization/color
-export const theme = {
+export const themes = {
   dark: {
     bg: {
       main: '#263238',

@@ -2,12 +2,11 @@ import React, { useMemo } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
-// Icons: https://styled-icons.dev/?s=material-outlined
-import { Launch as LaunchIcon, TextSnippet as CodeIcon } from '@styled-icons/material-outlined'
+import { Launch as LaunchIcon, TextSnippet as CodeIcon } from '../icons';
 
 import { Page } from '../pages';
 import { StoryMap } from '../stories';
-import { Mode, theme } from '../theme';
+import { Mode, themes } from '../theme';
 
 /**
  * Sort and groups stories into hierarchy.
@@ -48,9 +47,10 @@ export interface SidebarProps {
 export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
   const selected: { page: string, file: string, story: string } = useParams();
   const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
+  const theme = mode === 'dark' ? themes.dark : themes.light;
 
   return (
-    <ThemeProvider theme={mode === 'dark' ? theme.dark : theme.light }>
+    <ThemeProvider theme={theme}>
       <Container>
         {/* Pages */}
         {pages.length > 0 && (
@@ -82,10 +82,10 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
                           <StoryItem key={name} selected={file === selected.file && name === selected.story}>
                             <NavLink to={`/story/${file}/${name}`}>{name}</NavLink>
                             <NavLink to={`/story/${file}/${name}?source`}>
-                              <CodeIcon size={24} title='Source' />
+                              <CodeIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Source' />
                             </NavLink>
                             <NavLink to={`/__story/${file}/${name}?source`} style={{ marginLeft: 8 }}>
-                              <LaunchIcon size={24} title='Open' />
+                              <LaunchIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Open' />
                             </NavLink>
                           </StoryItem>
                         ))}
