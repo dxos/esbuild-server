@@ -32,7 +32,6 @@
     "react-syntax-highlighter": "^15.4.5",
     "rehype-highlight": "^5.0.1",
     "styled-components": "^5.3.1",
-    "styled-icons": "^10.45.0",
     "theme-ui": "^0.12.1",
     "yargs": "^17.2.1"
   },
