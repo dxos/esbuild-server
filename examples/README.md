@@ -6,16 +6,27 @@ To run the dev server with the examples build the package (optionally in watch m
 yarn build --watch
 ```
 
+## App Server
+
 To run the app server.
 
 ```bash
 cd examples
-../bin/main.js dev 
+../bin/main.js dev
 ```
 
-To run the storybook within the examples:
+## Book
+
+To run the storybook:
 
 ```bash
 cd examples
-../bin/main.js book
+../bin/main.js book --mdx
+```
+
+To build the storybook:
+
+```bash
+cd examples
+../bin/main.js book --build
 ```

@@ -1,18 +1,20 @@
-import chalk from 'chalk';
-import { dirname, join, resolve } from 'path';
-import { CommandModule } from 'yargs';
-import { sync as findPackageJson } from 'pkg-up';
 import assert from 'assert';
-import { promisify } from 'util';
-import { ncp } from 'ncp';
+import chalk from 'chalk';
+import fs from 'fs';
 import { build } from 'esbuild';
+import { ncp } from 'ncp';
+import { dirname, join, resolve } from 'path';
+import { sync as findPackageJson } from 'pkg-up';
+import { promisify } from 'util';
+import { CommandModule } from 'yargs';
 
+import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
+import { DEFAFULT_CONFIG_FILE } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
-import { createBookPlugin, resolveFiles } from '../book';
-import { DEFAFULT_CONFIG_FILE } from '../config';
 
 interface BookCommandArgv {
+  pages: string[]
   stories: string[]
   port: number
   config: string
@@ -28,63 +30,94 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       describe: 'glob to find story files',
       type: 'string',
       array: true,
-      default: ['./stories/**/*.stories.[jt]sx'],
+      default: ['./stories/**/*.stories.[jt]sx']
+    })
+    .positional('pages', {
+      describe: 'glob to find story pages',
+      type: 'string',
+      array: true,
+      default: ['./stories/**/*.mdx']
     })
     .option('port', {
       alias: 'p',
       type: 'number',
-      default: 8080,
+      default: 8080
     })
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE,
+      default: DEFAFULT_CONFIG_FILE
     })
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
-      default: false,
+      default: false
+    })
+    .option('mdx', {
+      type: 'boolean',
+      default: false
+    })
+    .option('mode', {
+      type: 'string',
+      default: 'dark'
     })
     .option('build', {
       type: 'boolean',
       default: false,
-      describe: 'build a static stories site instead of starting a dev-server',
+      describe: 'build a static stories site instead of starting a dev-server'
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
     const overrides = config?.overrides || {};
-
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
 
-    const files = (await resolveFiles(argv.stories)).map(file => resolve(file))
-    if (files.length === 0) {
-      console.log(chalk`{red error}: No stories found.`)
-      process.exit(1)
+    const projectRoot = process.cwd();
+    const packageRoot = getPackageRoot();
+    const staticDir = join(packageRoot, 'src/book/ui/public');
+    const outdir = config?.outdir || './dist';
+
+    const readme = join(projectRoot, 'README.md');
+    const pages = [
+      ...(fs.existsSync(readme) ? [readme] : []),
+      ...(argv.mdx ? (await resolveFiles(argv.pages)).map(file => resolve(file)) : [])
+    ];
+
+    const stories = (await resolveFiles(argv.stories)).map(file => resolve(file));
+
+    if (pages.length === 0 && stories.length === 0) {
+      console.log(chalk`{red error}: No pages or stories found.`);
+      process.exit(1);
     }
 
-    console.log(chalk`🔎 {dim Found} {white ${files.length}} {dim files with stories}`)
+    console.log(chalk`🔎 {dim Found} {white ${stories.length}} {dim files with stories}`);
 
     if (argv.verbose) {
-      for(const file of files) {
-        console.log(`    ${file}`)
+      if (pages.length) {
+        console.log('Pages:');
+        for (const page of pages) {
+          console.log(`- ${chalk.green(page)}`);
+        }
+      }
+
+      if (stories.length) {
+        console.log('Stories:');
+        for (const file of stories) {
+          console.log(`- ${chalk.green(file)}`);
+        }
       }
     }
 
-    const outdir = config?.outdir || './dist';
-    const packageRoot = getPackageRoot();
-    const staticDir = join(packageRoot, 'src/book/ui/public');
-
     if (argv.build) {
-      console.log(chalk`🏎️  {dim Build started}`)
-      const startTime = Date.now()
+      console.log(chalk`🏎️  {dim Build started}`);
+      const startTime = Date.now();
 
       try {
         try {
           await promisify(ncp)(staticDir, outdir);
-        } catch(err) {
-          console.error(err)
-          throw err
+        } catch (err) {
+          console.error(err);
+          throw err;
         }
 
         await build({
@@ -97,7 +130,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(files, packageRoot, process.cwd()),
+            createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
+            await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -105,13 +139,13 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           loader: {
             '.jpg': 'file',
             '.png': 'file',
-            '.svg': 'file',
+            '.svg': 'file'
           },
           ...overrides
         });
-        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-      } catch(err) {
-        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+        console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
+      } catch (err) {
+        console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
         process.exit(1);
       }
     } else {
@@ -120,7 +154,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(files, packageRoot, process.cwd()),
+          createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
+          await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
           ...(config?.plugins ?? [])
         ],
         devServer: {
@@ -129,10 +164,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           logRequests: argv.verbose
         },
         overrides
-      })
+      });
     }
   }
-}
+};
 
 function getPackageRoot() {
   const pkg = findPackageJson({ cwd: __dirname });

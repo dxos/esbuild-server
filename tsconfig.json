@@ -19,6 +19,6 @@
     "target": "ES2018",
     "experimentalDecorators": true
   },
-  "include": ["src", "example"],
+  "include": ["src", "examples"],
   "exclude": ["node_modules", "dist"]
 }

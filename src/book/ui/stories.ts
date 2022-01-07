@@ -1,40 +1,47 @@
-import { FC } from 'react'
+import { FunctionComponent } from 'react'
 
-export type Stories = Record<string, {
+export interface Story {
+  path: string
+  module: any
+  source: string
+}
+
+export type StoryMap = Record<string, {
   title: string
-  stories: Record<string, FC>
+  source: string
+  stories: Record<string, FunctionComponent>
 }>
 
-export function extractStories(modules: Record<string, any>, basePath: string): Stories {
-  const res: Stories = {}
+export function extractStories(stories: Story[], basePath: string): StoryMap {
+  const res: StoryMap = {}
 
-  for (const file of Object.keys(modules)) {
-    const key = convertFileNameToPathSegment(file, basePath);
+  stories.forEach(({ path, module, source }) => {
+    const key = convertFileNameToPathSegment(path, basePath);
 
-    const mod = modules[file];
     res[key] = {
-      title: mod.default?.title ?? key,
-      stories: {}
+      stories: {},
+      source,
+      title: module.default?.title ?? key
     };
 
-    for (const comp of Object.keys(mod)) {
-      if (typeof mod[comp] === 'function') {
-        res[key].stories[comp] = mod[comp];
+    for (const comp of Object.keys(module)) {
+      if (typeof module[comp] === 'function') {
+        res[key].stories[comp] = module[comp];
       }
     }
-  }
+  });
 
   return res;
 }
 
-function convertFileNameToPathSegment(filename: string, basePath: string) {
-  if (filename.startsWith(basePath)) {
-    filename = filename.slice(basePath.length);
+function convertFileNameToPathSegment(path: string, basePath: string) {
+  if (path.startsWith(basePath)) {
+    path = path.slice(basePath.length);
   }
 
-  if (filename.startsWith('/')) {
-    filename = filename.slice(1);
+  if (path.startsWith('/')) {
+    path = path.slice(1);
   }
 
-  return filename.trim().replace(/[-\.\/]/g, '-');
+  return path.trim().replace(/[-\.\/]/g, '-');
 }

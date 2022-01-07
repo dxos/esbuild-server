@@ -35,17 +35,17 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
 
     const outdir = config.outdir || './dist';
 
-    console.log(chalk`📦 {dim Building to} ${outdir}`)
-    console.log(chalk`🏎️  {dim Build started}`)
-    const startTime = Date.now()
+    console.log(chalk`📦 {dim Building to} ${outdir}`);
+    console.log(chalk`🏎️  {dim Build started}`);
+    const startTime = Date.now();
 
     try {
       if (config.staticDir) {
         try {
           await promisify(ncp)(config.staticDir, outdir);
-        } catch(err) {
-          console.error(err)
-          throw err
+        } catch (err) {
+          console.error(err);
+          throw err;
         }
       }
 
@@ -67,7 +67,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
         ...overrides
       });
       console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-    } catch(err) {
+    } catch (err) {
       console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
       process.exit(1);
     }
