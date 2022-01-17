@@ -18,6 +18,11 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
     - run: yarn install --frozen-lockfile
-    - run: yarn build
-    - run: ../bin/main.js build
+    - name: Build the source code
+      run: yarn build
+    - name: Test esbuild-server building
+      run: ../bin/main.js build
+      working-directory: examples
+    - name: Test esbuild-server book building
+      run: ../bin/main.js book --build
       working-directory: examples
