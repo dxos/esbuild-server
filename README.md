@@ -2,6 +2,7 @@
 
 A fast dev-server and storybook built with esbuild.
 
+[![CI](https://github.com/dxos/esbuild-server/actions/workflows/ci.yaml/badge.svg)](https://github.com/dxos/esbuild-server/actions/workflows/ci.yaml)
 <img src="https://img.shields.io/npm/v/@dxos/esbuild-server"/>
 
 
