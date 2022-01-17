@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - "main"
 jobs:
   test:
     strategy:
@@ -19,3 +19,5 @@ jobs:
         node-version: ${{ matrix.node }}
     - run: yarn install --frozen-lockfile
     - run: yarn build
+    - run: ../bin/main.js build
+      working-directory: examples
