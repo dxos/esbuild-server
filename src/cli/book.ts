@@ -9,7 +9,7 @@ import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
 import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
-import { DEFAFULT_CONFIG_FILE } from '../config';
+import { DEFAFULT_CONFIG_FILE, validateConfig } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
 
@@ -71,6 +71,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     if (config) {
       console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
     }
+
+    validateConfig(config ?? {});
 
     const projectRoot = process.cwd();
     const packageRoot = getPackageRoot();

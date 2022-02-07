@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { CommandModule } from 'yargs';
+import { validateConfigForApp } from '../config';
 
 import { DEFAFULT_CONFIG_FILE } from '../config';
 import { startDevBundler } from '../dev-bundler';
@@ -37,12 +38,10 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
       throw new Error('Config not found.');
     }
 
-    if (!config.entryPoints) {
-      throw new Error('At least one entrypoint must be specified.');
-    }
+    validateConfigForApp(config);
 
     startDevBundler({
-      entryPoints: config?.entryPoints,
+      entryPoints: config?.entryPoints!,
       plugins: config?.plugins ?? [],
       devServer: {
         port: argv.port,

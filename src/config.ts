@@ -32,3 +32,25 @@ export interface Config {
    */
   plugins?: Plugin[]
 }
+
+const DISALLOWED_OVERRIDES = [
+  'bundle',
+  'outfile',
+  'outdir',
+  'outbase',
+  'entryPoints',
+]
+
+export function validateConfig(config: Config) {
+  const forbiddenKeys = Object.keys(config.overrides ?? {}).filter(key => DISALLOWED_OVERRIDES.includes(key));
+  if(forbiddenKeys.length > 0) {
+    throw new Error(`Following overrides are forbidden: ${forbiddenKeys.join(', ')}`);
+  }
+}
+
+export function validateConfigForApp(config: Config) {
+  validateConfig(config);
+  if(!config.entryPoints) {
+    throw new Error('At least one entrypoint must be specified');
+  }
+}

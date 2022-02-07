@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
 import { loadConfig } from '../load-config';
-import { DEFAFULT_CONFIG_FILE } from '../config';
+import { DEFAFULT_CONFIG_FILE, validateConfigForApp } from '../config';
 
 interface BuildCommandArgv {
   config: string
@@ -29,9 +29,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
       throw new Error('Config not found');
     }
 
-    if (!config.entryPoints) {
-      throw new Error('At least one entrypoint must be specified');
-    }
+    validateConfigForApp(config ?? {});
 
     const outdir = config.outdir || './dist';
 
