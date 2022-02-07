@@ -12,6 +12,7 @@ import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
 import { DEFAFULT_CONFIG_FILE, validateConfig } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
+import { mkdir } from 'fs/promises';
 
 interface BookCommandArgv {
   pages: string[]
@@ -116,6 +117,8 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
 
       try {
         try {
+          await mkdir(outdir, { recursive: true });
+
           await promisify(ncp)(staticDir, outdir);
         } catch (err) {
           console.error(err);

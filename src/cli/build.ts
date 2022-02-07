@@ -6,6 +6,7 @@ import { CommandModule } from 'yargs';
 
 import { loadConfig } from '../load-config';
 import { DEFAFULT_CONFIG_FILE, validateConfigForApp } from '../config';
+import { mkdir } from 'fs/promises';
 
 interface BuildCommandArgv {
   config: string
@@ -40,6 +41,8 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
     try {
       if (config.staticDir) {
         try {
+          await mkdir(outdir, { recursive: true });
+
           await promisify(ncp)(config.staticDir, outdir);
         } catch (err) {
           console.error(err);
