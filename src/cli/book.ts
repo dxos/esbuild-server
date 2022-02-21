@@ -83,7 +83,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     const readme = join(projectRoot, 'README.md');
     const pages = [
       ...(fs.existsSync(readme) ? [readme] : []),
-      ...(await resolveFiles(argv.pages)).map(file => resolve(file))
+      ...(argv.mdx ? (await resolveFiles(argv.pages)).map(file => resolve(file)) : [])
     ];
 
     const stories = (await resolveFiles(argv.stories)).map(file => resolve(file));
@@ -112,10 +112,13 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     }
 
     const defaultPlugins = [
-      createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
-      await createMdxPlugin()
+      createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode })
     ];
 
+    defaultPlugins.push(
+      await createMdxPlugin()
+    );
+    
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
       const startTime = Date.now();

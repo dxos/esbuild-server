@@ -53,11 +53,15 @@ export function createBookPlugin(
 
       // Map our own react to the client one.
       let reactResolved: string;
+      let mdxReactResolved: string;
       onStart(() => {
         reactResolved = require.resolve('react', { paths: [projectRoot] })
+        mdxReactResolved = require.resolve('@mdx-js/react', { paths: [projectRoot] })
       })
-
       onResolve({ filter: /^react$/ }, () => ({ path: reactResolved }));
+      onResolve({ filter: /^\@mdx-js\/react$/ }, () => {
+        return { path: mdxReactResolved }
+      });
     }
   }
 }
