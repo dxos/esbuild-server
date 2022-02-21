@@ -448,15 +448,18 @@
     // 
     {
       "packageName": "@dxos/esbuild-server",
-      "projectFolder": "packages/esbuild-server"
+      "projectFolder": "packages/esbuild-server",
+      "shouldPublish": true
     },
     {
       "packageName": "@dxos/esbuild-server-demos",
-      "projectFolder": "packages/esbuild-server-demos"
+      "projectFolder": "packages/esbuild-server-demos",
+      "shouldPublish": false
     },
     {
       "packageName": "@dxos/esbuild-book-knobs",
-      "projectFolder": "packages/esbuild-book-knobs"
+      "projectFolder": "packages/esbuild-book-knobs",
+      "shouldPublish": false
     }
     // 
     // {
