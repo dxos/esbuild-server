@@ -111,6 +111,16 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       }
     }
 
+    const defaultPlugins = [
+      createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode })
+    ];
+
+    if (argv.mdx) {
+      defaultPlugins.push(
+        await createMdxPlugin({ mdx: Boolean(argv.mdx) })
+      );
+    }
+
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
       const startTime = Date.now();
@@ -135,8 +145,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           platform: 'browser',
           format: 'iife',
           plugins: [
-            createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
-            await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
+            ...defaultPlugins,
             ...(config?.plugins ?? [])
           ],
           sourcemap: true,
@@ -159,8 +168,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           'index': 'entrypoint'
         },
         plugins: [
-          createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode }),
-          await createMdxPlugin({ mdx: Boolean(argv.mdx) }),
+          ...defaultPlugins,
           ...(config?.plugins ?? [])
         ],
         devServer: {

@@ -1,10 +1,6 @@
 import { Plugin } from 'esbuild';
 
-interface MDXOptions {
-  mdx?: boolean
-}
-
-export async function createMdxPlugin ({ mdx }: MDXOptions = {}): Promise<Plugin> {
+export async function createMdxPlugin (): Promise<Plugin> {
   // TODO(burdon): Figure out how to use EMS with CJS.
   const { default: plugin } = await eval('import("@mdx-js/esbuild")');
 
@@ -28,6 +24,6 @@ export async function createMdxPlugin ({ mdx }: MDXOptions = {}): Promise<Plugin
     // Required to support MDXProvider (i.e., custom components).
     // TODO(burdon): Creates external dependency error:
     //   Could not resolve "@mdx-js/react" (mark it as external to exclude it from the bundle)
-    providerImportSource: mdx ? '@mdx-js/react' : undefined
+    providerImportSource: '@mdx-js/react'
   });
 }
