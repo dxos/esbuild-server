@@ -117,7 +117,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
 
     if (argv.mdx) {
       defaultPlugins.push(
-        await createMdxPlugin({ mdx: Boolean(argv.mdx) })
+        await createMdxPlugin()
       );
     }
 
