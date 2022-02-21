@@ -27,7 +27,7 @@ export function createBookPlugin(
             const pages = [
               ${pages.map(file => `{
                 path: '${file}', 
-                page: require('${file}').default // Uses MDX plugin if confiured.
+                page: require('${file}').default // Uses MDX plugin if configured.
               }`).join(',')}
             ];
 
