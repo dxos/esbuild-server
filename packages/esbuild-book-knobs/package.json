@@ -2,13 +2,14 @@
   "name": "@dxos/esbuild-book-knobs",
   "version": "2.2.2",
   "description": "Knobs for esbuild-server book.",
-  "homepage": "https://github.com/dxos/gem#readme",
+  "private": true,
+  "homepage": "https://github.com/dxos/esbuild-server#readme",
   "bugs": {
-    "url": "https://github.com/dxos/gem/issues"
+    "url": "https://github.com/dxos/esbuild-server/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dxos/gem.git"
+    "url": "git+https://github.com/dxos/esbuild-server.git"
   },
   "license": "AGPL-3.0",
   "author": "DXOS.org",
