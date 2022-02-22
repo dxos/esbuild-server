@@ -2,6 +2,7 @@
   "name": "@dxos/esbuild-server-demos",
   "version": "2.2.2",
   "description": "Demos.",
+  "private": true,
   "homepage": "https://github.com/dxos/esbuild-server#readme",
   "bugs": {
     "url": "https://github.com/dxos/esbuild-server/issues"
