@@ -66,3 +66,11 @@ common/autoinstallers/*/.npmrc
 
 # Heft
 .heft
+
+# Heft
+node_modules
+dist
+.DS_Store
+.idea
+yarn-error.log
+

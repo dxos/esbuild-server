@@ -51,7 +51,7 @@ export function createBookPlugin(
         };
       });
 
-      // Map our own react to the client one.
+      // Map our own esbuild-server packages instead of the client one.
       let reactResolved: string;
       let mdxReactResolved: string;
       onStart(() => {
