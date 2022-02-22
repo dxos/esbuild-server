@@ -8,7 +8,7 @@ jobs:
   test:
     strategy:
       matrix:
-        node: ['16.x']
+        node: ['16.14']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -17,12 +17,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node }}
-    - run: yarn install --frozen-lockfile
+    - run: npm install -g @microsoft/rush@5.58.0 pnpm@6.24.2 yarn@1.22.17
     - name: Build the source code
-      run: yarn build
+      run: node common/scripts/install-run-rush.js build --verbose
     - name: Test esbuild-server building
-      run: ../bin/main.js build
-      working-directory: examples
+      run: ../../bin/main.js build
+      working-directory: packages/esbuild-server-demos
     - name: Test esbuild-server book building
-      run: ../bin/main.js book --build
-      working-directory: examples
+      run: ../../bin/main.js book --build
+      working-directory: packages/esbuild-server-demos
