@@ -22,8 +22,8 @@ jobs:
     - name: Build the source code
       run: node common/scripts/install-run-rush.js build --verbose
     - name: Test esbuild-server building
-      run: ../../bin/main.js build
+      run: rushx build --verbose
       working-directory: packages/esbuild-server-demos
     - name: Test esbuild-server book building
-      run: ../../bin/main.js book --build
+      run: rushx book --build
       working-directory: packages/esbuild-server-demos
