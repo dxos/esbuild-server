@@ -455,7 +455,6 @@
     {
       "packageName": "@dxos/esbuild-server-demos",
       "projectFolder": "packages/esbuild-server-demos",
-      "versionPolicyName": "lockStepPolicy",
       "shouldPublish": false
     },
     {
