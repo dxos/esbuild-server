@@ -6,8 +6,11 @@ on:
 name: Publish packages to NPM
 jobs:
   publish:
-    runs-on: [self-hosted, dind-actions-runner]
-    timeout-minutes: 25
+    strategy:
+      matrix:
+        node: ['16.14']
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
@@ -17,7 +20,7 @@ jobs:
         clean: false
     - name: Check, install and build
       run: |
-        \. "$NVM_DIR/nvm.sh" && nvm use
+        \.
 
         # Install dependencies
         echo "::group::Install"
@@ -28,11 +31,11 @@ jobs:
         node common/scripts/github-actions-folding.js node common/scripts/install-run-rush.js build:test --verbose
     - name: Run prerelease scripts
       run: |
-        \. "$NVM_DIR/nvm.sh" && nvm use
+        \.
         node common/scripts/install-run-rush.js prerelease
     - name: Publish latest to NPM
       run:  |
-        \. "$NVM_DIR/nvm.sh" && nvm use
+        \.
 
         # Publish under "latest" tag
         node common/scripts/install-run-rush.js publish --publish --include-all --tag latest
