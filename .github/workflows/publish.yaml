@@ -15,22 +15,12 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
     - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
       with:
-        fetch-depth: 0
-        clean: false
-    - name: Check, install and build
-      run: |
-        # Install dependencies
-        echo "::group::Install"
-        node common/scripts/install-run-rush.js install
-        echo "::endgroup::"
-
-        # Build with tests
-        node common/scripts/github-actions-folding.js node common/scripts/install-run-rush.js build:test --verbose
-    - name: Run prerelease scripts
-      run: |
-        node common/scripts/install-run-rush.js prerelease
+        node-version: ${{ matrix.node }}
+    - run: npm install -g @microsoft/rush@5.58.0 pnpm@6.24.2 yarn@1.22.17
+    - name: Build the source code and test
+      run: node common/scripts/install-run-rush.js build:test --verbose
     - name: Publish latest to NPM
-      run:  |
-        # Publish under "latest" tag
-        node common/scripts/install-run-rush.js publish --publish --include-all --tag latest
+      run: node common/scripts/install-run-rush.js publish --publish --include-all --tag latest
