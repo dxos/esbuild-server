@@ -166,6 +166,14 @@
     //    */
     //   // "autoinstallerName": "my-task"
     // }
+    {
+      "commandKind": "bulk",
+      "name": "build:test",
+      "description": "Build, lint and test.",
+      "summary": "Build, lint and test.",
+      "incremental": true,
+      "enableParallelism": true
+    }
   ],
 
   /**
