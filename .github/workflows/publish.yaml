@@ -20,8 +20,6 @@ jobs:
         clean: false
     - name: Check, install and build
       run: |
-        \.
-
         # Install dependencies
         echo "::group::Install"
         node common/scripts/install-run-rush.js install
@@ -31,11 +29,8 @@ jobs:
         node common/scripts/github-actions-folding.js node common/scripts/install-run-rush.js build:test --verbose
     - name: Run prerelease scripts
       run: |
-        \.
         node common/scripts/install-run-rush.js prerelease
     - name: Publish latest to NPM
       run:  |
-        \.
-
         # Publish under "latest" tag
         node common/scripts/install-run-rush.js publish --publish --include-all --tag latest
