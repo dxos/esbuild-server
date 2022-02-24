@@ -24,7 +24,8 @@
     "build": "npm run clean && tsc --build",
     "clean": "rm -rf ./dist",
     "lint": "eslint --format codeframe './src/**/*.ts'",
-    "test": "jest --rootDir ./src --verbose --passWithNoTests"
+    "test": "true",
+    "build:test": "npm run test && npm run build"
   },
   "browserslist": [
     "> 5%"
