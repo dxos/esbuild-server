@@ -20,7 +20,7 @@ jobs:
     - run: npm install -g @microsoft/rush@5.58.0 pnpm@6.24.2 yarn@1.22.17
     - run: rush update
     - name: Build the source code
-      run: node common/scripts/install-run-rush.js build --verbose
+      run: node common/scripts/install-run-rush.js build:test --verbose
     - name: Test esbuild-server building
       run: rushx build --verbose
       working-directory: packages/esbuild-server-demos
