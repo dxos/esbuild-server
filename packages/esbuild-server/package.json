@@ -13,7 +13,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "start": "ts-node src/main.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "true"
   },
   "dependencies": {
     "@babel/core": "^7.16.5",
