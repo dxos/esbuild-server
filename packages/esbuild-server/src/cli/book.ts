@@ -2,6 +2,7 @@ import assert from 'assert';
 import chalk from 'chalk';
 import fs from 'fs';
 import { build } from 'esbuild';
+import { mkdir } from 'fs/promises';
 import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path';
 import { sync as findPackageJson } from 'pkg-up';
@@ -12,7 +13,6 @@ import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
 import { DEFAFULT_CONFIG_FILE, validateConfig } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
-import { mkdir } from 'fs/promises';
 
 interface BookCommandArgv {
   pages: string[]
@@ -25,16 +25,16 @@ interface BookCommandArgv {
 
 export const bookCommand: CommandModule<{}, BookCommandArgv> = {
   command: 'book [stories...]',
-  describe: 'start the dev server with a book of components',
+  describe: 'Starts the dev server with a book of components.',
   builder: yargs => yargs
     .positional('stories', {
-      describe: 'glob to find story files',
+      describe: 'Glob to find story files.',
       type: 'string',
       array: true,
       default: ['./stories/**/*.stories.[jt]sx']
     })
     .positional('pages', {
-      describe: 'glob to find story pages',
+      describe: 'Glob to find story pages.',
       type: 'string',
       array: true,
       default: ['./stories/**/*.mdx']
@@ -64,7 +64,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     .option('build', {
       type: 'boolean',
       default: false,
-      describe: 'build a static stories site instead of starting a dev-server'
+      describe: 'Builds a static stories site instead of starting the dev-server.'
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
@@ -118,7 +118,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     defaultPlugins.push(
       await createMdxPlugin()
     );
-    
+
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
       const startTime = Date.now();
@@ -126,7 +126,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       try {
         try {
           await mkdir(outdir, { recursive: true });
-
           await promisify(ncp)(staticDir, outdir);
         } catch (err) {
           console.error(err);

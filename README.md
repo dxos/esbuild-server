@@ -8,7 +8,7 @@ A fast dev-server and storybook built with esbuild.
 ## Installation
 
 Install or update rush and its dependencies:
-
+ 
 ```bash
 npm install -g @microsoft/rush pnpm
 ```

@@ -14,7 +14,7 @@ interface BuildCommandArgv {
 
 export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
   command: 'build',
-  describe: 'build the app for production',
+  describe: 'Builds the app for production.',
   builder: yargs => yargs
     .option('config', {
       type: 'string',

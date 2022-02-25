@@ -14,7 +14,7 @@ interface DevCommandArgv {
 
 export const devCommand: CommandModule<{}, DevCommandArgv> = {
   command: 'dev',
-  describe: 'start the dev server',
+  describe: 'Starts the dev server.',
   builder: yargs => yargs
     .option('port', {
       alias: 'p',
