@@ -11,8 +11,8 @@ yarn build --watch
 To run the app server.
 
 ```bash
-cd examples
-../bin/main.js dev
+cd ../esbuild-server-demos/
+rushx dev
 ```
 
 ## Book
@@ -20,13 +20,20 @@ cd examples
 To run the storybook:
 
 ```bash
-cd examples
-../bin/main.js book --mdx
+cd ../esbuild-server-demos/
+rushx book
+```
+
+To run the storybook with MDX pages generation:
+
+```bash
+cd ../esbuild-server-demos/
+rushx book --mdx
 ```
 
 To build the storybook:
 
 ```bash
-cd examples
-../bin/main.js book --build
+cd ../esbuild-server-demos/
+rushx book --build
 ```
