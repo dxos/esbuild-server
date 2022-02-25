@@ -20,6 +20,7 @@
     "src"
   ],
   "scripts": {
+    "dev": "esbuild-server dev",
     "book": "esbuild-server book",
     "build": "npm run clean && tsc --build",
     "clean": "rm -rf ./dist",
