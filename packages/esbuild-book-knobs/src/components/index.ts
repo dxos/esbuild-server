@@ -4,4 +4,3 @@
 
 export * from './Knobs';
 export * from './KnobsProvider';
-export * from './TestComponent';

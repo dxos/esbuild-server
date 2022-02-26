@@ -11,10 +11,13 @@ importers:
       '@dxos/esbuild-server': workspace:*
       '@emotion/css': ^11.7.1
       '@emotion/react': ^11.7.1
+      clsx: ~1.1.1
       react: ^17.0.2
       react-dom: ^17.0.2
       ts-jest: ^27.1.2
       typescript: ~4.5.4
+    dependencies:
+      clsx: 1.1.1
     devDependencies:
       '@dxos/esbuild-plugins': 2.27.5
       '@dxos/esbuild-server': link:../esbuild-server
@@ -1374,6 +1377,11 @@ packages:
     resolution: {integrity: sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=}
     dependencies:
       mimic-response: 1.0.1
+    dev: false
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/1.9.3:

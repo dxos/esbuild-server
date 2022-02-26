@@ -24,6 +24,12 @@ export interface Select {
   onChange: (value: any) => void
 }
 
+export interface Boolean {
+  label: string
+  defaultValue: boolean
+  onChange: (value: boolean) => void
+}
+
 export interface Number {
   label: string
   range: NumberRange
@@ -31,4 +37,4 @@ export interface Number {
   onChange: (value: number) => void
 }
 
-export type KnobType = Button | Select | Number;
+export type KnobType = Button | Select | Boolean | Number;

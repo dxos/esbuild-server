@@ -11,6 +11,7 @@ import { KnobContext, KnobDef } from '../hooks';
  * NOTE: Hooks must be called by child components.
  */
 export const KnobsProvider = ({ children }: { children: ReactNode }) => {
+  // TODO(burdon): Maintain map to support reset.
   const [knobs, setKnobs] = useState<KnobDef[]>([]);
 
   const addKnob = (type: string, options: any) => {

@@ -4,13 +4,13 @@
  */
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "nodeSupportedVersionRange": ">=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0",
   "rushVersion": "5.62.4",
   "pnpmVersion": "6.7.1",
   "pnpmOptions": {
     "useWorkspaces": true
   },
 
-  "nodeSupportedVersionRange": ">=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0",
   "projects": [
     {
       "packageName": "@dxos/esbuild-server",
