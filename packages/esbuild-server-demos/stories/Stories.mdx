@@ -3,7 +3,6 @@
 import { TestComponent } from '../src';
 
 ```typescript
-// NOTE: The path must be relative to the mdx file.
 import { TestComponent } from '../src';
 ```
 
@@ -27,9 +26,10 @@ This is a custom <Blink color='seagreen'>shortcode</Blink> tag.
 
 <CodeBlock>
 ```tsx
-const main = () => {
-  const x = 100;
-  console.log(x);
+export const Main = () => {
+  return (
+    <div>Test</div>
+  );
 };
 ```
 </CodeBlock>
