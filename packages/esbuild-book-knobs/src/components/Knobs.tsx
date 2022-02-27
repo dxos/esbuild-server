@@ -6,8 +6,8 @@ import { css } from '@emotion/css';
 import clsx from 'clsx';
 import React, { MutableRefObject, forwardRef } from 'react';
 
-import { ButtonOptions, NumberOptions, SelectOptions, range, BooleanOptions, KnobType, Options } from '../types';
 import { useKnobsContext, useKnobValue } from '../hooks';
+import { ButtonOptions, NumberOptions, SelectOptions, range, BooleanOptions, KnobType, Options } from '../types';
 
 const styles = {
   defaults: css`
@@ -162,9 +162,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
   className,
   horizontal = false,
   floating = false
-}: KnobsProps,
-  ref: MutableRefObject<HTMLDivElement>
-) => {
+}: KnobsProps, ref: MutableRefObject<HTMLDivElement>) => {
   const { knobs } = useKnobsContext();
 
   return (
@@ -177,7 +175,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
         className
       )}
     >
-      {knobs.map(({ id, type, options }, i) => {
+      {knobs.map(({ id, type, options }) => {
         switch (type) {
           case KnobType.Button: {
             return (
@@ -187,7 +185,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
                 options={options as ButtonOptions}
                 horizontal={horizontal}
               />
-            )
+            );
           }
 
           case KnobType.Select: {
@@ -219,6 +217,9 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
               />
             );
           }
+
+          default:
+            return null;
         }
       })}
     </div>
