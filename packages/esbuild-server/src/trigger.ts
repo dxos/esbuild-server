@@ -1,3 +1,7 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 export class Trigger<T> {
   _promise!: Promise<T>;
   _wake!: (arg: T) => void;
@@ -15,6 +19,8 @@ export class Trigger<T> {
   }
 
   reset () {
-    this._promise = new Promise((resolve) => { this._wake = resolve; })
+    this._promise = new Promise((resolve) => {
+      this._wake = resolve;
+    });
   }
 }

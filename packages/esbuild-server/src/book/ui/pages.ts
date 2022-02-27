@@ -1,3 +1,7 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import { FunctionComponent } from 'react';
 
 export interface Page {
@@ -6,10 +10,10 @@ export interface Page {
   page: FunctionComponent
 }
 
-export function extractPages(pages: Page[]): Page[] {
+export function extractPages (pages: Page[]): Page[] {
   return pages.map(({ path, page }) => {
     // Remove extension.
     const title = path.substring(path.lastIndexOf('/') + 1).split('.')[0];
-    return { title, path, page }
+    return { title, path, page };
   });
 }

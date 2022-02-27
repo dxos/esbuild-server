@@ -1,8 +1,11 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import chalk from 'chalk';
 import { CommandModule } from 'yargs';
-import { validateConfigForApp } from '../config';
 
-import { DEFAFULT_CONFIG_FILE } from '../config';
+import { validateConfigForApp, DEFAFULT_CONFIG_FILE } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
 
@@ -19,36 +22,36 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
     .option('port', {
       alias: 'p',
       type: 'number',
-      default: 8080,
+      default: 8080
     })
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE,
+      default: DEFAFULT_CONFIG_FILE
     })
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
-      default: false,
+      default: false
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
-    if (config) {
-      console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
-    } else {
+    if (!config) {
       throw new Error('Config not found.');
     }
+
+    console.log(chalk`🔧 {dim Loaded config from} {white ${argv.config}}`);
 
     validateConfigForApp(config);
 
     startDevBundler({
-      entryPoints: config?.entryPoints!,
-      plugins: config?.plugins ?? [],
+      entryPoints: config.entryPoints!,
+      plugins: config.plugins ?? [],
       devServer: {
         port: argv.port,
-        staticDir: config?.staticDir,
+        staticDir: config.staticDir,
         logRequests: argv.verbose
       },
-      overrides: config?.overrides
+      overrides: config.overrides
     });
   }
-}
+};

@@ -1,12 +1,16 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import chalk from 'chalk';
 import { build } from 'esbuild';
+import { mkdir } from 'fs/promises';
 import { ncp } from 'ncp';
 import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
-import { loadConfig } from '../load-config';
 import { DEFAFULT_CONFIG_FILE, validateConfigForApp } from '../config';
-import { mkdir } from 'fs/promises';
+import { loadConfig } from '../load-config';
 
 interface BuildCommandArgv {
   config: string
@@ -18,7 +22,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
   builder: yargs => yargs
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE,
+      default: DEFAFULT_CONFIG_FILE
     }),
   handler: async argv => {
     const config = loadConfig(argv.config);
@@ -63,14 +67,14 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
         loader: {
           '.jpg': 'file',
           '.png': 'file',
-          '.svg': 'file',
+          '.svg': 'file'
         },
         ...overrides
       });
-      console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+      console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
     } catch (err) {
-      console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+      console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
       process.exit(1);
     }
   }
-}
+};

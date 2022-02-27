@@ -1,8 +1,12 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import { Plugin } from 'esbuild';
 import fs from 'fs';
 import { join } from 'path/posix';
 
-export function createBookPlugin(
+export function createBookPlugin (
   projectRoot: string,
   packageRoot: string,
   pages: string[],
@@ -12,7 +16,7 @@ export function createBookPlugin(
   return {
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
-      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }))
+      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }));
       onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => {
         // Load source file.
         const readSource = (file: string) => JSON.stringify(fs.readFileSync(file, 'utf-8'));
@@ -55,13 +59,13 @@ export function createBookPlugin(
       let reactResolved: string;
       let mdxReactResolved: string;
       onStart(() => {
-        reactResolved = require.resolve('react', { paths: [projectRoot] })
-        mdxReactResolved = require.resolve('@mdx-js/react', { paths: [projectRoot] })
-      })
+        reactResolved = require.resolve('react', { paths: [projectRoot] });
+        mdxReactResolved = require.resolve('@mdx-js/react', { paths: [projectRoot] });
+      });
       onResolve({ filter: /^react$/ }, () => ({ path: reactResolved }));
-      onResolve({ filter: /^\@mdx-js\/react$/ }, () => {
-        return { path: mdxReactResolved }
+      onResolve({ filter: /^@mdx-js\/react$/ }, () => {
+        return { path: mdxReactResolved };
       });
     }
-  }
+  };
 }

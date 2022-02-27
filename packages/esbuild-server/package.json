@@ -14,8 +14,12 @@
     "build": "npm run clean && tsc --build",
     "build:test": "npm run test && npm run build",
     "clean": "rimraf ./dist",
+    "lint": "eslint --format codeframe './src/**/*.ts'",
     "start": "ts-node src/main.ts",
     "test": "true"
+  },
+  "eslintConfig": {
+    "extends": "plugin:@dxos/react"
   },
   "dependencies": {
     "@babel/core": "^7.16.5",
@@ -39,6 +43,7 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
+    "@dxos/eslint-plugin": "~1.0.24",
     "@types/glob": "^7.1.4",
     "@types/mdx": "~2.0.1",
     "@types/ncp": "^2.0.5",
@@ -49,6 +54,8 @@
     "@types/react-syntax-highlighter": "^13.5.2",
     "@types/styled-components": "^5.1.14",
     "@types/yargs": "^17.0.3",
+    "eslint": "^7.12.1",
+    "eslint-plugin-react": "~7.29.2",
     "react-is": "^17.0.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.1.0",
