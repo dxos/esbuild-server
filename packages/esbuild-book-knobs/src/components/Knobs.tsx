@@ -14,7 +14,7 @@ const styles = {
     display: flex;
 
     padding: 8px;
-    background: #F5F5F5;
+    background-color: #F5F5F5;
 
     input, select {
       outline: none;
@@ -27,14 +27,6 @@ const styles = {
     .knob {
       display: flex;
     }
-  `,
-
-  floating: css`
-    position: absolute;
-    right: 8px;
-    top: 8px;
-
-    border: 1px solid #CCC;
   `,
 
   horizontal: css`
@@ -69,7 +61,30 @@ const styles = {
       text-align: right;
       margin-right: 8px;
     }      
-  `
+  `,
+
+  floating: {
+    default: css`
+      position: absolute;
+      border: 1px solid #CCC;
+    `,
+    'top-left': css`
+      left: 8px;
+      top: 8px;
+    `,
+    'top-right': css`
+      right: 8px;
+      top: 8px;
+    `,
+    'bottom-left': css`
+      left: 8px;
+      bottom: 8px;
+    `,
+    'bottom-right': css`
+      right: 8px;
+      bottom: 8px;
+    `
+  }
 };
 
 interface KnobProps<T extends Options> {
@@ -132,7 +147,7 @@ const NumberKnob = ({ id, options: { label, range: { min, max, step = 1 } } }: K
 };
 
 const SelectKnob = ({ id, options: { label, values } }: KnobProps<SelectOptions>) => {
-  const [value, setValue] = useKnobValue<string>(id);
+  const [value, setValue] = useKnobValue<any>(id);
 
   return (
     <div className='knob'>
@@ -143,7 +158,7 @@ const SelectKnob = ({ id, options: { label, values } }: KnobProps<SelectOptions>
       >
         <option value=''>Default</option>
         {Object.keys(values).map(key => (
-          <option key={key} value={values[key]}>
+          <option key={key} value={key}>
             {key}
           </option>
         ))}
@@ -152,16 +167,18 @@ const SelectKnob = ({ id, options: { label, values } }: KnobProps<SelectOptions>
   );
 };
 
+export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+
 export interface KnobsProps {
   className?: string
   horizontal?: boolean
-  floating?: boolean
+  floating?: Position
 }
 
 export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
   className,
   horizontal = false,
-  floating = false
+  floating
 }: KnobsProps, ref: MutableRefObject<HTMLDivElement>) => {
   const { knobs } = useKnobsContext();
 
@@ -170,7 +187,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
       ref={ref}
       className={clsx(
         styles.defaults,
-        floating && styles.floating,
+        floating && [styles.floating.default, styles.floating[floating]],
         horizontal ? styles.horizontal : styles.vertical,
         className
       )}

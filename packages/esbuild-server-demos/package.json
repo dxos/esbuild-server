@@ -1,6 +1,6 @@
 {
   "name": "@dxos/esbuild-server-demos",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "private": true,
   "description": "Demos.",
   "homepage": "https://github.com/dxos/esbuild-server#readme",

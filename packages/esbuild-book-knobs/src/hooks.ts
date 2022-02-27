@@ -95,6 +95,7 @@ export const useNumber = (label: string, range: NumberRange, defaultValue: numbe
   return useKnob<NumberOptions, number>(KnobType.Number, { label, range }, defaultValue ?? range.min);
 };
 
-export const useSelect = (label: string, values: SelectMap, defaultValue = undefined): string => {
-  return useKnob<SelectOptions, string>(KnobType.Select, { label, values }, defaultValue);
+export const useSelect = (label: string, values: SelectMap, defaultValue = undefined) => {
+  const value = useKnob<SelectOptions, string>(KnobType.Select, { label, values }, defaultValue);
+  return values[value];
 };

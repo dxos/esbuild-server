@@ -13,7 +13,7 @@ export default {
 const Story = () => {
   const reset = useReset();
   useButton('Reset', reset);
-  const select = useSelect('Select', { foo: 1, bar: 2 }, 1);
+  const select = useSelect('Select', { foo: { value: 100 }, bar: { value: 200 } }, 'foo');
   const number = useNumber('Number', { min: 0, max: 100, step: 10 });
   const boolean1 = useBoolean('Boolean 1', true);
   const boolean2 = useBoolean('Boolean 2');
@@ -24,7 +24,7 @@ const Story = () => {
         <tbody>
         <tr>
           <td>Select</td>
-          <td>{String(select)}</td>
+          <td>{JSON.stringify(select)}</td>
         </tr>
         <tr>
           <td>Number</td>
@@ -93,7 +93,7 @@ export const Floating = () => {
         <Story />
       </Root>
 
-      <Knobs floating />
+      <Knobs floating='top-right' />
     </KnobsProvider>
   );
 };
