@@ -15,7 +15,7 @@ export const KnobsProvider = ({ children }: { children: ReactNode }) => {
   const [knobs, setKnobs] = useState<KnobInstance[]>([]);
   const addKnob = (knob: KnobInstance) => {
     setKnobs(knobs => [...knobs, knob]);
-  }
+  };
 
   return (
     <KnobsContext.Provider value={{ knobs, addKnob }}>
