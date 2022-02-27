@@ -44,7 +44,7 @@ const Story = () => {
   );
 };
 
-const Root = ({ children, vertical = false }: { children: ReactNode, vertical?: boolean }) => (
+const Root = ({ children, vertical = false }: { children?: ReactNode, vertical?: boolean }) => (
   <div style={{
     display: 'flex',
     flexDirection: vertical ? 'column' : 'row',

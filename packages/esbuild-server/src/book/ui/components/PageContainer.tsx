@@ -100,7 +100,7 @@ const theme = {
 };
 
 export interface PageProps {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export const PageContainer = ({ children }: PageProps) => {

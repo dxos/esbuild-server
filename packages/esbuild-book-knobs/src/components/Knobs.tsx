@@ -179,42 +179,46 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
         switch (type) {
           case KnobType.Button: {
             return (
-              <ButtonKnob
-                key={id}
-                id={id}
-                options={options as ButtonOptions}
-                horizontal={horizontal}
-              />
+              <div key={id}>
+                <ButtonKnob
+                  id={id}
+                  options={options as ButtonOptions}
+                  horizontal={horizontal}
+                />
+              </div>
             );
           }
 
           case KnobType.Select: {
             return (
-              <SelectKnob
-                key={id}
-                id={id}
-                options={options as SelectOptions}
-              />
+              <div key={id}>
+                <SelectKnob
+                  id={id}
+                  options={options as SelectOptions}
+                />
+              </div>
             );
           }
 
           case KnobType.Boolean: {
             return (
-              <BooleanKnob
-                key={id}
-                id={id}
-                options={options as BooleanOptions}
-              />
+              <div key={id}>
+                <BooleanKnob
+                  id={id}
+                  options={options as BooleanOptions}
+                />
+              </div>
             );
           }
 
           case KnobType.Number: {
             return (
-              <NumberKnob
-                key={id}
-                id={id}
-                options={options as NumberOptions}
-              />
+              <div key={id}>
+                <NumberKnob
+                  id={id}
+                  options={options as NumberOptions}
+                />
+              </div>
             );
           }
 
