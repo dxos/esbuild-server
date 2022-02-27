@@ -1,9 +1,9 @@
 {
   "name": "@dxos/esbuild-server",
   "version": "2.2.3",
+  "license": "MIT",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "license": "MIT",
   "bin": "./bin/main.js",
   "files": [
     "dist",
@@ -11,10 +11,10 @@
     "src"
   ],
   "scripts": {
+    "build": "npm run clean && tsc --build",
+    "build:test": "npm run test && npm run build",
     "clean": "rimraf ./dist",
     "start": "ts-node src/main.ts",
-    "build": "tsc",
-    "build:test": "npm run test && npm run build",
     "test": "true"
   },
   "dependencies": {

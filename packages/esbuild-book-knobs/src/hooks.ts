@@ -5,7 +5,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { KnobsContext } from './context';
-
 import {
   BooleanOptions,
   ButtonOptions, KnobInstance,
@@ -14,7 +13,7 @@ import {
   NumberRange,
   Options,
   SelectMap,
-  SelectOptions,
+  SelectOptions
 } from './types';
 
 export const useKnobsContext = () => {
@@ -27,7 +26,9 @@ export const useKnobsContext = () => {
 export const useReset = () => {
   const { knobs } = useKnobsContext();
   const knobsRef = useRef(knobs);
-  useEffect(() => { knobsRef.current = knobs }, [knobs]);
+  useEffect(() => {
+    knobsRef.current = knobs;
+  }, [knobs]);
 
   return () => {
     knobsRef.current.forEach(({ setValue, defaultValue }) => setValue(defaultValue));
@@ -38,7 +39,7 @@ export const useReset = () => {
  * Get value subscription.
  * @param id
  */
-export const useKnobValue = <T extends any> (id: string): [T, (value: T) => void] => {
+export const useKnobValue = <T> (id: string): [T, (value: T) => void] => {
   const { knobs } = useKnobsContext();
   const knob = useMemo(() => knobs.find(knob => knob.id === id), []);
   const [value, setValue] = useState<T>(knob.defaultValue);
@@ -56,24 +57,27 @@ export const useKnobValue = <T extends any> (id: string): [T, (value: T) => void
  * @param options
  * @param defaultValue
  */
-export const useKnob = <T extends Options, R> (type: KnobType, options: T, defaultValue?: R) => {
+export const useKnob = <O extends Options, T> (type: KnobType, options: O, defaultValue?: T) => {
   const { addKnob } = useKnobsContext();
   const id = useMemo(() => String(Math.random()), []);
-  const [value, setValue] = useState<R>(defaultValue);
+  const [value, setValue] = useState<T>(defaultValue);
   useEffect(() => {
-    const updateValue = (value: R) => {
-      setValue(value);
-
-      // Update control.
-      knob.onUpdate?.(value);
+    const knob: KnobInstance = {
+      id,
+      type,
+      options,
+      setValue: (value: T) => {
+        setValue(value);
+        knob.onUpdate?.(value);
+      },
+      defaultValue
     };
 
-    const knob: KnobInstance = { id, type, options, setValue: updateValue, defaultValue };
     addKnob(knob);
   }, []);
 
   return value;
-}
+};
 
 //
 // Type-specific knobs.

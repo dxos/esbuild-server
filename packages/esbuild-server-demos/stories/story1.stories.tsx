@@ -1,3 +1,7 @@
+//
+// Copyright 2018 DXOS.org
+//
+
 import React from 'react';
 
 import { TestComponent } from '../src';

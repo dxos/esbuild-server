@@ -6,10 +6,13 @@ export type SelectMap = { [index: string]: any }
 
 export type NumberRange = { min: number, max: number, step?: number }
 
-export function* range (min: number, max: number, step: number = 1) {
+export function * range (min: number, max: number, step = 1) {
   yield min;
-  if (min >= max) return;
-  yield* range(parseFloat(Number(min + step).toPrecision(10)), max, step);
+  if (min >= max) {
+    return;
+  }
+
+  yield * range(parseFloat(Number(min + step).toPrecision(10)), max, step);
 }
 
 export enum KnobType {
@@ -19,6 +22,7 @@ export enum KnobType {
   Number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Options {}
 
 export interface ButtonOptions extends Options {
