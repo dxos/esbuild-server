@@ -4,10 +4,10 @@
 
 import { css } from '@emotion/css';
 import clsx from 'clsx';
-import React, { MutableRefObject, forwardRef, useEffect, useMemo, useState } from 'react';
+import React, { MutableRefObject, forwardRef } from 'react';
 
-import { Button, Number, Select, range, Boolean } from '../types';
-import { useKnobs } from '../hooks';
+import { ButtonOptions, NumberOptions, SelectOptions, range, BooleanOptions, KnobType, Options } from '../types';
+import { useKnobsContext, useKnobValue } from '../hooks';
 
 const styles = {
   defaults: css`
@@ -47,6 +47,10 @@ const styles = {
     .knob {
       margin-right: 8px;
     }
+    
+    label {
+      margin-right: 8px;
+    }
   `,
 
   vertical: css`
@@ -68,12 +72,30 @@ const styles = {
   `
 };
 
-// TODO(burdon): Get values from context (support reset). Unique ID set per knob.
+interface KnobProps<T extends Options> {
+  id: string
+  horizontal?: boolean
+  options: T
+}
 
-const BooleanKnob = ({ label, defaultValue, onChange }: Boolean) => {
-  const id = useMemo(() => String(Math.random()), []);
-  const [value, setValue] = useState(defaultValue);
-  useEffect(() => onChange(value), [value]);
+const ButtonKnob = ({
+  horizontal,
+  options: { label, onClick }
+}: KnobProps<ButtonOptions>) => {
+  return (
+    <div className='knob'>
+      {!horizontal && (
+        <label />
+      )}
+      <button onClick={onClick}>
+        {label}
+      </button>
+    </div>
+  );
+};
+
+const BooleanKnob = ({ id, options: { label } }: KnobProps<BooleanOptions>) => {
+  const [value, setValue] = useKnobValue<boolean>(id);
 
   return (
     <div className='knob'>
@@ -89,21 +111,19 @@ const BooleanKnob = ({ label, defaultValue, onChange }: Boolean) => {
   );
 };
 
-const SelectionKnob = ({ label, defaultValue, values, onChange }: Select) => {
-  const [value, setValue] = useState(defaultValue);
-  useEffect(() => onChange(value), [value]);
+const NumberKnob = ({ id, options: { label, range: { min, max, step = 1 } } }: KnobProps<NumberOptions>) => {
+  const [value, setValue] = useKnobValue<number>(id);
 
   return (
     <div className='knob'>
       <label>{label}</label>
       <select
-        value={defaultValue}
-        onChange={event => setValue(event.target.value !== '' ? values[event.target.value] : undefined)}
+        value={value}
+        onChange={event => setValue(event.target.value !== '' ? parseInt(event.target.value) : undefined)}
       >
-        <option value={undefined}>Default</option>
-        {Object.keys(values).map(key => (
-          <option key={key} value={key}>
-            {key}
+        {[...range(min, max, step)].map(value => (
+          <option key={value} value={value}>
+            {value}
           </option>
         ))}
       </select>
@@ -111,20 +131,20 @@ const SelectionKnob = ({ label, defaultValue, values, onChange }: Select) => {
   );
 };
 
-const NumberRangeKnob = ({ label, defaultValue, range: { min, max, step = 1 }, onChange }: Number) => {
-  const [value, setValue] = useState(defaultValue);
-  useEffect(() => onChange(value), [value]);
+const SelectKnob = ({ id, options: { label, values } }: KnobProps<SelectOptions>) => {
+  const [value, setValue] = useKnobValue<string>(id);
 
   return (
     <div className='knob'>
       <label>{label}</label>
       <select
-        value={defaultValue}
-        onChange={event => setValue(event.target.value !== '' ? parseInt(event.target.value) : defaultValue)}
+        value={value ?? ''}
+        onChange={event => setValue(event.target.value)}
       >
-        {[...range(min, max, step)].map(value => (
-          <option key={value} value={value}>
-            {value}
+        <option value=''>Default</option>
+        {Object.keys(values).map(key => (
+          <option key={key} value={values[key]}>
+            {key}
           </option>
         ))}
       </select>
@@ -145,7 +165,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
 }: KnobsProps,
   ref: MutableRefObject<HTMLDivElement>
 ) => {
-  const [knobs] = useKnobs();
+  const { knobs } = useKnobsContext();
 
   return (
     <div
@@ -157,37 +177,46 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
         className
       )}
     >
-      {knobs.map(([type, options], i) => {
+      {knobs.map(({ id, type, options }, i) => {
         switch (type) {
-          case 'button': {
-            const { label, onClick } = options as Button;
+          case KnobType.Button: {
             return (
-              <div key={i} className='knob'>
-                {!horizontal && (
-                  <label />
-                )}
-                <button onClick={onClick}>
-                  {label}
-                </button>
-              </div>
+              <ButtonKnob
+                key={id}
+                id={id}
+                options={options as ButtonOptions}
+                horizontal={horizontal}
+              />
+            )
+          }
+
+          case KnobType.Select: {
+            return (
+              <SelectKnob
+                key={id}
+                id={id}
+                options={options as SelectOptions}
+              />
             );
           }
 
-          case 'select': {
+          case KnobType.Boolean: {
             return (
-              <SelectionKnob key={i} {...options} />
+              <BooleanKnob
+                key={id}
+                id={id}
+                options={options as BooleanOptions}
+              />
             );
           }
 
-          case 'boolean': {
+          case KnobType.Number: {
             return (
-              <BooleanKnob key={i} {...options} />
-            );
-          }
-
-          case 'number': {
-            return (
-              <NumberRangeKnob key={i} {...options} />
+              <NumberKnob
+                key={id}
+                id={id}
+                options={options as NumberOptions}
+              />
             );
           }
         }

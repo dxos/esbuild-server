@@ -12,29 +12,39 @@ export function* range (min: number, max: number, step: number = 1) {
   yield* range(parseFloat(Number(min + step).toPrecision(10)), max, step);
 }
 
-export interface Button {
+export enum KnobType {
+  Button,
+  Select,
+  Boolean,
+  Number
+}
+
+export interface Options {}
+
+export interface ButtonOptions extends Options {
   label: string
   onClick: () => void
 }
 
-export interface Select {
+export interface SelectOptions extends Options {
   label: string
   values: SelectMap
-  defaultValue: any
-  onChange: (value: any) => void
 }
 
-export interface Boolean {
+export interface BooleanOptions extends Options {
   label: string
-  defaultValue: boolean
-  onChange: (value: boolean) => void
 }
 
-export interface Number {
+export interface NumberOptions extends Options {
   label: string
   range: NumberRange
-  defaultValue: number
-  onChange: (value: number) => void
 }
 
-export type KnobType = Button | Select | Boolean | Number;
+export type KnobInstance = {
+  id: string
+  type: KnobType
+  options: Options
+  setValue: (value: any) => void
+  onUpdate?: (value: any) => void
+  defaultValue?: any
+}

@@ -4,38 +4,38 @@
 
 import React, { ReactNode } from 'react';
 
-import { Knobs, KnobsProvider, useBoolean, useButton, useNumber, useSelect } from '../src';
+import { Knobs, KnobsProvider, useBoolean, useButton, useNumber, useReset, useSelect } from '../src';
 
 export default {
   title: '@esbuild-book-knobs/KnobsProvider'
 };
 
 const Story = () => {
-  useButton('Test', () => {}); // TODO(burdon): Reset option.
-
-  const select = useSelect('Select', { foo: 1, bar: 2 });
+  const reset = useReset();
+  useButton('Reset', reset);
+  const select = useSelect('Select', { foo: 1, bar: 2 }, 1);
   const number = useNumber('Number', { min: 0, max: 100, step: 10 });
   const boolean1 = useBoolean('Boolean 1', true);
   const boolean2 = useBoolean('Boolean 2');
 
   return (
-    <div>
+    <div style={{ padding: 8 }}>
       <table>
         <tbody>
         <tr>
-          <td>select</td>
+          <td>Select</td>
           <td>{String(select)}</td>
         </tr>
         <tr>
-          <td>number</td>
+          <td>Number</td>
           <td>{number}</td>
         </tr>
         <tr>
-          <td>boolean 1</td>
+          <td>Boolean 1</td>
           <td>{String(boolean1)}</td>
         </tr>
         <tr>
-          <td>boolean 2</td>
+          <td>Boolean 2</td>
           <td>{String(boolean2)}</td>
         </tr>
         </tbody>

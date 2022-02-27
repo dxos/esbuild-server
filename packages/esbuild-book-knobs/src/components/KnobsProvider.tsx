@@ -4,23 +4,22 @@
 
 import React, { ReactNode, useState } from 'react';
 
-import { KnobContext, KnobDef } from '../hooks';
+import { KnobsContext } from '../context';
+import { KnobInstance } from '../types';
 
 /**
  * Root container for knobs.
  * NOTE: Hooks must be called by child components.
  */
 export const KnobsProvider = ({ children }: { children: ReactNode }) => {
-  // TODO(burdon): Maintain map to support reset.
-  const [knobs, setKnobs] = useState<KnobDef[]>([]);
-
-  const addKnob = (type: string, options: any) => {
-    setKnobs(knobs => [...knobs, [type, options]]);
-  };
+  const [knobs, setKnobs] = useState<KnobInstance[]>([]);
+  const addKnob = (knob: KnobInstance) => {
+    setKnobs(knobs => [...knobs, knob]);
+  }
 
   return (
-    <KnobContext.Provider value={[knobs, addKnob]}>
+    <KnobsContext.Provider value={{ knobs, addKnob }}>
       {children}
-    </KnobContext.Provider>
+    </KnobsContext.Provider>
   );
 };
