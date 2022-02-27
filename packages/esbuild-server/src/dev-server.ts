@@ -1,7 +1,11 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import chalk from 'chalk';
 import { BuildResult, Plugin } from 'esbuild';
 import { readFile } from 'fs/promises';
-import http from 'http'
+import http from 'http';
 import { isAbsolute } from 'path';
 import { join } from 'path/posix';
 
@@ -21,121 +25,121 @@ export interface DevServerConfig {
 export class DevServer {
   private buildTrigger = new Trigger<BuildResult>();
 
-  constructor(
+  constructor (
     readonly config: DevServerConfig
   ) {}
 
-  createPlugin(): Plugin {
+  createPlugin (): Plugin {
     return {
       name: 'esbuild-server',
       setup: ({ onStart, onEnd }) => {
-        let startTime: number = 0;
+        let startTime = 0;
         onStart(() => {
-          console.log(chalk`🏎️  {dim Build started}`)
-          startTime = Date.now()
+          console.log(chalk`🏎️  {dim Build started}`);
+          startTime = Date.now();
 
           this.buildTrigger.reset();
-        })
+        });
 
         onEnd((result) => {
           if (result.errors.length > 0) {
-            console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
-            return
+            console.log(chalk`🚫 {dim Build} {red failed} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
+            return;
           }
-          console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`)
+          console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);
 
           this.buildTrigger.wake(result);
-        })
+        });
       }
-    }
+    };
   }
 
-  private async resolveFile(url: string): Promise<ResolvedFile | undefined> {
-    const buildResult = await this.buildTrigger.wait()
+  private async resolveFile (url: string): Promise<ResolvedFile | undefined> {
+    const buildResult = await this.buildTrigger.wait();
 
-    const output = buildResult.outputFiles?.find(file => file.path === url)
+    const output = buildResult.outputFiles?.find(file => file.path === url);
     if (output) {
       return {
         path: output.path,
-        contents: output.contents,
-      }
+        contents: output.contents
+      };
     }
 
-    if(isAbsolute(url)) {
+    if (isAbsolute(url)) {
       try {
-        const contents = await readFile(url)
+        const contents = await readFile(url);
 
         return {
           path: url,
-          contents,
-        }
+          contents
+        };
       } catch {}
     }
 
     if (this.config.staticDir) {
       try {
-        const path = join(this.config.staticDir, url)
-        const contents = await readFile(path)
+        const path = join(this.config.staticDir, url);
+        const contents = await readFile(path);
 
         return {
           path,
-          contents,
-        }
+          contents
+        };
       } catch {}
     }
 
     if (url === '/') {
-      return this.resolveFile('index.html')
+      return this.resolveFile('index.html');
     }
 
-    return undefined
+    return undefined;
   }
 
-  listen(port: number = this.config.port, callback?: (code: string) => void) {
+  listen (port: number = this.config.port, callback?: (code: string) => void) {
     const server = http.createServer(async (req, res) => {
-      const start = Date.now()
+      const start = Date.now();
 
-      this.config.logRequests && console.log(`=> ${req.method} ${req.url} ${req.headers['accept']}`)
+      this.config.logRequests && console.log(`=> ${req.method} ${req.url} ${req.headers.accept}`);
 
       const respondWithFile = (file: ResolvedFile) => {
-        this.config.logRequests && console.log(`<= 200 ${file.path} (${file.contents.length} bytes) ${Date.now() - start}ms`)
+        this.config.logRequests && console.log(`<= 200 ${file.path} (${file.contents.length} bytes) ${Date.now() - start}ms`);
 
         if (req.url?.endsWith('.js')) {
           res.setHeader('Content-Type', 'application/javascript');
         }
 
-        res.writeHead(200)
-        res.write(file?.contents)
-        res.end()
-      }
+        res.writeHead(200);
+        res.write(file?.contents);
+        res.end();
+      };
 
-      const file = await this.resolveFile(req.url!)
+      const file = await this.resolveFile(req.url!);
       if (file) {
-        respondWithFile(file)
-        return
+        respondWithFile(file);
+        return;
       }
 
-      const indexFile = await this.resolveFile('/')
+      const indexFile = await this.resolveFile('/');
       if (indexFile) {
-        respondWithFile(indexFile)
-        return
+        respondWithFile(indexFile);
+        return;
       }
 
-      this.config.logRequests && console.log(`<= 404`)
+      this.config.logRequests && console.log('<= 404');
 
-      res.writeHead(404, 'Not found')
-      res.end()
-    })
+      res.writeHead(404, 'Not found');
+      res.end();
+    });
 
     server.on('error', (err: any) => {
-      callback?.(err.code)
-      server.close()
+      callback?.(err.code);
+      server.close();
     });
 
     server.listen(port, () => {
-      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${port}}`)
-    })
+      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${port}}`);
+    });
 
-    return server
+    return server;
   }
 }

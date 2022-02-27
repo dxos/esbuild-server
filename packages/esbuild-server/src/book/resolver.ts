@@ -1,3 +1,7 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import { glob } from 'glob';
 import { promisify } from 'util';
 

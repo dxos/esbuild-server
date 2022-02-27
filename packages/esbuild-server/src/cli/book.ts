@@ -1,7 +1,11 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import assert from 'assert';
 import chalk from 'chalk';
-import fs from 'fs';
 import { build } from 'esbuild';
+import fs from 'fs';
 import { mkdir } from 'fs/promises';
 import { ncp } from 'ncp';
 import { dirname, join, resolve } from 'path';
@@ -13,6 +17,12 @@ import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
 import { DEFAFULT_CONFIG_FILE, validateConfig } from '../config';
 import { startDevBundler } from '../dev-bundler';
 import { loadConfig } from '../load-config';
+
+function getPackageRoot () {
+  const pkg = findPackageJson({ cwd: __dirname });
+  assert(pkg);
+  return dirname(pkg);
+}
 
 interface BookCommandArgv {
   pages: string[]
@@ -178,9 +188,3 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     }
   }
 };
-
-function getPackageRoot() {
-  const pkg = findPackageJson({ cwd: __dirname });
-  assert(pkg);
-  return dirname(pkg);
-}

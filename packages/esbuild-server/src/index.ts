@@ -1,2 +1,6 @@
-export * from './config'
-export * from './dev-server'
+//
+// Copyright 2022 DXOS.org
+//
+
+export * from './config';
+export * from './dev-server';

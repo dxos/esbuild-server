@@ -1,5 +1,10 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import { build, BuildOptions, Plugin } from 'esbuild';
-import { DevServer, DevServerConfig } from '.';
+
+import { DevServer, DevServerConfig } from './dev-server';
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
@@ -8,11 +13,11 @@ export interface DevBundlerConfig {
   overrides?: BuildOptions
 }
 
-export function startDevBundler(config: DevBundlerConfig) {
+export function startDevBundler (config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
   const overrides = config?.overrides || {};
 
-  build({
+  void build({
     entryPoints: config.entryPoints,
     outdir: '/',
     bundle: true,
@@ -24,27 +29,27 @@ export function startDevBundler(config: DevBundlerConfig) {
     sourcemap: true,
     plugins: [
       ...config.plugins,
-      devServer.createPlugin(),
+      devServer.createPlugin()
     ],
     metafile: true,
     loader: {
       '.jpg': 'file',
       '.png': 'file',
-      '.svg': 'file',
+      '.svg': 'file'
     },
     ...overrides
-  })
+  });
 
   // Increment port of in use.
   let port = config.devServer.port;
-  let callback = (code: string) => {
+  const callback = (code: string) => {
     if (code === 'EADDRINUSE') {
-      port++
-      devServer.listen(port, callback)
+      port++;
+      devServer.listen(port, callback);
     } else {
-      throw Error(code)
+      throw Error(code);
     }
-  }
+  };
 
-  devServer.listen(port, callback)
+  devServer.listen(port, callback);
 }

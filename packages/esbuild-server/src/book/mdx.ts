@@ -1,7 +1,12 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import { Plugin } from 'esbuild';
 
 export async function createMdxPlugin (): Promise<Plugin> {
   // TODO(burdon): Figure out how to use EMS with CJS.
+  // eslint-disable-next-line no-eval
   const { default: plugin } = await eval('import("@mdx-js/esbuild")');
 
   // const remarkGfm = await eval('import("remark-gfm")');

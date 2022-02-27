@@ -1,8 +1,8 @@
 {
   "name": "@dxos/esbuild-server-demos",
-  "version": "2.2.2",
-  "description": "Demos.",
+  "version": "2.2.4",
   "private": true,
+  "description": "Demos.",
   "homepage": "https://github.com/dxos/esbuild-server#readme",
   "bugs": {
     "url": "https://github.com/dxos/esbuild-server/issues"
@@ -20,13 +20,13 @@
     "src"
   ],
   "scripts": {
-    "dev": "esbuild-server dev",
-    "book": "esbuild-server book",
+    "book": "esbuild-server book --mdx",
     "build": "npm run clean && tsc --build",
-    "clean": "rm -rf ./dist",
+    "build:test": "npm run test && npm run build",
+    "clean": "rimraf ./dist",
+    "dev": "esbuild-server dev",
     "lint": "eslint --format codeframe './src/**/*.ts'",
-    "test": "true",
-    "build:test": "npm run test && npm run build"
+    "test": "true"
   },
   "browserslist": [
     "> 5%"
@@ -41,10 +41,14 @@
   "devDependencies": {
     "@dxos/esbuild-plugins": "^2.19.2",
     "@dxos/esbuild-server": "workspace:*",
+    "@dxos/eslint-plugin": "~1.0.24",
     "@emotion/css": "^11.7.1",
     "@emotion/react": "^11.7.1",
+    "eslint": "^7.12.1",
+    "eslint-plugin-react": "~7.29.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rimraf": "^3.0.2",
     "ts-jest": "^27.1.2",
     "typescript": "~4.5.4"
   },
@@ -55,6 +59,6 @@
     "react-dom": "*"
   },
   "publishConfig": {
-    "access": "private"
+    "access": "restricted"
   }
 }

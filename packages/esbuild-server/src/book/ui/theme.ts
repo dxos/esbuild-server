@@ -1,3 +1,7 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 export type Mode = 'light' | 'dark' | undefined;
 
 // https://mui.com/customization/color

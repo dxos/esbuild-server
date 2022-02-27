@@ -1,4 +1,8 @@
-import { FunctionComponent } from 'react'
+//
+// Copyright 2022 DXOS.org
+//
+
+import { FunctionComponent } from 'react';
 
 export interface Story {
   path: string
@@ -12,8 +16,20 @@ export type StoryMap = Record<string, {
   stories: Record<string, FunctionComponent>
 }>
 
-export function extractStories(stories: Story[], basePath: string): StoryMap {
-  const res: StoryMap = {}
+function convertFileNameToPathSegment (path: string, basePath: string) {
+  if (path.startsWith(basePath)) {
+    path = path.slice(basePath.length);
+  }
+
+  if (path.startsWith('/')) {
+    path = path.slice(1);
+  }
+
+  return path.trim().replace(/[-./]/g, '-');
+}
+
+export function extractStories (stories: Story[], basePath: string): StoryMap {
+  const res: StoryMap = {};
 
   stories.forEach(({ path, module, source }) => {
     const key = convertFileNameToPathSegment(path, basePath);
@@ -32,16 +48,4 @@ export function extractStories(stories: Story[], basePath: string): StoryMap {
   });
 
   return res;
-}
-
-function convertFileNameToPathSegment(path: string, basePath: string) {
-  if (path.startsWith(basePath)) {
-    path = path.slice(basePath.length);
-  }
-
-  if (path.startsWith('/')) {
-    path = path.slice(1);
-  }
-
-  return path.trim().replace(/[-\.\/]/g, '-');
 }
