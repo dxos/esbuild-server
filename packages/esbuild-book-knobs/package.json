@@ -1,6 +1,6 @@
 {
   "name": "@dxos/esbuild-book-knobs",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "description": "Knobs for esbuild-server book.",
   "homepage": "https://github.com/dxos/esbuild-server#readme",
   "bugs": {
@@ -10,10 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/dxos/esbuild-server.git"
   },
-  "license": "AGPL-3.0",
+  "license": "MIT",
   "author": "DXOS.org",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
     "dist",
     "src"
