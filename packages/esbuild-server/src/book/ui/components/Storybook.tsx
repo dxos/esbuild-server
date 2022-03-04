@@ -1,4 +1,8 @@
-import React from 'react'
+//
+// Copyright 2022 DXOS.org
+//
+
+import React from 'react';
 import { HashRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -8,6 +12,31 @@ import { Mode } from '../theme';
 import { PageContainer } from './PageContainer';
 import { Sidebar } from './Sidebar';
 import { Source } from './Source';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    overflow: hidden;
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+`;
+
+const StoryContainer = styled.div`
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+`;
+
+const StoryFrame = styled.iframe`
+  width: 100%;
+  height: 100%;
+  border: none;
+`;
 
 export interface StorybookProps {
   pages: Page[]
@@ -45,12 +74,12 @@ const Main = ({
 
         {Object.entries(stories).map(([file, { stories, source }]) =>
           Object.keys(stories).map((name) => (
-            <Route exact path={`/story/${file}/${name}`}>
+            <Route key={name} exact path={`/story/${file}/${name}`}>
               <StoryContainer>
                 {search ? (
                   <Source code={source} mode={options.mode} />
                 ) : (
-                  <StoryFrame src={`#/__story/${file}/${name}`}/>
+                  <StoryFrame src={`#/__story/${file}/${name}`} />
                 )}
               </StoryContainer>
             </Route>
@@ -96,28 +125,3 @@ export const Storybook = ({
     </HashRouter>
   );
 };
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    overflow: hidden;
-  }
-`;
-
-const Container = styled.div`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-`;
-
-const StoryContainer = styled.div`
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-`;
-
-const StoryFrame = styled.iframe`
-  width: 100%;
-  height: 100%;
-  border: none;
-`;

@@ -1,9 +1,12 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import React, { useMemo } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { Launch as LaunchIcon, TextSnippet as CodeIcon } from '../icons';
-
 import { Page } from '../pages';
 import { StoryMap } from '../stories';
 import { Mode, themes } from '../theme';
@@ -13,7 +16,7 @@ import { Mode, themes } from '../theme';
  */
 const createHierarchy = (stories: StoryMap) => {
   // Sort stories.
-  const sorted = Object.entries(stories).sort(([, { title: a }], [,{ title: b }]) => {
+  const sorted = Object.entries(stories).sort(([, { title: a }], [, { title: b }]) => {
     return a < b ? -1 : a > b ? 1 : 0;
   });
 
@@ -38,70 +41,6 @@ const createHierarchy = (stories: StoryMap) => {
   return flatten;
 };
 
-export interface SidebarProps {
-  pages: Page[]
-  stories: StoryMap
-  mode?: Mode
-}
-
-export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
-  const selected: { page: string, file: string, story: string } = useParams();
-  const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
-  const theme = mode === 'dark' ? themes.dark : themes.light;
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        {/* Pages */}
-        {pages.length > 0 && (
-          <PageList>
-            {pages.map(({ title }) => (
-              <PageTitle key={title} selected={title === selected.page}>
-                <NavLink to={`/${title}`}>
-                  {title}
-                </NavLink>
-              </PageTitle>
-            ))}
-          </PageList>
-        )}
-
-        {/* Stories */}
-        {stories.length > 0 && (
-          <ModuleList>
-            {stories.map(({ module, stories }) => (
-              <Module key={module}>
-                <ModuleTitle>
-                  {module}
-                </ModuleTitle>
-                <StoryList>
-                  {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
-                    <Story key={name}>
-                      <StoryTitle>{name}</StoryTitle>
-                      <StoryItemList>
-                        {stories.map(({ name }) => (
-                          <StoryItem key={name} selected={file === selected.file && name === selected.story}>
-                            <NavLink to={`/story/${file}/${name}`}>{name}</NavLink>
-                            <NavLink to={`/story/${file}/${name}?source`}>
-                              <CodeIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Source' />
-                            </NavLink>
-                            <NavLink to={`/__story/${file}/${name}?source`} style={{ marginLeft: 8 }}>
-                              <LaunchIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Open' />
-                            </NavLink>
-                          </StoryItem>
-                        ))}
-                      </StoryItemList>
-                    </Story>
-                  ))}
-                </StoryList>
-              </Module>
-            ))}
-          </ModuleList>
-        )}
-      </Container>
-    </ThemeProvider>
-  );
-};
-
 const Container = styled.div`
   display: flex;
   flex-shrink: 0;
@@ -121,14 +60,6 @@ const Container = styled.div`
     font-size: 16px;
     color: ${({ theme }) => theme.fg.story};
   }
-`;
-
-const Header = styled.div<{ selected?: boolean }>`
-  padding: 8px;
-  overflow: hidden;
-  background-color: ${({ theme, selected }) => selected && theme.bg.selected};
-  border-left: 4px solid ${({ theme, selected }) => selected ? theme.fg.bullet : 'transparent'};
-  font-size: 18px;
 `;
 
 //
@@ -222,3 +153,67 @@ const StoryItem = styled.li<{ selected?: boolean }>`
     flex-shrink: 0;
   }
 `;
+
+export interface SidebarProps {
+  pages: Page[]
+  stories: StoryMap
+  mode?: Mode
+}
+
+export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
+  const selected: { page: string, file: string, story: string } = useParams();
+  const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
+  const theme = mode === 'dark' ? themes.dark : themes.light;
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Container>
+        {/* Pages */}
+        {pages.length > 0 && (
+          <PageList>
+            {pages.map(({ title }) => (
+              <PageTitle key={title} selected={title === selected.page}>
+                <NavLink to={`/${title}`}>
+                  {title}
+                </NavLink>
+              </PageTitle>
+            ))}
+          </PageList>
+        )}
+
+        {/* Stories */}
+        {stories.length > 0 && (
+          <ModuleList>
+            {stories.map(({ module, stories }) => (
+              <Module key={module}>
+                <ModuleTitle>
+                  {module}
+                </ModuleTitle>
+                <StoryList>
+                  {stories.map(({ file, name, stories }: { file: string, name: string, stories: any[] }) => (
+                    <Story key={name}>
+                      <StoryTitle>{name}</StoryTitle>
+                      <StoryItemList>
+                        {stories.map(({ name }) => (
+                          <StoryItem key={name} selected={file === selected.file && name === selected.story}>
+                            <NavLink to={`/story/${file}/${name}`}>{name}</NavLink>
+                            <NavLink to={`/story/${file}/${name}?source`}>
+                              <CodeIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Source' />
+                            </NavLink>
+                            <NavLink to={`/__story/${file}/${name}?source`} style={{ marginLeft: 8 }}>
+                              <LaunchIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Open' />
+                            </NavLink>
+                          </StoryItem>
+                        ))}
+                      </StoryItemList>
+                    </Story>
+                  ))}
+                </StoryList>
+              </Module>
+            ))}
+          </ModuleList>
+        )}
+      </Container>
+    </ThemeProvider>
+  );
+};

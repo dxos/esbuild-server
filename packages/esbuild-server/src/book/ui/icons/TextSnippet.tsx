@@ -1,3 +1,7 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import React from 'react';
 
 // Icons: https://styled-icons.dev/?s=material-outlined

@@ -125,9 +125,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode })
     ];
 
-    defaultPlugins.push(
-      await createMdxPlugin()
-    );
+    defaultPlugins.push(await createMdxPlugin());
 
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
