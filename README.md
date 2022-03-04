@@ -15,17 +15,13 @@ npm install -g @microsoft/rush pnpm
 
 ## Rush monorepo
 
-1. The project currently uses private NPM packages.
-   Make sure you have access to the [`dxos`](https://www.npmjs.com/org/dxos) NPM org
-   and that you are logged in to NPM (check via `npm whoami`, otherwise `npm login`).
-
-2. To install dependencies:
+To install dependencies:
 
 ```
 rush update
 ```
 
-3. To build packages:
+To build packages:
 
 ```
 rush build
