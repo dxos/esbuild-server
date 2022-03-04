@@ -1,9 +1,13 @@
-import React from 'react'
-import { render } from 'react-dom'
+//
+// Copyright 2022 DXOS.org
+//
 
-import { Page, extractPages } from './pages'
-import { Story, extractStories } from './stories'
-import { Storybook } from './components'
+import React from 'react';
+import { render } from 'react-dom';
+
+import { Storybook } from './components';
+import { Page, extractPages } from './pages';
+import { Story, extractStories } from './stories';
 
 export interface Spec {
   basePath: string
@@ -14,7 +18,7 @@ export interface Spec {
 /**
  * Called by JS injected into page via the plugin.
  */
-export function main(spec: Spec, options: any) {
+export function main (spec: Spec, options: any) {
   render((
     <Storybook
       pages={extractPages(spec.pages)}

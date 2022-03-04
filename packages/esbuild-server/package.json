@@ -14,7 +14,7 @@
     "build": "npm run clean && tsc --build",
     "build:test": "npm run test && npm run build",
     "clean": "rimraf ./dist",
-    "lint": "eslint --format codeframe './src/**/*.ts'",
+    "lint": "eslint --format codeframe './src/**/*.ts[x]'",
     "start": "ts-node src/main.ts",
     "test": "true"
   },

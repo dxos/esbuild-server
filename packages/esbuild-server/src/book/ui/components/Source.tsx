@@ -1,11 +1,30 @@
+//
+// Copyright 2022 DXOS.org
+//
+
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// eslint-disable-next-line no-restricted-imports
 import style from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
 import styled from 'styled-components';
 
 import { Mode } from '../theme';
 
 // TODO(burdon): Configure only required languages? (html, tsx, json).
+
+const SourceContainer = styled.div`
+  display: flex;
+  width: 100%;
+  overflow: auto;
+  pre {
+    display: flex;
+    flex: 1;
+    margin: 0 !important;
+  }
+  code {
+    font-size: 16px !important;
+  }
+`;
 
 export interface SourceProps {
   code?: string
@@ -31,17 +50,3 @@ export const Source = ({ code = '', mode = undefined }: SourceProps) => {
     </SourceContainer>
   );
 };
-
-const SourceContainer = styled.div`
-  display: flex;
-  width: 100%;
-  overflow: auto;
-  pre {
-    display: flex;
-    flex: 1;
-    margin: 0 !important;
-  }
-  code {
-    font-size: 16px !important;
-  }
-`;

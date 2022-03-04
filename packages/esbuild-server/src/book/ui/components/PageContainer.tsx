@@ -1,8 +1,12 @@
-import { MDXComponents } from 'mdx/types';
-import React, { ReactChildren, ReactNode, Suspense, lazy, useEffect, useState } from 'react';
-import styled  from 'styled-components';
+//
+// Copyright 2022 DXOS.org
+//
+
 import { ThemeProvider } from '@emotion/react';
 import { MDXProvider } from '@mdx-js/react';
+import { MDXComponents } from 'mdx/types';
+import React, { ReactChildren, ReactNode, Suspense, lazy, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 // TODO(burdon): Syntax highlighting.
 // TODO(burdon): Custom collapsible code block (see Mui).
@@ -40,7 +44,7 @@ const components: MDXComponents = {
       <CodeBlock>
         {children}
       </CodeBlock>
-    )
+    );
   },
 
   // TODO(burdon): Remove (testing).
@@ -63,7 +67,7 @@ const components: MDXComponents = {
     }, []);
 
     return (
-      <span style={{ opacity: on ? 1 : 0.5, ...props}}>
+      <span style={{ opacity: on ? 1 : 0.5, ...props }}>
         {children}
       </span>
     );
