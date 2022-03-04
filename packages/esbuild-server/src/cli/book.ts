@@ -65,7 +65,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     })
     .option('mdx', {
       type: 'boolean',
-      default: false
+      default: true
     })
     .option('mode', {
       type: 'string',
@@ -121,11 +121,14 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       }
     }
 
+    // https://esbuild.github.io/plugins
     const defaultPlugins = [
       createBookPlugin(process.cwd(), packageRoot, pages, stories, { mode: argv.mode })
     ];
 
-    defaultPlugins.push(await createMdxPlugin());
+    if (argv.mdx) {
+      defaultPlugins.push(await createMdxPlugin());
+    }
 
     if (argv.build) {
       console.log(chalk`🏎️  {dim Build started}`);
@@ -140,6 +143,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           throw err;
         }
 
+        // Build project.
         await build({
           entryPoints: {
             'index': 'entrypoint'

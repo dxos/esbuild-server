@@ -6,6 +6,12 @@ import { Plugin } from 'esbuild';
 import fs from 'fs';
 import { join } from 'path/posix';
 
+// UX entrypoint.
+const main = 'src/book/ui/main.tsx';
+
+/**
+ * https://esbuild.github.io/plugins
+ */
 export function createBookPlugin (
   projectRoot: string,
   packageRoot: string,
@@ -25,7 +31,7 @@ export function createBookPlugin (
         return {
           resolveDir: __dirname,
           contents: `
-            import { main } from '${join(packageRoot, 'src/book/ui/main.tsx')}';
+            import { main } from '${join(packageRoot, main)}';
 
             // MDX Pages.
             const pages = [
@@ -62,6 +68,7 @@ export function createBookPlugin (
         reactResolved = require.resolve('react', { paths: [projectRoot] });
         mdxReactResolved = require.resolve('@mdx-js/react', { paths: [projectRoot] });
       });
+
       onResolve({ filter: /^react$/ }, () => ({ path: reactResolved }));
       onResolve({ filter: /^@mdx-js\/react$/ }, () => {
         return { path: mdxReactResolved };

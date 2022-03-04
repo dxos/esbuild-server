@@ -68,6 +68,7 @@ const Container = styled.div`
 
 const PageList = styled.div`
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   overflow-y: auto;
 `;
@@ -100,7 +101,6 @@ const ModuleTitle = styled.div`
   padding: 8px 12px;
   overflow: hidden;
   background-color: ${({ theme }) => theme.bg.module};
-  font-variant: small-caps;
   font-size: 18px;
 `;
 
