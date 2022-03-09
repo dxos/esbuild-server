@@ -33,6 +33,16 @@ export interface Config {
    * Esbuild plugins: https://esbuild.github.io/plugins/.
    */
   plugins?: Plugin[]
+
+  /**
+   * Book-specific config.
+   */
+  book?: {
+    /**
+     * Directory to output static build to.
+     */
+    outdir?: string
+  }
 }
 
 const DISALLOWED_OVERRIDES = [
