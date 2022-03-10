@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": true,
+    "incremental": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "ESNext"
+    ],
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitOverride": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2018",
+    "experimentalDecorators": true,
+    "stripInternal": true,
+  },
+  "exclude": ["node_modules", "dist"]
+}

@@ -4,7 +4,7 @@
 
 import { css } from '@emotion/css';
 import clsx from 'clsx';
-import React, { MutableRefObject, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
 import { useKnobsContext, useKnobValue } from '../hooks';
 import { ButtonOptions, NumberOptions, SelectOptions, range, BooleanOptions, KnobType, Options } from '../types';
@@ -127,7 +127,7 @@ const BooleanKnob = ({ id, options: { label } }: KnobProps<BooleanOptions>) => {
 };
 
 const NumberKnob = ({ id, options: { label, range: { min, max, step = 1 } } }: KnobProps<NumberOptions>) => {
-  const [value, setValue] = useKnobValue<number>(id);
+  const [value, setValue] = useKnobValue<number | undefined>(id);
 
   return (
     <div className='knob'>
@@ -179,7 +179,7 @@ export const Knobs = forwardRef<HTMLDivElement, KnobsProps>(({
   className,
   horizontal = false,
   floating
-}: KnobsProps, ref: MutableRefObject<HTMLDivElement>) => {
+}: KnobsProps, ref) => {
   const { knobs } = useKnobsContext();
 
   return (

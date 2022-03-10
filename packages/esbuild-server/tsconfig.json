@@ -1,24 +1,11 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "composite": true,
-    "incremental": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
     "lib": [
       "ESNext",
       "DOM"
-    ],
-    "jsx": "react",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "ES2018",
-    "experimentalDecorators": true
+    ]
   },
-  "include": ["src", "examples"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "examples"]
 }

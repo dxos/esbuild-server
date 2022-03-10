@@ -6,7 +6,7 @@ export type SelectMap = { [index: string]: any }
 
 export type NumberRange = { min: number, max: number, step?: number }
 
-export function * range (min: number, max: number, step = 1) {
+export function * range (min: number, max: number, step = 1): Generator<number> {
   yield min;
   if (min >= max) {
     return;
