@@ -12,6 +12,8 @@ importers:
       '@dxos/eslint-plugin': ~1.0.24
       '@emotion/css': ^11.7.1
       '@emotion/react': ^11.7.1
+      '@types/react': ^17.0.14
+      '@types/react-dom': ^17.0.9
       clsx: ~1.1.1
       eslint: ^7.12.1
       eslint-plugin-react: ~7.29.2
@@ -27,7 +29,9 @@ importers:
       '@dxos/esbuild-server': link:../esbuild-server
       '@dxos/eslint-plugin': 1.0.24_eslint@7.32.0+typescript@4.5.5
       '@emotion/css': 11.7.1
-      '@emotion/react': 11.8.1_react@17.0.2
+      '@emotion/react': 11.8.1_a0c521d4794c7ad97f5f4c1c4a7d5818
+      '@types/react': 17.0.39
+      '@types/react-dom': 17.0.11
       eslint: 7.32.0
       eslint-plugin-react: 7.29.2_eslint@7.32.0
       react: 17.0.2
@@ -151,6 +155,8 @@ importers:
       '@dxos/eslint-plugin': ~1.0.24
       '@emotion/css': ^11.7.1
       '@emotion/react': ^11.7.1
+      '@types/react': ^17.0.14
+      '@types/react-dom': ^17.0.9
       eslint: ^7.12.1
       eslint-plugin-react: ~7.29.2
       react: ^17.0.2
@@ -163,7 +169,9 @@ importers:
       '@dxos/esbuild-server': link:../esbuild-server
       '@dxos/eslint-plugin': 1.0.24_eslint@7.32.0+typescript@4.5.5
       '@emotion/css': 11.7.1
-      '@emotion/react': 11.8.1_react@17.0.2
+      '@emotion/react': 11.8.1_a0c521d4794c7ad97f5f4c1c4a7d5818
+      '@types/react': 17.0.39
+      '@types/react-dom': 17.0.11
       eslint: 7.32.0
       eslint-plugin-react: 7.29.2_eslint@7.32.0
       react: 17.0.2
@@ -616,7 +624,7 @@ packages:
       react: 17.0.2
     dev: false
 
-  /@emotion/react/11.8.1_react@17.0.2:
+  /@emotion/react/11.8.1_a0c521d4794c7ad97f5f4c1c4a7d5818:
     resolution: {integrity: sha512-XGaie4nRxmtP1BZYBXqC5JGqMYF2KRKKI7vjqNvQxyRpekVAZhb6QqrElmZCAYXH1L90lAelADSVZC4PFsrJ8Q==}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -635,6 +643,7 @@ packages:
       '@emotion/sheet': 1.1.0
       '@emotion/utils': 1.1.0
       '@emotion/weak-memoize': 0.2.5
+      '@types/react': 17.0.39
       hoist-non-react-statics: 3.3.2
       react: 17.0.2
     dev: true
