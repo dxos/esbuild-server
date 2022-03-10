@@ -88,7 +88,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     const projectRoot = process.cwd();
     const packageRoot = getPackageRoot();
     const staticDir = join(packageRoot, 'src/book/ui/public');
-    const outdir = config?.outdir || './dist';
+    const outdir = config?.book?.outdir || './out/book';
 
     const readme = join(projectRoot, 'README.md');
     const pages = [

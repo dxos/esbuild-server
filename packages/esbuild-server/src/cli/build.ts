@@ -36,7 +36,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
 
     validateConfigForApp(config ?? {});
 
-    const outdir = config.outdir || './dist';
+    const outdir = config.outdir || './out';
 
     console.log(chalk`📦 {dim Building to} ${outdir}`);
     console.log(chalk`🏎️  {dim Build started}`);
