@@ -11,4 +11,7 @@ type KnobContextDef = {
   addKnob: (knob: KnobInstance) => void
 }
 
-export const KnobsContext = createContext<KnobContextDef>(undefined);
+export const KnobsContext = createContext<KnobContextDef>({
+  knobs: [],
+  addKnob: () => {}
+});

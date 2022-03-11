@@ -13,6 +13,12 @@
 
   "projects": [
     {
+      "packageName": "@dxos/esbuild-plugins",
+      "projectFolder": "packages/esbuild-plugins",
+      "versionPolicyName": "lockStepPolicy",
+      "shouldPublish": true
+    },
+    {
       "packageName": "@dxos/esbuild-server",
       "projectFolder": "packages/esbuild-server",
       "versionPolicyName": "lockStepPolicy",
@@ -20,14 +26,11 @@
     },
     {
       "packageName": "@dxos/esbuild-server-demos",
-      "projectFolder": "packages/esbuild-server-demos",
-      "shouldPublish": false
+      "projectFolder": "packages/esbuild-server-demos"
     },
     {
       "packageName": "@dxos/esbuild-book-knobs",
-      "projectFolder": "packages/esbuild-book-knobs",
-      "versionPolicyName": "lockStepPolicy",
-      "shouldPublish": false
+      "projectFolder": "packages/esbuild-book-knobs"
     }
   ]
 }

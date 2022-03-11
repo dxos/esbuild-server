@@ -2,13 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ]
+    "types": ["node"]
   },
   "include": [
-    "src",
-    "stories"
+    "src"
   ]
 }

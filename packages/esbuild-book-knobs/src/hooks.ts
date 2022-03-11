@@ -42,13 +42,13 @@ export const useReset = () => {
 export const useKnobValue = <T> (id: string): [T, (value: T) => void] => {
   const { knobs } = useKnobsContext();
   const knob = useMemo(() => knobs.find(knob => knob.id === id), []);
-  const [value, setValue] = useState<T>(knob.defaultValue);
+  const [value, setValue] = useState<T>(knob!.defaultValue);
   useEffect(() => {
     // Callback.
-    knob.onUpdate = (value: T) => setValue(value);
+    knob!.onUpdate = (value: T) => setValue(value);
   }, [knob]);
 
-  return [value, knob.setValue];
+  return [value, knob!.setValue];
 };
 
 /**
@@ -60,7 +60,7 @@ export const useKnobValue = <T> (id: string): [T, (value: T) => void] => {
 export const useKnob = <O extends Options, T> (type: KnobType, options: O, defaultValue?: T) => {
   const { addKnob } = useKnobsContext();
   const id = useMemo(() => String(Math.random()), []);
-  const [value, setValue] = useState<T>(defaultValue);
+  const [value, setValue] = useState<T | undefined>(defaultValue);
   useEffect(() => {
     const knob: KnobInstance = {
       id,
@@ -87,15 +87,15 @@ export const useButton = (label: string, onClick: () => void) => {
   useKnob<ButtonOptions, void>(KnobType.Button, { label, onClick });
 };
 
-export const useBoolean = (label: string, defaultValue = false): boolean => {
+export const useBoolean = (label: string, defaultValue = false): boolean | undefined => {
   return useKnob<BooleanOptions, boolean>(KnobType.Boolean, { label }, defaultValue);
 };
 
-export const useNumber = (label: string, range: NumberRange, defaultValue: number = undefined): number => {
+export const useNumber = (label: string, range: NumberRange, defaultValue: number | undefined = undefined): number | undefined => {
   return useKnob<NumberOptions, number>(KnobType.Number, { label, range }, defaultValue ?? range.min);
 };
 
-export const useSelect = (label: string, values: SelectMap, defaultValue = undefined) => {
+export const useSelect = (label: string, values: SelectMap, defaultValue: string | undefined = undefined) => {
   const value = useKnob<SelectOptions, string>(KnobType.Select, { label, values }, defaultValue);
-  return values[value];
+  return value && values[value];
 };
