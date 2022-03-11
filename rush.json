@@ -8,9 +8,16 @@
   "rushVersion": "5.62.4",
   "pnpmVersion": "6.7.1",
   "pnpmOptions": {
+    "strictPeerDependencies": true,
     "useWorkspaces": true
   },
-
+  "ensureConsistentVersions": true,
+  "projectFolderMinDepth": 2,
+  "projectFolderMaxDepth": 2,
+  "repository": {
+    "url": "https://github.com/dxos/esbuild-server",
+    "defaultBranch": "main"
+  },
   "projects": [
     {
       "packageName": "@dxos/esbuild-plugins",
