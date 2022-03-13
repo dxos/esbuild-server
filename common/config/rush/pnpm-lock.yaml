@@ -82,6 +82,7 @@ importers:
       '@mdx-js/mdx': ^2.0.0
       '@mdx-js/react': ^2.0.0
       '@types/glob': ^7.1.4
+      '@types/lodash.defaultsdeep': ^4.6.6
       '@types/mdx': ~2.0.1
       '@types/ncp': ^2.0.5
       '@types/node': ^16.3.2
@@ -96,6 +97,7 @@ importers:
       eslint: ^7.12.1
       eslint-plugin-react: ~7.29.2
       glob: ^7.2.0
+      lodash.defaultsdeep: ^4.6.1
       ncp: ^2.0.0
       pkg-up: ^3.1.0
       react: ^17.0.2
@@ -119,6 +121,7 @@ importers:
       chalk: 4.1.2
       esbuild: 0.12.29
       glob: 7.2.0
+      lodash.defaultsdeep: 4.6.1
       ncp: 2.0.0
       pkg-up: 3.1.0
       react: 17.0.2
@@ -133,6 +136,7 @@ importers:
     devDependencies:
       '@dxos/eslint-plugin': 1.0.26_eslint@7.32.0+typescript@4.5.5
       '@types/glob': 7.2.0
+      '@types/lodash.defaultsdeep': 4.6.6
       '@types/mdx': 2.0.1
       '@types/ncp': 2.0.5
       '@types/node': 16.11.25
@@ -1032,6 +1036,16 @@ packages:
     dependencies:
       '@types/node': 16.11.25
     dev: false
+
+  /@types/lodash.defaultsdeep/4.6.6:
+    resolution: {integrity: sha512-k3bXTg1/54Obm6uFEtSwvDm2vCyK9jSROv0V9X3gFFNPu7eKmvqqadPSXx0SkVVixSilR30BxhFlnIj8OavXOA==}
+    dependencies:
+      '@types/lodash': 4.14.179
+    dev: true
+
+  /@types/lodash/4.14.179:
+    resolution: {integrity: sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==}
+    dev: true
 
   /@types/mdast/3.0.10:
     resolution: {integrity: sha512-W864tg/Osz1+9f4lrGTZpCSO5/z4608eUp19tbozkq2HJK6i3z1kT0H9tlADXuYIb1YYOBByU4Jsqkk75q48qA==}
@@ -2979,6 +2993,10 @@ packages:
     dependencies:
       p-locate: 3.0.0
       path-exists: 3.0.0
+    dev: false
+
+  /lodash.defaultsdeep/4.6.1:
+    resolution: {integrity: sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==}
     dev: false
 
   /lodash.merge/4.6.2:
