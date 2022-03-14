@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "book": "esbuild-server book --mdx",
-    "build": "npm run clean && tsc --build",
+    "build": "npm run clean && esbuild-server build",
     "build:test": "npm run test && npm run build",
     "clean": "rimraf ./dist",
     "dev": "esbuild-server dev",

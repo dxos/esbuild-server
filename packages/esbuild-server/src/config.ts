@@ -30,7 +30,9 @@ export interface Config {
   staticDir?: string
 
   /**
-   * Esbuild plugins: https://esbuild.github.io/plugins/.
+   * Esbuild plugins:
+   * https://esbuild.github.io/plugins
+   * https://github.com/esbuild/community-plugins
    */
   plugins?: Plugin[]
 
