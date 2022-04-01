@@ -22,7 +22,7 @@ export function createBookPlugin (
   return {
     name: 'esbuild-book',
     setup: ({ onResolve, onLoad, onStart }) => {
-      onResolve({ filter: /^entrypoint$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }));
+      onResolve({ filter: /^esbuild-server-book$/ }, () => ({ namespace: 'esbuild-book', path: 'entrypoint' }));
       onLoad({ namespace: 'esbuild-book', filter: /^entrypoint$/ }, () => {
         // Load source file.
         const readSource = (file: string) => JSON.stringify(fs.readFileSync(file, 'utf-8'));
