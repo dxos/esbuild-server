@@ -44,6 +44,11 @@ export interface Config {
      * Directory to output static build to.
      */
     outdir?: string
+
+    /**
+     * Additional entrypoints for book to build.
+     */
+    entryPoints?: string[]
   }
 }
 

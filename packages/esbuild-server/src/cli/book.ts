@@ -145,9 +145,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
 
         // Build project.
         await build({
-          entryPoints: {
-            'index': 'entrypoint'
-          },
+          entryPoints: [
+            'esbuild-server-book',
+            ...(config?.book?.entryPoints ?? [])
+          ],
           outdir,
           bundle: true,
           write: true,
@@ -173,9 +174,10 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       }
     } else {
       startDevBundler({
-        entryPoints: {
-          'index': 'entrypoint'
-        },
+        entryPoints: [
+          'esbuild-server-book',
+          ...(config?.book?.entryPoints ?? [])
+        ],
         plugins: [
           ...defaultPlugins,
           ...(config?.plugins ?? [])
