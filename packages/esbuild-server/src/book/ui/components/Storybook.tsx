@@ -3,7 +3,7 @@
 //
 
 import React from 'react';
-import { HashRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useParams, useRoutes } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { Page } from '../pages';
@@ -46,47 +46,53 @@ export interface StorybookProps {
   }
 }
 
-const Main = ({
+const Layout = ({
   pages,
   stories,
   options = {}
 }: StorybookProps) => {
-  const { search } = useLocation();
+  return (
+    <>
+      <GlobalStyle />
+      <Container>
+        <Sidebar
+          pages={pages}
+          stories={stories}
+          mode={options.mode}
+        />
+
+        <StoryContainer>
+          <Outlet />
+        </StoryContainer>
+      </Container>
+    </>
+  );
+};
+
+const Page = ({ pages }: { pages: Page[] }) => {
+  const { page } = useParams();
+  const { page: Page } = pages.find(({ title }) => title === page) ?? { page: () => null };
 
   return (
-    <Container>
-      <Sidebar
-        pages={pages}
-        stories={stories}
-        mode={options.mode}
-      />
+    <PageContainer>
+      <Page />
+    </PageContainer>
+  );
+};
 
-      <Switch>
-        {pages.map(({ title, page: Page }) => (
-          <Route key={title} exact path={`/${title}`}>
-            <StoryContainer>
-              <PageContainer>
-                <Page />
-              </PageContainer>
-            </StoryContainer>
-          </Route>
-        ))}
+const Story = ({ stories: storiesMap, mode }: { stories: StoryMap, mode?: Mode}) => {
+  const { file, story } = useParams();
+  const { search } = useLocation();
+  const { source } = storiesMap[file!];
 
-        {Object.entries(stories).map(([file, { stories, source }]) =>
-          Object.keys(stories).map((name) => (
-            <Route key={name} exact path={`/story/${file}/${name}`}>
-              <StoryContainer>
-                {search ? (
-                  <Source code={source} mode={options.mode} />
-                ) : (
-                  <StoryFrame src={`#/__story/${file}/${name}`} />
-                )}
-              </StoryContainer>
-            </Route>
-          ))
-        )}
-      </Switch>
-    </Container>
+  if (search) {
+    return (
+      <Source code={source} mode={mode} />
+    );
+  }
+
+  return (
+    <StoryFrame src={`#/__story/${file}/${story}`} />
   );
 };
 
@@ -94,34 +100,36 @@ export const Storybook = ({
   pages,
   stories,
   options = {}
-}: StorybookProps) => {
-  return (
-    <HashRouter>
-      <GlobalStyle />
-
-      <Switch>
-        {/* Stories to be loaded into the iframe. */}
-        <Route path='/__story'>
-          {Object.entries(stories).map(([file, mod]) =>
-            Object.entries(mod.stories).map(([name, Story]) => (
-              <Route key={`${file}-${name}`} exact path={`/__story/${file}/${name}`}>
-                <Story />
-              </Route>
-            ))
-          )}
-        </Route>
-
-        {/* Main layout. */}
-        <Route path={['/story/:file/:story', '/:page', '/']}>
-          <Main
-            pages={pages}
-            stories={stories}
-            options={options}
-          />
-        </Route>
-
-        <Redirect to='/' />
-      </Switch>
-    </HashRouter>
-  );
-};
+}: StorybookProps) => useRoutes([
+  {
+    path: '/__story',
+    children: Object.entries(stories).map(([file, module]) => ({
+      path: file,
+      children: Object.entries(module.stories).map(([name, Story]) => ({
+        path: name,
+        element: <Story />
+      }))
+    }))
+  },
+  {
+    path: '/',
+    element: (
+      <Layout
+        pages={pages}
+        stories={stories}
+        options={options}
+      />
+    ),
+    children: [
+      {
+        path: ':page',
+        element: <Page pages={pages} />
+      },
+      {
+        path: 'story/:file/:story',
+        element: <Story stories={stories} mode={options.mode} />
+      }
+    ]
+  },
+  { path: '*', element: <Navigate to='/' /> }
+]);
