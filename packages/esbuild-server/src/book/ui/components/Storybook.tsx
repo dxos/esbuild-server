@@ -81,18 +81,21 @@ const Page = ({ pages }: { pages: Page[] }) => {
 };
 
 const Story = ({ stories: storiesMap, mode }: { stories: StoryMap, mode?: Mode}) => {
-  const { file, story } = useParams();
+  const { file, story: name } = useParams();
   const { search } = useLocation();
-  const { source } = storiesMap[file!];
+  const story = file && storiesMap[file];
+  if (!story) {
+    return null;
+  }
 
   if (search) {
     return (
-      <Source code={source} mode={mode} />
+      <Source code={story.source} mode={mode} />
     );
   }
 
   return (
-    <StoryFrame src={`#/__story/${file}/${story}`} />
+    <StoryFrame src={`#/__story/${file}/${name}`} />
   );
 };
 
