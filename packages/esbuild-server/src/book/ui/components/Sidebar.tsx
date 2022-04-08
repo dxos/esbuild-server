@@ -161,7 +161,7 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
-  const selected: { page: string, file: string, story: string } = useParams();
+  const selected = useParams();
   const stories = useMemo(() => createHierarchy(storyMap), [storyMap]);
   const theme = mode === 'dark' ? themes.dark : themes.light;
 
@@ -200,7 +200,7 @@ export const Sidebar = ({ pages, stories: storyMap, mode }: SidebarProps) => {
                             <NavLink to={`/story/${file}/${name}?source`}>
                               <CodeIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Source' />
                             </NavLink>
-                            <NavLink to={`/__story/${file}/${name}?source`} style={{ marginLeft: 8 }}>
+                            <NavLink target='_blank' to={`/__story/${file}/${name}`} style={{ marginLeft: 8 }}>
                               <LaunchIcon style={{ fill: theme.fg.main }} width={24} height={24} title='Open' />
                             </NavLink>
                           </StoryItem>

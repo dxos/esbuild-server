@@ -67,11 +67,15 @@ common/autoinstallers/*/.npmrc
 # Heft
 .heft
 
-# Heft
-node_modules
+# Build
 out
 dist
-.DS_Store
-.idea
-yarn-error.log
 
+# macOS
+.DS_Store
+
+# Intellij
+.idea
+
+# asdf
+.tool-versions

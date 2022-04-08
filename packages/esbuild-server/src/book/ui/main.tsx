@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { render } from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 
 import { Storybook } from './components';
 import { Page, extractPages } from './pages';
@@ -20,11 +21,13 @@ export interface Spec {
  */
 export function main (spec: Spec, options: any) {
   render((
-    <Storybook
-      pages={extractPages(spec.pages)}
-      stories={extractStories(spec.stories, spec.basePath)}
-      options={options}
-    />
+    <HashRouter>
+      <Storybook
+        pages={extractPages(spec.pages)}
+        stories={extractStories(spec.stories, spec.basePath)}
+        options={options}
+      />
+    </HashRouter>
   ),
   document.getElementById('root'));
 }
