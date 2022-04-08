@@ -41,7 +41,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
       describe: 'Glob to find story files.',
       type: 'string',
       array: true,
-      default: ['./stories/**/*.stories.[jt]sx']
+      default: ['./{src,stories}/**/*.stories.[jt]sx']
     })
     .positional('pages', {
       describe: 'Glob to find story pages.',

@@ -4,10 +4,10 @@
 
 import React from 'react';
 
-import { TestComponent } from '../src';
+import { TestComponent } from './TestComponent';
 
 export default {
-  title: 'examples/story-1'
+  title: 'TestComponent/story-1'
 };
 
 export const Primary = () => (
