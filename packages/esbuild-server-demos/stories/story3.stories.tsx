@@ -7,7 +7,7 @@ import React from 'react';
 import { TestComponent } from '../src';
 
 export default {
-  title: 'more-examples/story-3'
+  title: 'examples/story-3'
 };
 
 export const Primary = () => (
