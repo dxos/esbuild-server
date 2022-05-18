@@ -4,7 +4,7 @@
 
 import { build, BuildOptions, Plugin } from 'esbuild';
 
-import { DevServer, DevServerConfig } from './dev-server';
+import { UPDATE_EVENTS, DevServer, DevServerConfig } from './dev-server';
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
@@ -19,9 +19,8 @@ export function startDevBundler (config: DevBundlerConfig) {
 
   void build({
     entryPoints: config.entryPoints,
-    outdir: '/',
+    outdir: '/', // TODO(burdon): Configure?
     bundle: true,
-    watch: true,
     write: false,
     platform: 'browser',
     format: 'iife',
@@ -37,15 +36,29 @@ export function startDevBundler (config: DevBundlerConfig) {
       '.png': 'file',
       '.svg': 'file'
     },
+    // https://esbuild.github.io/api/#watch
+    // https://github.com/evanw/esbuild/issues/802
+    banner: {
+      js: `(() => new EventSource("${UPDATE_EVENTS}").onmessage = () => location.reload())();`
+    },
+    watch: {
+      onRebuild (error, result) {
+        if (error) {
+          console.error(error);
+        } else {
+          devServer.update();
+        }
+      }
+    },
     ...overrides
   });
 
-  // Increment port of in use.
+  // TODO(burdon): Add to dev server.
+  // Increment port if already running elsewhere.
   let port = config.devServer.port;
   const callback = (code: string) => {
     if (code === 'EADDRINUSE') {
-      port++;
-      devServer.listen(port, callback);
+      devServer.listen(++port, callback);
     } else {
       throw Error(code);
     }

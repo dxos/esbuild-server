@@ -40,6 +40,40 @@ importers:
       rimraf: 3.0.2
       typescript: 4.5.5
 
+  ../../packages/esbuild-demos:
+    specifiers:
+      '@babel/core': ^7.16.5
+      '@dxos/esbuild-plugins': workspace:*
+      '@dxos/esbuild-server': workspace:*
+      '@dxos/eslint-plugin': ~1.0.26
+      '@emotion/css': ~11.7.1
+      '@emotion/react': ~11.8.2
+      '@types/react': ^17.0.14
+      '@types/react-dom': ^17.0.9
+      eslint: ^7.12.1
+      eslint-plugin-react: ~7.29.2
+      react: ^17.0.2
+      react-dom: ^17.0.2
+      react-router-dom: ^6.3.0
+      rimraf: ^3.0.2
+      typescript: ^4.5.4
+    devDependencies:
+      '@babel/core': 7.17.5
+      '@dxos/esbuild-plugins': link:../esbuild-plugins
+      '@dxos/esbuild-server': link:../esbuild-server
+      '@dxos/eslint-plugin': 1.0.26_eslint@7.32.0+typescript@4.5.5
+      '@emotion/css': 11.7.1_@babel+core@7.17.5
+      '@emotion/react': 11.8.2_7c3ecd89bd75b61b41f2029715ea2305
+      '@types/react': 17.0.39
+      '@types/react-dom': 17.0.11
+      eslint: 7.32.0
+      eslint-plugin-react: 7.29.2_eslint@7.32.0
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-router-dom: 6.3.0_react-dom@17.0.2+react@17.0.2
+      rimraf: 3.0.2
+      typescript: 4.5.5
+
   ../../packages/esbuild-plugins:
     specifiers:
       '@dxos/eslint-plugin': ~1.0.26
@@ -148,40 +182,6 @@ importers:
       eslint-plugin-react: 7.29.2_eslint@7.32.0
       rimraf: 3.0.2
       ts-node: 10.5.0_ad16171857a0edcfc445c7bfcf336eb6
-      typescript: 4.5.5
-
-  ../../packages/esbuild-server-demos:
-    specifiers:
-      '@babel/core': ^7.16.5
-      '@dxos/esbuild-plugins': workspace:*
-      '@dxos/esbuild-server': workspace:*
-      '@dxos/eslint-plugin': ~1.0.26
-      '@emotion/css': ~11.7.1
-      '@emotion/react': ~11.8.2
-      '@types/react': ^17.0.14
-      '@types/react-dom': ^17.0.9
-      eslint: ^7.12.1
-      eslint-plugin-react: ~7.29.2
-      react: ^17.0.2
-      react-dom: ^17.0.2
-      react-router-dom: ^6.3.0
-      rimraf: ^3.0.2
-      typescript: ^4.5.4
-    devDependencies:
-      '@babel/core': 7.17.5
-      '@dxos/esbuild-plugins': link:../esbuild-plugins
-      '@dxos/esbuild-server': link:../esbuild-server
-      '@dxos/eslint-plugin': 1.0.26_eslint@7.32.0+typescript@4.5.5
-      '@emotion/css': 11.7.1_@babel+core@7.17.5
-      '@emotion/react': 11.8.2_7c3ecd89bd75b61b41f2029715ea2305
-      '@types/react': 17.0.39
-      '@types/react-dom': 17.0.11
-      eslint: 7.32.0
-      eslint-plugin-react: 7.29.2_eslint@7.32.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-router-dom: 6.3.0_react-dom@17.0.2+react@17.0.2
-      rimraf: 3.0.2
       typescript: 4.5.5
 
 packages:
