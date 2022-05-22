@@ -10,13 +10,21 @@ export default {
   title: 'examples/story-2'
 };
 
-const value: [size: number, color: string][] = [[100, 'orange'], [200, 'seagreen'], [300, 'lightblue']];
+const value: [size: number, color: string][] = [
+  [80, 'orange'],
+  [160, 'seagreen'],
+  [320, 'lightblue']
+];
 
 export const Primary = () => (
   <div style={{ display: 'flex', justifyContent: 'center', margin: 80 }}>
     {value.map(([size, color], i) => (
-      <div key={i} style={{ margin: 8 }}>
-        <TestComponent label={color} color={color} size={size} />
+      <div key={i} style={{ margin: 16 }}>
+        <TestComponent
+          label={color}
+          color={color}
+          size={size}
+        />
       </div>
     ))}
   </div>
