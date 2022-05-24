@@ -23,7 +23,7 @@ jobs:
       run: node common/scripts/install-run-rush.js build:test --verbose
     - name: Test esbuild-server building
       run: rushx build --verbose
-      working-directory: packages/esbuild-server-demos
+      working-directory: packages/esbuild-demos
     - name: Test esbuild-server book building
       run: rushx book --build
-      working-directory: packages/esbuild-server-demos
+      working-directory: packages/esbuild-demos
