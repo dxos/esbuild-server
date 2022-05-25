@@ -143,8 +143,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
           throw err;
         }
 
-        console.log('>>>>>>>>>>>>>');
-
         // Build project.
         await build({
           entryPoints: [
