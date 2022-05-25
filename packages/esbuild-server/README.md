@@ -10,7 +10,7 @@ A fast dev-server and storybook built with esbuild.
 
 Run `esbuild-server --help` or `esbuild-server <command> --help` to list all commands.
 
-```
+```bash
 esbuild-server <command>
 
 Commands:
@@ -68,7 +68,7 @@ although only the very minimal features are currently supported.
 
 To render a storybook run the following command (replacing with your glob for stories).
 
-```
+```bash
 esbuild-server book
 ```
 
@@ -76,16 +76,15 @@ Each story file should export a set of components and optionally a default expor
 
 To build storybooks:
 
-```
+```bash
 esbuild-server book --build
 ```
 
 ## Publishing
 
+```bash
+yarn publish --patch
 ```
-yarn publish
-```
-
 
 ## Polyfills
 

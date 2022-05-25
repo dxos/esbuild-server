@@ -1,5 +1,5 @@
 {
-  "name": "@dxos/esbuild-server-demos",
+  "name": "@dxos/esbuild-demos",
   "version": "2.28.2",
   "private": true,
   "description": "Demos.",

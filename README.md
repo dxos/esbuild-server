@@ -13,35 +13,13 @@ Install or update rush and its dependencies:
 npm install -g @microsoft/rush pnpm
 ```
 
-## Rush monorepo
+## Update and build
 
 To install dependencies:
 
-```
+```bash
 rush update
-```
-
-To build packages:
-
-```
 rush build
 ```
 
-### Local Development
-
-- Re-run `rush update` after changing any `package.json` files.
-- Run `rushx build` in a local package folder to get local errors.
-
-### Adding new dependencies
-
-```
-cd package/directory
-rush add [--dev] -p <package name> --make-consistent
-```
-
-### Running scripts in individual packages
-
-```
-cd package/directory
-rushx <script name>
-```
+## Deploy
