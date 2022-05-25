@@ -86,7 +86,6 @@ esbuild-server book --build
 yarn publish
 ```
 
-
 ## Polyfills
 
 Currently `esbuild-server` does not polyfill any of the node.js modules or globals. 
