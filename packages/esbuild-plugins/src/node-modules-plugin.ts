@@ -63,7 +63,7 @@ export function NodeModulesPlugin (): Plugin {
       });
       onResolve({ filter: /^crypto$/ }, arg => {
         return {
-          path: require.resolve('crypto-browserify')
+          path: require.resolve('../../polyfills/crypto.js')
         };
       });
       onResolve({ filter: /^debug$/ }, arg => {
