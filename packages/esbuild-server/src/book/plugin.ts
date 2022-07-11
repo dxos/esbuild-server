@@ -63,13 +63,16 @@ export function createBookPlugin (
 
       // Map our own esbuild-server packages instead of the client one.
       let reactResolved: string;
+      let reactDomResolved: string;
       let mdxReactResolved: string;
       onStart(() => {
         reactResolved = require.resolve('react', { paths: [projectRoot] });
+        reactDomResolved = require.resolve('react-dom', { paths: [projectRoot] });
         mdxReactResolved = require.resolve('@mdx-js/react', { paths: [projectRoot] });
       });
 
       onResolve({ filter: /^react$/ }, () => ({ path: reactResolved }));
+      onResolve({ filter: /^react-dom$/ }, () => ({ path: reactDomResolved }));
       onResolve({ filter: /^@mdx-js\/react$/ }, () => {
         return { path: mdxReactResolved };
       });
