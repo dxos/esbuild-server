@@ -2,7 +2,8 @@
 // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
 /* eslint-disable */
 
-window.global = window;
+var _window = this || self || window;
+_window.global = _window;
 
 function defaultSetTimout () {
   throw new Error('setTimeout has not been defined');
@@ -215,7 +216,7 @@ function uptime () {
   return dif / 1000;
 }
 
-window.setImmediate = nextTick;
+_window.setImmediate = nextTick;
 
 export var process = {
   nextTick: nextTick,
