@@ -40,11 +40,6 @@ export interface Config {
   overrides?: BuildOptions
 
   /**
-   * Directory with static files to be served by the dev server.
-   */
-  staticDir?: string
-
-  /**
    * Esbuild plugins:
    * https://esbuild.github.io/plugins
    * https://github.com/esbuild/community-plugins
@@ -52,18 +47,23 @@ export interface Config {
   plugins?: Plugin[]
 
   /**
+   * Directory with static files to be served by the dev server.
+   */
+  staticDir?: string
+
+  /**
    * Book-specific config.
    */
   book?: {
     /**
-     * Directory to output static build to.
-     */
-    outdir?: string
-
-    /**
      * Additional entrypoints for book to build.
      */
     entryPoints?: string[]
+
+    /**
+     * Directory to output static build to.
+     */
+    outdir?: string
   }
 }
 
