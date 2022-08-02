@@ -69,10 +69,10 @@ export interface Config {
 
 const DISALLOWED_OVERRIDES = [
   'bundle',
-  'outfile',
-  'outdir',
+  'entryPoints',
   'outbase',
-  'entryPoints'
+  'outdir',
+  'outfile'
 ];
 
 export function validateConfig (config: Config) {
@@ -91,7 +91,6 @@ export function validateConfigForApp (config: Config) {
 
 export function loadConfig (path: string): Config | undefined {
   const resolved = resolve(path);
-
   if (!existsSync(resolved)) {
     return undefined;
   }
