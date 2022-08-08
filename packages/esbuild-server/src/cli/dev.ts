@@ -5,9 +5,8 @@
 import chalk from 'chalk';
 import { CommandModule } from 'yargs';
 
-import { validateConfigForApp, DEFAFULT_CONFIG_FILE } from '../config';
-import { startDevBundler } from '../dev-bundler';
-import { loadConfig } from '../load-config';
+import { loadConfig, validateConfigForApp, DEFAULT_CONFIG_FILE } from '../config';
+import { startDevBundler } from '../server';
 
 interface DevCommandArgv {
   port: number
@@ -16,7 +15,7 @@ interface DevCommandArgv {
 }
 
 export const devCommand: CommandModule<{}, DevCommandArgv> = {
-  command: 'dev',
+  command: 'dev', // TODO(burdon): Rename server?
   describe: 'Starts the dev server.',
   builder: yargs => yargs
     .option('port', {
@@ -26,7 +25,7 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
     })
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE
+      default: DEFAULT_CONFIG_FILE
     })
     .option('verbose', {
       alias: 'v',

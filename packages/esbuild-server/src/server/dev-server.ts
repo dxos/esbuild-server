@@ -9,7 +9,7 @@ import http, { ServerResponse } from 'http';
 import { isAbsolute } from 'path';
 import { join } from 'path/posix';
 
-import { Trigger } from './trigger';
+import { Trigger } from '../util';
 
 export const UPDATE_EVENTS = '/events';
 
@@ -19,11 +19,14 @@ export interface ResolvedFile {
 }
 
 export interface DevServerConfig {
-  port: number,
-  staticDir?: string,
+  port: number
+  staticDir?: string
   logRequests?: boolean
 }
 
+/**
+ * HTTP server dynamically serves build assets.
+ */
 export class DevServer {
   private readonly buildTrigger = new Trigger<BuildResult>();
   private clients: ServerResponse[] = [];

@@ -10,7 +10,7 @@ import { TestComponent } from './TestComponent';
 const App = () => {
   return (
     <>
-      <h1>Hello world!</h1>
+      <h1>Hello World!</h1>
       <p>Custom Component</p>
       <TestComponent />
     </>

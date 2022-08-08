@@ -14,9 +14,8 @@ import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
 import { createBookPlugin, createMdxPlugin, resolveFiles } from '../book';
-import { DEFAFULT_CONFIG_FILE, validateConfig } from '../config';
-import { startDevBundler } from '../dev-bundler';
-import { loadConfig } from '../load-config';
+import { DEFAULT_CONFIG_FILE, defaultBuildOptions, loadConfig, validateConfig } from '../config';
+import { startDevBundler } from '../server';
 
 function getPackageRoot () {
   const pkg = findPackageJson({ cwd: __dirname });
@@ -56,7 +55,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
     })
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE
+      default: DEFAULT_CONFIG_FILE
     })
     .option('verbose', {
       alias: 'v',
@@ -145,26 +144,19 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
 
         // Build project.
         await build({
+          ...defaultBuildOptions,
+
           entryPoints: [
             'esbuild-server-book',
             ...(config?.book?.entryPoints ?? [])
           ],
           outdir,
-          bundle: true,
-          write: true,
-          platform: 'browser',
-          format: 'iife',
           plugins: [
             ...defaultPlugins,
             ...(config?.plugins ?? [])
           ],
-          sourcemap: true,
-          metafile: true,
-          loader: {
-            '.jpg': 'file',
-            '.png': 'file',
-            '.svg': 'file'
-          },
+          write: true,
+
           ...overrides
         });
         console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);

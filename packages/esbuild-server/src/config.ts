@@ -3,8 +3,23 @@
 //
 
 import { BuildOptions, Plugin } from 'esbuild';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
-export const DEFAFULT_CONFIG_FILE = './esbuild-server.config.js';
+export const defaultBuildOptions: BuildOptions = {
+  bundle: true,
+  format: 'iife',
+  loader: {
+    '.jpg': 'file',
+    '.png': 'file',
+    '.svg': 'file'
+  },
+  metafile: true,
+  platform: 'browser',
+  sourcemap: true
+};
+
+export const DEFAULT_CONFIG_FILE = './esbuild-server.config.js';
 
 export interface Config {
   /**
@@ -25,11 +40,6 @@ export interface Config {
   overrides?: BuildOptions
 
   /**
-   * Directory with static files to be served by the dev server.
-   */
-  staticDir?: string
-
-  /**
    * Esbuild plugins:
    * https://esbuild.github.io/plugins
    * https://github.com/esbuild/community-plugins
@@ -37,27 +47,32 @@ export interface Config {
   plugins?: Plugin[]
 
   /**
+   * Directory with static files to be served by the dev server.
+   */
+  staticDir?: string
+
+  /**
    * Book-specific config.
    */
   book?: {
     /**
-     * Directory to output static build to.
-     */
-    outdir?: string
-
-    /**
      * Additional entrypoints for book to build.
      */
     entryPoints?: string[]
+
+    /**
+     * Directory to output static build to.
+     */
+    outdir?: string
   }
 }
 
 const DISALLOWED_OVERRIDES = [
   'bundle',
-  'outfile',
-  'outdir',
+  'entryPoints',
   'outbase',
-  'entryPoints'
+  'outdir',
+  'outfile'
 ];
 
 export function validateConfig (config: Config) {
@@ -72,4 +87,16 @@ export function validateConfigForApp (config: Config) {
   if (!config.entryPoints) {
     throw new Error('At least one entrypoint must be specified');
   }
+}
+
+export function loadConfig (path: string): Config | undefined {
+  const resolved = resolve(path);
+  if (!existsSync(resolved)) {
+    return undefined;
+  }
+
+  // TODO: Config validation.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const config: Config = require(resolved);
+  return config;
 }

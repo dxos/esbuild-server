@@ -10,8 +10,7 @@ import { ncp } from 'ncp';
 import { promisify } from 'util';
 import { CommandModule } from 'yargs';
 
-import { DEFAFULT_CONFIG_FILE, validateConfigForApp } from '../config';
-import { loadConfig } from '../load-config';
+import { DEFAULT_CONFIG_FILE, defaultBuildOptions, loadConfig, validateConfigForApp } from '../config';
 
 interface BuildCommandArgv {
   config: string
@@ -23,7 +22,7 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
   builder: yargs => yargs
     .option('config', {
       type: 'string',
-      default: DEFAFULT_CONFIG_FILE
+      default: DEFAULT_CONFIG_FILE
     })
     .option('minify', {
       type: 'boolean'
@@ -81,20 +80,13 @@ export const buildCommand: CommandModule<{}, BuildCommandArgv> = {
       }
 
       await build({
+        ...defaultBuildOptions,
+
         entryPoints: config.entryPoints,
         outdir,
-        bundle: true,
-        write: true,
-        platform: 'browser',
-        format: 'iife',
         plugins: config.plugins,
-        metafile: true,
-        sourcemap: true,
-        loader: {
-          '.jpg': 'file',
-          '.png': 'file',
-          '.svg': 'file'
-        },
+        write: true,
+
         ...overrides
       });
       console.log(chalk`🏁 {dim Build} {green finished} {dim in} {white ${((Date.now() - startTime) / 1000).toFixed(2)}} {dim seconds}`);

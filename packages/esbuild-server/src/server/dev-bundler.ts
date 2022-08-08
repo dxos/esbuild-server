@@ -4,43 +4,42 @@
 
 import { build, BuildOptions, Plugin } from 'esbuild';
 
+import { defaultBuildOptions } from '../config';
 import { UPDATE_EVENTS, DevServer, DevServerConfig } from './dev-server';
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
   plugins: Plugin[]
-  devServer: DevServerConfig,
+  devServer: DevServerConfig
   overrides?: BuildOptions
 }
 
+/**
+ * Starts build and HTTP server.
+ */
 export function startDevBundler (config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
   const overrides = config?.overrides || {};
 
   void build({
+    ...defaultBuildOptions,
+
     entryPoints: config.entryPoints,
-    outdir: '/', // TODO(burdon): Configure?
-    bundle: true,
-    write: false,
-    platform: 'browser',
-    format: 'iife',
-    incremental: true,
-    sourcemap: true,
     plugins: [
       ...config.plugins,
       devServer.createPlugin()
     ],
-    metafile: true,
-    loader: {
-      '.jpg': 'file',
-      '.png': 'file',
-      '.svg': 'file'
-    },
-    // https://esbuild.github.io/api/#watch
-    // https://github.com/evanw/esbuild/issues/802
+
+    outdir: '/',
+    write: false,
+
+    // Trigger reload.
     banner: {
       js: `(() => new EventSource("${UPDATE_EVENTS}").onmessage = () => location.reload())();`
     },
+    // https://esbuild.github.io/api/#watch
+    // https://github.com/evanw/esbuild/issues/802
+    incremental: true,
     watch: {
       onRebuild (error, result) {
         if (error) {
@@ -50,6 +49,7 @@ export function startDevBundler (config: DevBundlerConfig) {
         }
       }
     },
+
     ...overrides
   });
 
