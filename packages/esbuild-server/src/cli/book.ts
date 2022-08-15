@@ -34,6 +34,7 @@ interface BookCommandArgv {
 
 export const bookCommand: CommandModule<{}, BookCommandArgv> = {
   command: 'book [stories...]',
+  aliases: ['storybook'],
   describe: 'Starts the dev server with a book of components.',
   builder: yargs => yargs
     .positional('stories', {
