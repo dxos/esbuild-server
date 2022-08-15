@@ -31,7 +31,7 @@ const styles = {
 
   horizontal: css`
     flex-direction: row;
-    align-items: cetner;
+    align-items: center;
 
     border-top: 1px solid #CCC;
     border-bottom: 1px solid #CCC;

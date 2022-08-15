@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import { BuildResult, Plugin } from 'esbuild';
 import { readFile } from 'fs/promises';
 import http, { ServerResponse } from 'http';
+import https from 'https';
 import { isAbsolute } from 'path';
 import { join } from 'path/posix';
 
@@ -22,6 +23,14 @@ export interface DevServerConfig {
   port: number
   staticDir?: string
   logRequests?: boolean
+}
+
+export interface DevServerOptions {
+  port: number
+  tls?: {
+    cert?: string
+    key?: string
+  }
 }
 
 /**
@@ -97,9 +106,15 @@ export class DevServer {
     return undefined;
   }
 
-  listen (port: number = this.config.port, callback?: (code: string) => void) {
-    // TODO(burdon): Called twice when sidebar is visible.
-    const server = http.createServer(async (req, res) => {
+  async listen (
+    options: DevServerOptions = { port: this.config.port },
+    callback?: (code: string) => void
+  ) {
+    const scheme = options.tls ? 'https' : 'http';
+    const factory = scheme === 'https' ? https : http;
+
+    // https://nodejs.org/api/https.html
+    const server = factory.createServer(options.tls ?? {}, async (req, res) => {
       const start = Date.now();
 
       this.config.logRequests && console.log(`=> ${req.method} ${req.url} ${req.headers.accept}`);
@@ -149,8 +164,8 @@ export class DevServer {
       server.close();
     });
 
-    server.listen(port, () => {
-      console.log(chalk`🚀 {dim Listening on} {white http://localhost:${port}}`);
+    server.listen(options.port, () => {
+      console.log(chalk`🚀 {dim Listening on} {white ${scheme}://localhost:${options.port}}`);
     });
 
     return server;

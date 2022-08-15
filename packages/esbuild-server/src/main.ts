@@ -5,11 +5,11 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { bookCommand, buildCommand, devCommand } from './cli';
+import { bookCommand, buildCommand, serverCommand } from './cli';
 
 void yargs(hideBin(process.argv))
-  .command(buildCommand)
-  .command(devCommand)
   .command(bookCommand)
+  .command(buildCommand)
+  .command(serverCommand)
   .demandCommand()
   .argv;

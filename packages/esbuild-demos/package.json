@@ -24,8 +24,9 @@
     "build": "npm run clean && esbuild-server build",
     "build:test": "npm run test && npm run build",
     "clean": "rimraf ./dist",
-    "dev": "esbuild-server dev",
     "lint": "eslint --format codeframe './src/**/*.ts'",
+    "server": "esbuild-server server",
+    "server:https": "esbuild-server server --https",
     "test": "true"
   },
   "browserslist": [

@@ -15,7 +15,7 @@ esbuild-server <command>
 
 Commands:
   esbuild-server build              Build the app for production.
-  esbuild-server dev                Start the dev server.
+  esbuild-server server             Start the dev server.
   esbuild-server book [stories...]  Start the dev server with a book of components.
 
 Options:
