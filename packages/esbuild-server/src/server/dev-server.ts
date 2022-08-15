@@ -41,7 +41,7 @@ export class DevServer {
       setup: ({ onStart, onEnd }) => {
         let startTime = 0;
         onStart(() => {
-          console.log(chalk`🏎️  {dim Build started}`);
+          console.log(chalk`🏎️ {dim Build started}`);
           startTime = Date.now();
           this.buildTrigger.reset();
         });
