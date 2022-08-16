@@ -5,23 +5,27 @@
 import chalk from 'chalk';
 import { CommandModule } from 'yargs';
 
-import { loadConfig, validateConfigForApp, DEFAULT_CONFIG_FILE } from '../config';
-import { startDevBundler } from '../server';
+import { DEFAULT_CONFIG_FILE, loadConfig, validateConfigForApp } from '../config';
+import { Scheme, startDevBundler } from '../server';
 
-interface DevCommandArgv {
+interface ServerCommandArgv {
   port: number
   config: string
   verbose: boolean
 }
 
-export const devCommand: CommandModule<{}, DevCommandArgv> = {
-  command: 'dev', // TODO(burdon): Rename server?
+export const serverCommand: CommandModule<{}, ServerCommandArgv> = {
+  command: 'server',
+  aliases: ['dev'],
   describe: 'Starts the dev server.',
   builder: yargs => yargs
     .option('port', {
       alias: 'p',
       type: 'number',
       default: 8080
+    })
+    .option('https', {
+      type: 'boolean'
     })
     .option('config', {
       type: 'string',
@@ -42,7 +46,7 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
 
     validateConfigForApp(config);
 
-    startDevBundler({
+    void startDevBundler({
       entryPoints: config.entryPoints!,
       plugins: config.plugins ?? [],
       devServer: {
@@ -50,6 +54,7 @@ export const devCommand: CommandModule<{}, DevCommandArgv> = {
         staticDir: config.staticDir,
         logRequests: argv.verbose
       },
+      scheme: argv.https ? Scheme.HTTPS : Scheme.HTTP,
       overrides: config.overrides
     });
   }

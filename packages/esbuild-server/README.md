@@ -15,7 +15,7 @@ esbuild-server <command>
 
 Commands:
   esbuild-server build              Build the app for production.
-  esbuild-server dev                Start the dev server.
+  esbuild-server server             Start the dev server.
   esbuild-server book [stories...]  Start the dev server with a book of components.
 
 Options:
@@ -23,6 +23,37 @@ Options:
   --version  Show version number                                       [boolean]
 ```
 
+## Server
+
+Specify and entry-point to serve an application:
+
+```bash
+esbuild-server server
+```
+
+To run the server with TLS support:
+
+```bash
+esbuild-server server --https
+```
+
+Initially this requires root permissions to create the dev TLC certificate.
+
+## Storybook
+
+Stories are compatible with the Storybooks:
+
+```bash
+esbuild-server book
+```
+
+Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
+
+To build static books:
+
+```bash
+esbuild-server book --build
+```
 
 ## Config file
 
@@ -32,7 +63,6 @@ The config is automatically loaded from `./esbuild-server.config.js`.
 export interface Config {
   /**
    * List of entry points to bundle.
-   *
    * Those are then can be requested from the dev server.
    *
    * Read more: https://esbuild.github.io/api/#entry-points
@@ -59,25 +89,6 @@ export interface Config {
    */
   plugins?: Plugin[]
 }
-```
-
-## Storybook
-
-`esbuild-server` stories are compatible with storybook format, 
-although only the very minimal features are currently supported.
-
-To render a storybook run the following command (replacing with your glob for stories).
-
-```bash
-esbuild-server book
-```
-
-Each story file should export a set of components and optionally a default export with the title that will be displayed in the outline.
-
-To build storybooks:
-
-```bash
-esbuild-server book --build
 ```
 
 ## Publishing

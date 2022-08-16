@@ -2,28 +2,35 @@
 // Copyright 2022 DXOS.org
 //
 
+import { CertificateManager, CertificateStore } from '@rushstack/debug-certificate-manager';
+import { ConsoleTerminalProvider, Terminal } from '@rushstack/node-core-library';
 import { build, BuildOptions, Plugin } from 'esbuild';
 
 import { defaultBuildOptions } from '../config';
 import { UPDATE_EVENTS, DevServer, DevServerConfig } from './dev-server';
+
+export enum Scheme {
+  HTTP,
+  HTTPS
+}
 
 export interface DevBundlerConfig {
   entryPoints: string[] | Record<string, string>
   plugins: Plugin[]
   devServer: DevServerConfig
   overrides?: BuildOptions
+  scheme?: Scheme
 }
 
 /**
  * Starts build and HTTP server.
  */
-export function startDevBundler (config: DevBundlerConfig) {
+export async function startDevBundler (config: DevBundlerConfig) {
   const devServer = new DevServer(config.devServer);
   const overrides = config?.overrides || {};
 
   void build({
     ...defaultBuildOptions,
-
     entryPoints: config.entryPoints,
     plugins: [
       ...config.plugins,
@@ -33,12 +40,12 @@ export function startDevBundler (config: DevBundlerConfig) {
     outdir: '/',
     write: false,
 
+    // https://esbuild.github.io/api/#watch
+    // https://github.com/evanw/esbuild/issues/802
     // Trigger reload.
     banner: {
       js: `(() => new EventSource("${UPDATE_EVENTS}").onmessage = () => location.reload())();`
     },
-    // https://esbuild.github.io/api/#watch
-    // https://github.com/evanw/esbuild/issues/802
     incremental: true,
     watch: {
       onRebuild (error, result) {
@@ -53,16 +60,33 @@ export function startDevBundler (config: DevBundlerConfig) {
     ...overrides
   });
 
-  // TODO(burdon): Add to dev server.
+  const options = {
+    port: config.devServer.port
+  };
+
+  // https://www.npmjs.com/package/@rushstack/debug-certificate-manager
+  if (config.scheme === Scheme.HTTPS) {
+    const certificateStore: CertificateStore = new CertificateStore();
+    const certificateManager: CertificateManager = new CertificateManager();
+    const terminal = new Terminal(new ConsoleTerminalProvider());
+    await certificateManager.ensureCertificateAsync(true, terminal);
+    Object.assign(options, {
+      tls: {
+        cert: certificateStore.certificateData,
+        key: certificateStore.keyData
+      }
+    });
+  }
+
   // Increment port if already running elsewhere.
-  let port = config.devServer.port;
   const callback = (code: string) => {
     if (code === 'EADDRINUSE') {
-      devServer.listen(++port, callback);
+      options.port++;
+      void devServer.listen(options, callback);
     } else {
       throw Error(code);
     }
   };
 
-  devServer.listen(port, callback);
+  void devServer.listen(options, callback);
 }

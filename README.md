@@ -23,3 +23,5 @@ rush build
 ```
 
 ## Deploy
+
+TODO(burdon): `rush` command to publish all packages?

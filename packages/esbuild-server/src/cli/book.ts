@@ -34,6 +34,7 @@ interface BookCommandArgv {
 
 export const bookCommand: CommandModule<{}, BookCommandArgv> = {
   command: 'book [stories...]',
+  aliases: ['storybook'],
   describe: 'Starts the dev server with a book of components.',
   builder: yargs => yargs
     .positional('stories', {
@@ -145,7 +146,6 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         // Build project.
         await build({
           ...defaultBuildOptions,
-
           entryPoints: [
             'esbuild-server-book',
             ...(config?.book?.entryPoints ?? [])
@@ -165,7 +165,7 @@ export const bookCommand: CommandModule<{}, BookCommandArgv> = {
         process.exit(1);
       }
     } else {
-      startDevBundler({
+      void startDevBundler({
         entryPoints: [
           'esbuild-server-book',
           ...(config?.book?.entryPoints ?? [])
